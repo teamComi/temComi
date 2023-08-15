@@ -1,247 +1,503 @@
-DROP TABLE USERS CASCADE CONSTRAINTS;
-DROP TABLE MEMBER CASCADE CONSTRAINTS;
-DROP TABLE NOTICE CASCADE CONSTRAINTS;
-DROP TABLE BOARD CASCADE CONSTRAINTS;
-
--- 소셜로그인시 회원가입을 이용할 경우의 회원 테이블
-CREATE TABLE MEMBER(
-  USERID VARCHAR2(50) CONSTRAINT PK_MEMBER_UID PRIMARY KEY,
-  USERPWD VARCHAR2(100),
-  USERNAME VARCHAR2(20) NOT NULL,
-  GENDER CHAR(1)  NOT NULL,
-  AGE NUMBER(3)   NOT NULL,
-  PHONE VARCHAR2(13),
-  EMAIL VARCHAR2(30) not null,  
-  ENROLL_DATE DATE DEFAULT SYSDATE,
-  LASTMODIFIED DATE DEFAULT SYSDATE,
-  signtype VARCHAR2(10) default 'direct' not null,
-  -- 가입방식 : 직접 가입('direct'), 소셜로그인('kakao', 'naver', 'google') 
-  ADMIN CHAR(1) DEFAULT 'N' not null,
-  login_ok CHAR(1) DEFAULT 'Y' not null
-  );
-
-comment on column member.userid is '회원아이디';
-comment on column member.userpwd is '회원패스워드';
-comment on column member.username is '회원이름';
-comment on column member.gender is '회원성별';
-comment on column member.age is '회원나이';
-comment on column member.email is '회원이메일';
-comment on column member.phone is '회원전화번호';
-comment on column member.enroll_date is '회원가입날짜';
-comment on column member.userid is '회원아이디';
-comment on column member.lastmodified is '마지막수정날짜';
-comment on column member.signtype is '가입방식';
-comment on column member.login_ok is '로그인가능여부';
-comment on column member.admin is '관리자여부';
-
-CREATE TABLE USERS (
-  USERID VARCHAR2(15) PRIMARY KEY,
-  USERPWD VARCHAR2(100) NOT NULL,
-  USERNAME VARCHAR2(20) NOT NULL
+/* 파티 모집 분류 */
+CREATE TABLE PARTY (
+	PA_NUM NUMBER NOT NULL, /* 파티 번호 */
+	ME_NUM NUMBER, /* 회원 넘버 */
+	PA_TIME DATE, /* 모임 시간 */
+	PA_TOTAL_AMOUNT NUMBER, /* 총 금액 */
+	PA_DEPOSIT NUMBER, /* 보증금 */
+	PA_PER_AMOUNT NUMBER, /* 1인당 금액 */
+	PA_CATEGORY VARCHAR2(1000), /* 카테고리 */
+	PA_TITLE VARCHAR2(1000), /* 게시글 제목 */
+	PA_CON VARCHAR2(1000), /* 게시글 내용 */
+	PA_ENROLL DATE, /* 등록일자 */
+	PA_MOD_DATE DATE, /* 수정일자 */
+	PA_DEL_DATE DATE, /* 삭제일자 */
+	PA_ACT CHAR, /* 활성화여부 */
+	PA_VIEWS NUMBER, /* 조회수 */
+	PA_LIKE NUMBER, /* 좋아요수 */
+	PA_COM_COUNT NUMBER, /* 댓글수 */
+	PA_GENDER_SET CHAR, /* 성별 권한 설정 */
+	PA_LOCATION VARCHAR2(1000), /* 위치정보 */
+	PA_TOTAL_NUM NUMBER, /* 파티원 인원 수 */
+	PA_GENDER_LIMIT CHAR, /* 성별 제한 */
+	PH_NUM NUMBER /* 사진 테이블 번호 */
 );
 
-ALTER TABLE USERS
-DROP PRIMARY KEY;
+ALTER TABLE PARTY
+	ADD
+		CONSTRAINT PK_PARTY
+		PRIMARY KEY (
+			PA_NUM
+		);
 
--- 삭제룰을 추가한 새 제약조건 추가함
-ALTER TABLE USERS
-ADD CONSTRAINT FK_MEMBER_UID 
-FOREIGN KEY(USERID) REFERENCES MEMBER ON DELETE CASCADE;
-
--- TRIGGER 작성 : 이름 - TRI_INSERT_USERS
--- MEMBER 테이블에 새 회원정보가 기록되면, 자동으로 USERS 테이블에 아이디, 암호, 이름이
--- INSERT 되게 함
-CREATE OR REPLACE TRIGGER TRI_INSERT_USERS
-AFTER INSERT ON MEMBER
-FOR EACH ROW
-BEGIN
-  INSERT INTO USERS
-  VALUES (:NEW.USERID, :NEW.USERPWD, :NEW.USERNAME);
-END;
-/
-
-CREATE OR REPLACE TRIGGER TRI_UPDATE_USERS
-AFTER UPDATE ON MEMBER
-FOR EACH ROW
-BEGIN
-  UPDATE USERS 
-  SET USERPWD = :NEW.USERPWD
-  WHERE USERID = :OLD.USERID;
-END;
-/
-
-INSERT INTO MEMBER VALUES ('admin', 'admin', '관리자', 'M', 35, '010-1111-9999', 
-'admin@ncs.kr', to_date('2016-06-25', 'RRRR-MM-DD'), 
-sysdate, default, default, default);
-
-INSERT INTO MEMBER
-VALUES ('user01', 'pass01', '홍길동', 'M', 25, '010-1234-5678', 'hong1234@ncs.kr', 
-        default, default, default, default, default);
-        
-INSERT INTO MEMBER
-VALUES ('user02', 'pass02', '신사임당', 'F', 45, '010-4545-9999', 'dano99@ncs.kr', 
-        default, default, 'direct', default, default);
-        
-
-COMMIT;
-
--- notice 테이블
-DROP TABLE NOTICE;
-
-CREATE TABLE NOTICE(
-  NOTICENO NUMBER CONSTRAINT PK_NOTICENO PRIMARY KEY,
-  NOTICETITLE VARCHAR2(50) NOT NULL,
-  NOTICEDATE DATE DEFAULT SYSDATE,
-  NOTICEWRITER VARCHAR2(50) NOT NULL,
-  NOTICECONTENT VARCHAR2(2000),
-  ORIGINAL_FILEPATH VARCHAR2(100),
-  RENAME_FILEPATH VARCHAR2(100),
-  CONSTRAINT FK_NOTICEWRITER FOREIGN KEY (NOTICEWRITER) 
-      REFERENCES MEMBER ON DELETE CASCADE
+/* 댓글(채팅, 후기) */
+CREATE TABLE COMMENTS (
+	COM_NUM NUMBER NOT NULL, /* 댓글 번호 */
+	PA_NUM NUMBER, /* 파티 번호 */
+	COM_PARENT NUMBER, /* 부모 댓글 번호 */
+	COM_DEPTH NUMBER, /* 깊이 */
+	COM_CON VARCHAR2(1000), /* 내용 */
+	COM_VIEWS NUMBER, /* 조회수 */
+	COM_COUNT NUMBER, /* 댓글수 */
+	COM_ENROLL DATE, /* 등록일자 */
+	COM_MOD_DATE DATE, /* 수정일자 */
+	COM_DEL_DATE DATE, /* 삭제일자 */
+	COM_PHOTO_NUM NUMBER /* 사진 테이블 번호 */
 );
 
-COMMENT ON COLUMN notice.NOTICENO IS '공지글번호';
-COMMENT ON COLUMN notice.NOTICETITLE IS '공지글제목';
-COMMENT ON COLUMN notice.NOTICEDATE IS '공지등록날짜';
-COMMENT ON COLUMN notice.NOTICEWRITER IS '공지작성자';
-COMMENT ON COLUMN notice.NOTICECONTENT IS '공지내용';
-COMMENT ON COLUMN notice.ORIGINAL_FILEPATH IS '원본첨부파일명';
-COMMENT ON COLUMN notice.RENAME_FILEPATH IS '바뀐첨부파일명';
+ALTER TABLE COMMENTS
+	ADD
+		CONSTRAINT PK_COMMENTS
+		PRIMARY KEY (
+			COM_NUM
+		);
 
-
-COMMIT;
-
-INSERT INTO NOTICE VALUES (1, '공지 서비스 오픈', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), 
-'공지 서비스 오픈2', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '공지 서비스 오픈3', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '공지 서비스 오픈4', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '공지 서비스 오픈5', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '공지 서비스 오픈6', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '공지 서비스 오픈7', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '공지 서비스 오픈8', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '공지 서비스 오픈9', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '공지 서비스 오픈10', SYSDATE, 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '신입사원 모집공고', 
-TO_DATE('2016-07-15', 'RRRR-MM-DD'), 'user01', 
-'공지 서비스가 오픈되었습니다. 많이 이용해 주세요.', null, null);
-INSERT INTO NOTICE VALUES ((select max(noticeno) + 1 from notice), '신입사원 모집공고 마감', 
-TO_DATE('2016-07-20', 'RRRR-MM-DD'), 'user01', 
-'2016년 7월 20일 18시에 신입사원 모집을 마감합니다.', null, null);
-
-SELECT * FROM NOTICE;
- 
-commit;
-
-
--- BOARD TABLE SCRIPT FILE
-DROP TABLE BOARD;
--- 원글, 댓글 테이블 구분하는 것이 좋다
-CREATE TABLE BOARD(
-	BOARD_NUM	NUMBER,	
-	BOARD_WRITER	 VARCHAR2(50) NOT NULL,
-	BOARD_TITLE	VARCHAR2(50) NOT NULL,
-	BOARD_CONTENT	VARCHAR2(2000) NOT NULL,
-	BOARD_ORIGINAL_FILENAME	VARCHAR2(100),
-    BOARD_RENAME_FILENAME VARCHAR2(100),
-    BOARD_REF NUMBER,
-	BOARD_REPLY_REF	NUMBER,
-	BOARD_LEV	NUMBER DEFAULT 1,
-	BOARD_REPLY_SEQ NUMBER DEFAULT 1,
-	BOARD_READCOUNT	NUMBER DEFAULT 0,
-	BOARD_DATE	DATE DEFAULT SYSDATE,
-  CONSTRAINT PK_BOARD PRIMARY KEY (BOARD_NUM),
-  CONSTRAINT FK_BOARD_WRITER FOREIGN KEY (BOARD_WRITER) REFERENCES MEMBER (USERID) ON DELETE CASCADE
+/* 사진 테이블 */
+CREATE TABLE PHOTO (
+	PH_NUM NUMBER NOT NULL, /* 사진 테이블 번호 */
+	PH1 VARCHAR2(1000), /* 사진정보1 */
+	PH2 VARCHAR2(1000), /* 사진정보2 */
+	PH3 VARCHAR2(1000), /* 사진정보3 */
+	PH4 VARCHAR2(1000), /* 사진정보4 */
+	PH5 VARCHAR2(1000) /* 사진정보5 */
 );
 
-COMMENT ON COLUMN BOARD.BOARD_NUM IS '게시글번호';
-COMMENT ON COLUMN BOARD.BOARD_WRITER IS '작성자아이디';
-COMMENT ON COLUMN BOARD.BOARD_TITLE IS '게시글제목';
-COMMENT ON COLUMN BOARD.BOARD_CONTENT IS '게시글내용';
-COMMENT ON COLUMN BOARD.BOARD_DATE IS '작성날짜';
-COMMENT ON COLUMN BOARD.BOARD_ORIGINAL_FILENAME IS '원본첨부파일명';
-COMMENT ON COLUMN BOARD.BOARD_RENAME_FILENAME IS '바뀐첨부파일명';
-COMMENT ON COLUMN BOARD.BOARD_REF IS '원글번호';  -- 원글번호 : 원글 - 자기번호, 댓글/대댓글 : 원글번호
-COMMENT ON COLUMN BOARD.BOARD_REPLY_REF IS '참조답글번호';  -- 원글 : null, 원글의 답/댓글 : 자기번호, 답글의 답글 : 참조답글번호
-COMMENT ON COLUMN BOARD.BOARD_LEV IS '답글단계'; -- 원글 : 1, 원글의 답글 : 2, 답글의 답글 : 3
-COMMENT ON COLUMN BOARD.BOARD_REPLY_SEQ IS '답글순번'; -- 원글 : 0, 같은 원글의 답글일 때 : 1 ....... 순차처리
+ALTER TABLE PHOTO
+	ADD
+		CONSTRAINT PK_PHOTO
+		PRIMARY KEY (
+			PH_NUM
+		);
 
-INSERT INTO BOARD 
-VALUES (1, 'admin', '관리자 게시글', '저희 사이트를 이용해 주셔서 감사합니다.', 
-NULL, NULL, 1, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+/* Q&A */
+CREATE TABLE QA (
+	QA_NUM NUMBER NOT NULL, /* Q&A 번호 */
+	ME_NUM NUMBER, /* 회원 넘버 */
+	QA_TITLE VARCHAR2(1000), /* 게시글 제목 */
+	QA_PWD VARCHAR2(1000), /* 게시글 비번 */
+	QA_CON VARCHAR2(1000), /* 게시글 내용 */
+	QA_CATEGORY VARCHAR2(1000), /* 카테고리 */
+	QA_ENROLL DATE, /* 등록일자 */
+	QA_MOD_DATE DATE, /* 수정일자 */
+	QA_DEL_DATE DATE, /* 삭제일자 */
+	QA_VIEWS NUMBER, /* 조회수 */
+	QA_COM_COUNT NUMBER, /* 댓글수 */
+	QA_ADMIN_NUM NUMBER, /* 답변 운영자 번호 */
+	QA_REPORT_CON VARCHAR2(1000), /* 신고내용 */
+	QA_ATT_NUM NUMBER, /* 신고할 회원 넘버 */
+	QA_ATT_DATE DATE, /* 신고날짜 */
+	QA_PHOTO_NUM NUMBER /* 사진 테이블 번호 */
+);
 
-INSERT INTO BOARD 
-VALUES (2, 'user01', 'MVC Model2', '웹 어플리케이션 설계 방식 중 MVC 디자인 패턴 모델2 방식의 한 유형입니다.', 
-NULL, NULL, 2, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+ALTER TABLE QA
+	ADD
+		CONSTRAINT PK_QA
+		PRIMARY KEY (
+			QA_NUM
+		);
 
-INSERT INTO BOARD 
-VALUES (3, 'user02', '설계방식2', '설계방식 2번째로는 First Controller 를 사용하는 방식이 있습니다.', 
-NULL, NULL, 3, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+/* Q&A 댓글 */
+CREATE TABLE QACOMMENTS (
+	QA_COM_NUM NUMBER NOT NULL, /* Q&A 댓글 번호 */
+	QA_NUM NUMBER, /* Q&A 번호 */
+	QA_COM_MEM_NUM NUMBER, /* 회원 넘버 */
+	QA_COM_PARENT NUMBER, /* 부모 댓글 번호 */
+	QA_COM_DEPTH NUMBER, /* 깊이 */
+	QA_COM_CON VARCHAR2(450), /* 내용 */
+	QA_COM_VIEWS NUMBER, /* 조회수 */
+	QA_COM_COUNT DATE, /* 댓글수 */
+	QA_COM_ENROLL DATE, /* 등록일자 */
+	QA_COM_MOD_DATE DATE, /* 수정일자 */
+	QA_COM_DEL_DATE DATE /* 삭제일자 */
+);
 
-INSERT INTO BOARD 
-VALUES (4, 'user01', '설계방식3', '3번째 방식은 액션을 이용하는 방식입니다.', 
-NULL, NULL, 4, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+ALTER TABLE QACOMMENTS
+	ADD
+		CONSTRAINT PK_QACOMMENTS
+		PRIMARY KEY (
+			QA_COM_NUM
+		);
 
-INSERT INTO BOARD 
-VALUES (5, 'user01', 'MVC Model2', '웹 어플리케이션 설계 방식 중 MVC 디자인 패턴 모델2 방식의 한 유형입니다.', 
-NULL, NULL, 5, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+/* 회원 */
+CREATE TABLE MEMBER (
+	ME_NUM NUMBER NOT NULL, /* 회원 넘버 */
+	ME_NAME VARCHAR2(20), /* 이름 */
+	ME_ID VARCHAR2(15), /* 아이디 */
+	ME_PWD VARCHAR2(20), /* 비번 */
+	ME_C_PWD NUMBER, /* 비번 입력 카운트 */
+	ME_CER CHAR, /* 인증유무 */
+	ME_LOGIN_TYPE CHAR, /* 간편회원유무 */
+	ME_EMAIL VARCHAR2(40), /* 이메일 */
+	ME_PHONE CHAR(13), /* 핸드폰 */
+	ME_ADD VARCHAR2(80), /* 주소 */
+	ME_GENDER CHAR, /* 성별 */
+	ME_B_DAY DATE, /* 생일 */
+	ME_ENROLL DATE, /* 가입일 */
+	ME_AKA VARCHAR2(15), /* 닉네임 */
+	ME_LIKE NUMBER, /* 인기도 */
+	ME_PHOTO_ADD VARCHAR2(100), /* 프로필 사진 */
+	ME_ADMIN CHAR, /* 관리자 권한 */
+	ME_BAN CHAR, /* 정지 여부 */
+	ME_POINT NUMBER, /* 포인트 */
+	ME_FIR_CATEGORY VARCHAR2(20), /* 대분류 */
+	ME_SEC_CATEGORY VARCHAR2(20) /* 소분류 */
+);
 
-INSERT INTO BOARD 
-VALUES (6, 'user02', '설계방식2', '설계방식 2번째로는 First Controller 를 사용하는 방식이 있습니다.', 
-NULL, NULL, 6, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+ALTER TABLE MEMBER
+	ADD
+		CONSTRAINT PK_MEMBER
+		PRIMARY KEY (
+			ME_NUM
+		);
 
-INSERT INTO BOARD 
-VALUES (7, 'user01', '설계방식3', '3번째 방식은 액션을 이용하는 방식입니다.', 
-NULL, NULL, 7, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+/* 팔로잉 */
+CREATE TABLE FOLLOWING (
+	ME_NUM NUMBER NOT NULL, /* 회원 넘버 */
+	BLOCK CHAR, /* 차단여부 */
+	ME_NUM2 NUMBER /* 팔로잉 */
+);
 
-INSERT INTO BOARD 
-VALUES (8, 'user01', 'MVC Model2', '웹 어플리케이션 설계 방식 중 MVC 디자인 패턴 모델2 방식의 한 유형입니다.', 
-NULL, NULL, 8, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+ALTER TABLE FOLLOWING
+	ADD
+		CONSTRAINT PK_FOLLOWING
+		PRIMARY KEY (
+			ME_NUM
+		);
 
-INSERT INTO BOARD 
-VALUES (9, 'user02', '설계방식2', '설계방식 2번째로는 First Controller 를 사용하는 방식이 있습니다.', 
-NULL, NULL, 9, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+/* 쪽지 테이블 */
+CREATE TABLE NOTE (
+	ME_NUM_RE NUMBER NOT NULL, /* 회원 넘버 (받은사람) */
+	NO_CON VARCHAR2(1000), /* 내용 */
+	NO_SEN_TIME DATE, /* 보낸시간 */
+	NO_CH CHAR, /* 읽음 여부 */
+	ME_NUM_SEN NUMBER /* 보낸사람 */
+);
 
-INSERT INTO BOARD 
-VALUES (10, 'user01', '설계방식3', '3번째 방식은 액션을 이용하는 방식입니다.', 
-NULL, NULL, 10, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+ALTER TABLE NOTE
+	ADD
+		CONSTRAINT PK_NOTE
+		PRIMARY KEY (
+			ME_NUM_RE
+		);
 
-INSERT INTO BOARD 
-VALUES (11, 'user01', 'MVC Model2', '웹 어플리케이션 설계 방식 중 MVC 디자인 패턴 모델2 방식의 한 유형입니다.', 
-NULL, NULL, 11, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+/* 결제 정보 테이블 */
+CREATE TABLE PAYMENT (
+	PM_NUM NUMBER NOT NULL, /* 결제 번호 */
+	ME_NUM NUMBER NOT NULL, /* 회원 넘버 */
+	PA_NUM NUMBER NOT NULL, /* 파티 번호 */
+	PM_HOST CHAR, /* 파티장 여부 */
+	PM_METHOD VARCHAR2(1000), /* 결제 수단 */
+	PM_AMOUNT NUMBER, /* 결제 금액 */
+	PM_CREDITS NUMBER, /* 적립금 사용 금액 */
+	PM_TOTAL_AMOUNT NUMBER, /* 총결제 금액 */
+	PM_DEPOSIT CHAR, /* 거치금 여부 */
+	PM_DATE DATE, /* 결제 날짜 */
+	PM_AC_VER VARCHAR2(1000), /* 계좌인증정보 */
+	PM_PH_VER VARCHAR2(1000) /* 휴대폰인증정보 */
+);
 
-INSERT INTO BOARD 
-VALUES (12, 'user02', '설계방식2', '설계방식 2번째로는 First Controller 를 사용하는 방식이 있습니다.', 
-NULL, NULL, 12, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+ALTER TABLE PAYMENT
+	ADD
+		CONSTRAINT PK_PAYMENT
+		PRIMARY KEY (
+			PM_NUM,
+			ME_NUM,
+			PA_NUM
+		);
 
-INSERT INTO BOARD 
-VALUES (13, 'user01', '설계방식3', '3번째 방식은 액션을 이용하는 방식입니다.', 
-NULL, NULL, 13, null, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+/* 파티원 테이블 */
+CREATE TABLE TOTALPARTY (
+	PA_NUM NUMBER NOT NULL, /* 파티 번호 */
+	PA_MEM1 NUMBER, /* 파티원1 */
+	PA_MEM2 NUMBER, /* 파티원2 */
+	PA_MEM3 NUMBER, /* 파티원3 */
+	PA_MEM4 NUMBER, /* 파티원4 */
+	PA_MEM5 NUMBER, /* 파티원5 */
+	PA_MEM6 NUMBER, /* 파티원6 */
+	PA_MEM7 NUMBER, /* 파티원7 */
+	PA_MEM8 NUMBER, /* 파티원8 */
+	PA_MEM9 NUMBER, /* 파티원9 */
+	PA_MEM10 NUMBER /* 파티원10 */
+);
 
-SELECT * FROM BOARD;
+ALTER TABLE TOTALPARTY
+	ADD
+		CONSTRAINT PK_TOTALPARTY
+		PRIMARY KEY (
+			PA_NUM
+		);
 
-COMMIT;
+/* 환불 정보 테이블 */
+CREATE TABLE REFUND (
+	ME_NUM NUMBER NOT NULL, /* 회원 넘버 */
+	PA_NUM NUMBER NOT NULL, /* 파티 번호 */
+	PM_NUM NUMBER NOT NULL, /* 결제 번호 */
+	RF_NUM NUMBER, /* 환불 정보 번호 */
+	RF_AMOUNT NUMBER, /* 환불 금액 */
+	RF_STATUS CHAR, /* 환불 처리 상태 */
+	RF_RE_DATE DATE, /* 환불 요청 날짜 */
+	RF_DATE DATE, /* 환불 처리 날짜 */
+	RF_AC_VER VARCHAR2(1000), /* 계좌인증정보 */
+	RF_PH_VER VARCHAR2(1000) /* 휴대폰인증정보 */
+);
 
+ALTER TABLE REFUND
+	ADD
+		CONSTRAINT PK_REFUND
+		PRIMARY KEY (
+			ME_NUM,
+			PA_NUM,
+			PM_NUM
+		);
 
-commit;
+/* 댓글 사진 테이블 */
+CREATE TABLE COMPHOTO (
+	COM_PHOTO_NUM NUMBER NOT NULL, /* 사진 테이블 번호 */
+	COM_PH1 VARCHAR2(1000), /* 사진정보1 */
+	COM_PH2 VARCHAR2(1000), /* 사진정보2 */
+	COM_PH3 VARCHAR2(1000), /* 사진정보3 */
+	COM_PH4 VARCHAR2(1000), /* 사진정보4 */
+	COM_PH5 VARCHAR2(1000) /* 사진정보5 */
+);
 
-select * from member;
+ALTER TABLE COMPHOTO
+	ADD
+		CONSTRAINT PK_COMPHOTO
+		PRIMARY KEY (
+			COM_PHOTO_NUM
+		);
 
--- notice 의 공지글 등록은 관리자만 등록/수정할 수 있게 처리함
--- 공지글 등록자 아이디를 수정 : user01 >> admin 으로 변경
-UPDATE NOTICE
-SET NOTICEWRITER = 'admin';
+/* Q&A 사진 테이블 */
+CREATE TABLE QAPHOTO (
+	QA_PHOTO_NUM NUMBER NOT NULL, /* 사진 테이블 번호 */
+	QA_PHOTO_PH1 VARCHAR2(1000), /* 사진정보1 */
+	QA_PHOTO_PH2 VARCHAR2(1000), /* 사진정보2 */
+	QA_PHOTO_PH3 VARCHAR2(1000), /* 사진정보3 */
+	QA_PHOTO_PH4 VARCHAR2(1000), /* 사진정보4 */
+	QA_PHOTO_PH5 VARCHAR2(1000) /* 사진정보5 */
+);
 
-commit;
+ALTER TABLE QAPHOTO
+	ADD
+		CONSTRAINT PK_QAPHOTO
+		PRIMARY KEY (
+			QA_PHOTO_NUM
+		);
 
-select * from notice;
+/* 팔로워 */
+CREATE TABLE FOLLOWERS (
+	ME_NUM NUMBER NOT NULL, /* 회원 넘버 */
+	BLOCK CHAR, /* 차단여부 */
+	ME_NUM2 NUMBER /* 팔로워 */
+);
+
+ALTER TABLE FOLLOWERS
+	ADD
+		CONSTRAINT PK_FOLLOWERS
+		PRIMARY KEY (
+			ME_NUM
+		);
+
+/* 종합 신고 테이블 */
+CREATE TABLE REPORT (
+	RE_NUM NUMBER NOT NULL, /* 종합 신고 테이블 번호 */
+	ME_NUM NUMBER, /* 회원 넘버 */
+	RE_CATEGORY VARCHAR2(50), /* 카테고리 */
+	RE_TABLE_NUMBER NUMBER, /* 테이블 번호 */
+	RE_CON VARCHAR2(500), /* 신고내용 */
+	RE_ATT_NUM NUMBER, /* 신고할 회원 넘버 */
+	RE_ATT_TIME DATE, /* 신고날짜 */
+	RE_ADMIN_NUM NUMBER, /* 신고처리(관리자) */
+	RE_PROCE_TIME DATE /* 신고처리 날짜 */
+);
+
+ALTER TABLE REPORT
+	ADD
+		CONSTRAINT PK_REPORT
+		PRIMARY KEY (
+			RE_NUM
+		);
+
+ALTER TABLE PARTY
+	ADD
+		CONSTRAINT FK_PHOTO_TO_PARTY
+		FOREIGN KEY (
+			PH_NUM
+		)
+		REFERENCES PHOTO (
+			PH_NUM
+		);
+
+ALTER TABLE PARTY
+	ADD
+		CONSTRAINT FK_MEMBER_TO_PARTY
+		FOREIGN KEY (
+			ME_NUM
+		)
+		REFERENCES MEMBER (
+			ME_NUM
+		);
+
+ALTER TABLE COMMENTS
+	ADD
+		CONSTRAINT FK_PARTY_TO_COMMENTS
+		FOREIGN KEY (
+			PA_NUM
+		)
+		REFERENCES PARTY (
+			PA_NUM
+		);
+
+ALTER TABLE COMMENTS
+	ADD
+		CONSTRAINT FK_COMPHOTO_TO_COMMENTS
+		FOREIGN KEY (
+			COM_PHOTO_NUM
+		)
+		REFERENCES COMPHOTO (
+			COM_PHOTO_NUM
+		);
+
+ALTER TABLE QA
+	ADD
+		CONSTRAINT FK_QAPHOTO_TO_QA
+		FOREIGN KEY (
+			QA_PHOTO_NUM
+		)
+		REFERENCES QAPHOTO (
+			QA_PHOTO_NUM
+		);
+
+ALTER TABLE QA
+	ADD
+		CONSTRAINT FK_MEMBER_TO_QA
+		FOREIGN KEY (
+			ME_NUM
+		)
+		REFERENCES MEMBER (
+			ME_NUM
+		);
+
+ALTER TABLE QACOMMENTS
+	ADD
+		CONSTRAINT FK_QA_TO_QACOMMENTS
+		FOREIGN KEY (
+			QA_NUM
+		)
+		REFERENCES QA (
+			QA_NUM
+		);
+
+ALTER TABLE FOLLOWING
+	ADD
+		CONSTRAINT FK_MEMBER_TO_FOLLOWING
+		FOREIGN KEY (
+			ME_NUM
+		)
+		REFERENCES MEMBER (
+			ME_NUM
+		);
+
+ALTER TABLE FOLLOWING
+	ADD
+		CONSTRAINT FK_FOLLOWING_TO_FOLLOWING
+		FOREIGN KEY (
+			ME_NUM2
+		)
+		REFERENCES FOLLOWING (
+			ME_NUM
+		);
+
+ALTER TABLE NOTE
+	ADD
+		CONSTRAINT FK_MEMBER_TO_NOTE
+		FOREIGN KEY (
+			ME_NUM_RE
+		)
+		REFERENCES MEMBER (
+			ME_NUM
+		);
+
+ALTER TABLE NOTE
+	ADD
+		CONSTRAINT FK_NOTE_TO_NOTE
+		FOREIGN KEY (
+			ME_NUM_SEN
+		)
+		REFERENCES NOTE (
+			ME_NUM_RE
+		);
+
+ALTER TABLE PAYMENT
+	ADD
+		CONSTRAINT FK_MEMBER_TO_PAYMENT
+		FOREIGN KEY (
+			ME_NUM
+		)
+		REFERENCES MEMBER (
+			ME_NUM
+		);
+
+ALTER TABLE PAYMENT
+	ADD
+		CONSTRAINT FK_PARTY_TO_PAYMENT
+		FOREIGN KEY (
+			PA_NUM
+		)
+		REFERENCES PARTY (
+			PA_NUM
+		);
+
+ALTER TABLE TOTALPARTY
+	ADD
+		CONSTRAINT FK_PARTY_TO_TOTALPARTY
+		FOREIGN KEY (
+			PA_NUM
+		)
+		REFERENCES PARTY (
+			PA_NUM
+		);
+
+ALTER TABLE REFUND
+	ADD
+		CONSTRAINT FK_PAYMENT_TO_REFUND
+		FOREIGN KEY (
+			PM_NUM,
+			ME_NUM,
+			PA_NUM
+		)
+		REFERENCES PAYMENT (
+			PM_NUM,
+			ME_NUM,
+			PA_NUM
+		);
+
+ALTER TABLE FOLLOWERS
+	ADD
+		CONSTRAINT FK_MEMBER_TO_FOLLOWERS
+		FOREIGN KEY (
+			ME_NUM
+		)
+		REFERENCES MEMBER (
+			ME_NUM
+		);
+
+ALTER TABLE FOLLOWERS
+	ADD
+		CONSTRAINT FK_FOLLOWERS_TO_FOLLOWERS
+		FOREIGN KEY (
+			ME_NUM2
+		)
+		REFERENCES FOLLOWERS (
+			ME_NUM
+		);
+
+ALTER TABLE REPORT
+	ADD
+		CONSTRAINT FK_MEMBER_TO_REPORT
+		FOREIGN KEY (
+			ME_NUM
+		)
+		REFERENCES MEMBER (
+			ME_NUM
+		);
