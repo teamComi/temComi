@@ -1,12 +1,8 @@
 package common;
 
-import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
