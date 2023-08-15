@@ -1,8 +1,7 @@
-CREATE USER c##testweb IDENTIFIED BY testweb;
+-- run -> system // id : c##comidb // pwd : comidb
+create user c##comidb IDENTIFIED by comidb;
 
-GRANT CONNECT, RESOURCE TO c##testweb;
-GRANT CREATE VIEW TO c##testweb;
-
-ALTER USER c##testweb
-QUOTA 1024M ON USERS;
-
+grant connect, resource to c##comidb;
+grant create view to c##comidb;
+alter user c##comidb
+quota 1024m on users;
