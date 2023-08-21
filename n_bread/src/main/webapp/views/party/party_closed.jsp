@@ -20,29 +20,32 @@
     <script type="text/javascript">
     	var partyData = [];
         <%= partyList.size() %>
-    	<% for(Party p : partyList) { %>
+    	<% for(Party party : partyList) { %>
     		partyData.push({
-    			paid : Number(<%= "\"" + p.getPaNum() + "\"" %>)
-    			,meid : Number(<%= "\"" + p.getMeNum() + "\"" %>)
-    			,title : <%= "\"" + p.getPaTitle() + "\"" %>
-    			,price : Number(<%= "\"" + p.getPaTotalAmount() + "\"" %>)
-    			,deposit : Number(<%= "\"" + p.getPaDeposit() + "\"" %>)
-    			,peoplePrice : Number(<%= "\"" + p.getPaPerAmount() + "\"" %>)
-    			,category : <%= "\"" + p.getPaCategory() + "\"" %>
-    			,title : <%= "\"" + p.getPaTitle() + "\"" %>
-    			,contents : <%= "\"" + p.getPaCon() + "\"" %>
-    			,enroll : <%= "\"" + p.getPaEnroll() + "\"" %>
-    			,modDate : <%= "\"" + p.getPaModDate() + "\"" %>
-    			,delDate : <%= "\"" + p.getPaDelDate() + "\"" %>
-    			,act : <%= "\"" + p.getPaAct() + "\"" %>
-    			,views : Number(<%= "\"" + p.getPaViews() + "\"" %>)
-    			,likes : Number(<%= "\"" + p.getPaLike() + "\"" %>)
-    			,count : Number(<%= "\"" + p.getPaComCount() + "\"" %>)
-    			,genderSet : <%= "\"" + p.getPaGenderSet() + "\"" %>
-    			,location : <%= "\"" + p.getPaLocation() + "\"" %>
-    			,totalNum : Number(<%= "\"" + p.getPaTotalNum() + "\"" %>)
-    			,genderLimit : <%= "\"" + p.getPaGenderLimit() + "\"" %>
-    			,phNum : Number(<%= "\"" + p.getPhNum() + "\"" %>)
+    			paid : Number(<%= "\"" + party.getPaNum() + "\"" %>)
+    			,meid : Number(<%= "\"" + party.getMeNum() + "\"" %>)
+    			,title : <%= "\"" + party.getPaTitle() + "\"" %>
+    			,price : Number(<%= "\"" + party.getPaTotalAmount() + "\"" %>)
+    			,deposit : Number(<%= "\"" + party.getPaDeposit() + "\"" %>)
+    			,peoplePrice : Number(<%= "\"" + party.getPaPerAmount() + "\"" %>)
+    			
+    			,title : <%= "\"" + party.getPaTitle() + "\"" %>
+    			,contents : <%= "\"" + party.getPaCon() + "\"" %>
+    			,enroll : <%= "\"" + party.getPaEnroll() + "\"" %>
+    			,modDate : <%= "\"" + party.getPaModDate() + "\"" %>
+    			,delDate : <%= "\"" + party.getPaDelDate() + "\"" %>
+    			,act : <%= "\"" + party.getPaAct() + "\"" %>
+    			,views : Number(<%= "\"" + party.getPaViews() + "\"" %>)
+    			,likes : Number(<%= "\"" + party.getPaLike() + "\"" %>)
+    			,count : Number(<%= "\"" + party.getPaComCount() + "\"" %>)
+				
+    			,genderSet : <%= "\"" + party.getPaGenderSet() + "\"" %>
+    			,location : <%= "\"" + party.getPaLocation() + "\"" %>
+    			,totalNum : Number(<%= "\"" + party.getPaTotalNum() + "\"" %>)
+    			,genderLimit : <%= "\"" + party.getPaGenderLimit() + "\"" %>
+    			,phNum : Number(<%= "\"" + party.getPhNum() + "\"" %>)
+				,category : <%= "\"" + party.getCatNum() + "\"" %>
+    			)
     			
     		})
     	<% } %>
