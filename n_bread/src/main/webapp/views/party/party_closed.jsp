@@ -45,7 +45,7 @@
     			,genderLimit : <%= "\"" + party.getPaGenderLimit() + "\"" %>
     			,phNum : Number(<%= "\"" + party.getPhNum() + "\"" %>)
 				,category : <%= "\"" + party.getCatNum() + "\"" %>
-    			)
+    		)
     			
     		})
     	<% } %>
