@@ -1,6 +1,8 @@
-
+var common
 document.addEventListener("DOMContentLoaded", function(){
     
+    common = new Common();
+
     var header = document.querySelector('#header_view');
     fetch('/comi/views/common/header.html')
     .then(res => res.text())
@@ -36,21 +38,30 @@ function listAddClass(){
     }
 }
 
-function comma(num) {
-    var str = String(num);
-    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+function Common() {
 }
 
-function chkArrayNull(arr) {
-    if(arr !== null && arr !== undefined && arr && arr.length > 0) {
-        return true;
+Common.prototype = {
+    comma : function (num) {
+        var str = String(num);
+        var str2 = str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+        console.log('str2 : ' + str2);
+        return (str2 == undefined || str2 == null || str2 == 'undefined') ? '0' : str2;
+    },
+    chkArrayNull : function (arr) {
+        if(arr !== null && arr !== undefined && arr && arr.length > 0) {
+            return true;
+        }
+        return false;
+    },
+    chkJsonNull : function (json) {
+        if(json !== null && json !== undefined && json && Object.keys(json).length > 0) {
+            return true;
+        }
+        return false;
     }
-    return false;
 }
 
-function chkJsonNull(json) {
-    if(json !== null && json !== undefined && json && Object.keys(json).length > 0) {
-        return true;
-    }
-    return false;
-}
+
+
+

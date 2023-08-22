@@ -66,6 +66,7 @@
 			,point : Number(<%= "\"" + member.getMePoint() + "\"" %>)
 		}
     </script>
+	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/party_view_click.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/slick_set.js"></script>
 </head>
@@ -81,27 +82,9 @@
 
 			<!-- 슬라이더 -->
 			<div class="main_slider">
-
 				<div id="slider_main">
-					<div>
-						<div class="slide_box">
-							<img class="picture_box" src="/comi/resources/images/pic01.jpg" />
-						</div>
-					</div>
-
-					<div>
-						<div class="slide_box">
-							<img class="picture_box" src="/comi/resources/images/pic01.jpg" />
-						</div>
-					</div>
-
-					<div>
-						<div class="slide_box">
-							<img class="picture_box" src="/comi/resources/images/pic01.jpg" />
-						</div>
-					</div>
 					
-				  </div>
+				</div>
 			</div>
 		</div>
 
@@ -226,107 +209,8 @@
 					<a id="article-party-share-re" href="/comi/views/party/party_view.html">더보기</a>
 				</div>
 
-				<div class="main_portfolio">
-					<a class="port_box flexBox" href="/comi/views/party/party_view_click.html">
-						<div class="image featured">
-							<img src="/comi/resources/images/pic01.jpg" alt="" />
-						</div>
-						<div class="text_box">
-							<div class="port_box_title">카드 판매합니다.</div>
-							<div class="port_box_textbox">
-								<div class="port_box_price">가격 : <span class="price_all">230000</span></div>
-								<div class="port_box_deposit">예치금 : <span class="price_deposit">130000</span></div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_address">서울시 동작구 상도로 15길</div>
-								<div class="port_box_date">3일전</div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_text">인원 모집 3명</div>
-								<div class="port_box_text">인당 5,000원</div>
-							</div>
-						</div>
-					</a>
-					<a class="port_box flexBox" href="/comi/views/party/party_view_click.html">
-						<div class="image featured">
-							<img src="/comi/resources/images/pic01.jpg" alt="" />
-						</div>
-						<div class="text_box">
-							<div class="port_box_title">카드 판매합니다.</div>
-							<div class="port_box_textbox">
-								<div class="port_box_price">가격 : <span class="price_all">230000</span></div>
-								<div class="port_box_deposit">예치금 : <span class="price_deposit">130000</span></div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_address">서울시 동작구 상도로 15길</div>
-								<div class="port_box_date">3일전</div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_text">인원 모집 3명</div>
-								<div class="port_box_text">인당 5,000원</div>
-							</div>
-						</div>
-					</a>
-					<a class="port_box flexBox" href="/comi/views/party/party_view_click.html">
-						<div class="image featured">
-							<img src="/comi/resources/images/pic01.jpg" alt="" />
-						</div>
-						<div class="text_box">
-							<div class="port_box_title">카드 판매합니다.</div>
-							<div class="port_box_textbox">
-								<div class="port_box_price">가격 : <span class="price_all">230000</span></div>
-								<div class="port_box_deposit">예치금 : <span class="price_deposit">130000</span></div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_address">서울시 동작구 상도로 15길</div>
-								<div class="port_box_date">3일전</div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_text">인원 모집 3명</div>
-								<div class="port_box_text">인당 5,000원</div>
-							</div>
-						</div>
-					</a>
-					<a class="port_box flexBox" href="/comi/views/party/party_view_click.html">
-						<div class="image featured">
-							<img src="/comi/resources/images/pic01.jpg" alt="" />
-						</div>
-						<div class="text_box">
-							<div class="port_box_title">카드 판매합니다.</div>
-							<div class="port_box_textbox">
-								<div class="port_box_price">가격 : <span class="price_all">230000</span></div>
-								<div class="port_box_deposit">예치금 : <span class="price_deposit">130000</span></div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_address">서울시 동작구 상도로 15길</div>
-								<div class="port_box_date">3일전</div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_text">인원 모집 3명</div>
-								<div class="port_box_text">인당 5,000원</div>
-							</div>
-						</div>
-					</a>
-					<a class="port_box flexBox" href="/comi/views/party/party_view_click.html">
-						<div class="image featured">
-							<img src="/comi/resources/images/pic01.jpg" alt="" />
-						</div>
-						<div class="text_box">
-							<div class="port_box_title">카드 판매합니다.</div>
-							<div class="port_box_textbox">
-								<div class="port_box_price">가격 : <span class="price_all">230000</span></div>
-								<div class="port_box_deposit">예치금 : <span class="price_deposit">130000</span></div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_address">서울시 동작구 상도로 15길</div>
-								<div class="port_box_date">3일전</div>
-							</div>
-							<div class="port_box_textbox">
-								<div class="port_box_text">인원 모집 3명</div>
-								<div class="port_box_text">인당 5,000원</div>
-							</div>
-						</div>
-					</a>
+				<div class="main_portfolio" id="portf_box">
+					
 				</div>
 			</section>
 			<!-- 공유 모임 더 보기 end-->

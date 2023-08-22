@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function(){
             var value = '';
             console.log('json : ' + json.list);
 
-            //하단 리스트 불러오기
             var makeP = new makeParty();
 
             for(var i in json.list) {
@@ -61,8 +60,8 @@ PartyViewClick.prototype = {
         var chatNum = party.count;
         var selecNum = party.views;
 
-        //슬라이드
-        $('#slider_main').append(makeP.setSlide(obj));
+        var endStr = (partyType == 'disabled') ? '종료된 모임이에요.' : '';
+        $('.party_closed').append(endStr);
 
         //프로필
         $("#article-profile-image-box img").attr("src", imgUrl);
