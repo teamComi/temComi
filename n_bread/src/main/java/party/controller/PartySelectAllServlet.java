@@ -1,6 +1,8 @@
 package party.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -9,6 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import party.model.service.PartyService;
 import party.model.vo.Party;
@@ -43,19 +48,45 @@ public class PartySelectAllServlet extends HttpServlet {
 		else if(type.equals("findReview")) list = pservice.selectPartyAll("close");//비활성화
 		
 		System.out.println("list : " + list);
-		RequestDispatcher view = null;
 		
-		if(list != null && list.size() > 0) {
-			if(type.equals("findParty")) 
-				view = request.getRequestDispatcher("views/party/party_view.jsp");
-			else //if(type.equals("findReview"))
-				view = request.getRequestDispatcher("views/party/party_closed.jsp");
-			request.setAttribute("partyList", list);
-		}else {
-			view = request.getRequestDispatcher("views/common/error.jsp");
-			request.setAttribute("message", "파티 리스트 불러오기 실패");
+		JSONArray jarr = new JSONArray();
+		
+		for(Party party : list) {
+			JSONObject json = new JSONObject();
+			json.put("paid", party.getPaNum());
+			json.put("meid", party.getMeNum());
+			json.put("time", String.valueOf(party.getPaTime()));
+			json.put("price", party.getPaTotalAmount());
+			json.put("deposit", party.getPaDeposit());
+			json.put("peoplePrice", party.getPaPerAmount());
+			
+			json.put("title", URLEncoder.encode(party.getPaTitle(), "UTF-8"));
+			json.put("contents", URLEncoder.encode(party.getPaCon(), "UTF-8"));
+			json.put("enroll", String.valueOf(party.getPaEnroll()));
+			json.put("modDate", String.valueOf(party.getPaModDate()));
+			json.put("delDate", String.valueOf(party.getPaDelDate()));
+			json.put("act", party.getPaAct());
+			json.put("views", party.getPaViews());
+			json.put("likes", party.getPaLike());
+			json.put("count", party.getPaComCount());
+			
+			json.put("genderSet", party.getPaGenderSet());
+			json.put("location", party.getPaLocation());
+			json.put("totalNum", party.getPaTotalNum());
+			json.put("genderLimit", party.getPaGenderLimit());
+			json.put("phNum", party.getPhNum());
+			json.put("category", party.getCatNum());
+			
+			jarr.add(json);
 		}
-		view.forward(request, response);
+		
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("list", jarr);
+		response.setContentType("application/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(sendJson);
+		out.flush();
+		
 	}
 
 	/**

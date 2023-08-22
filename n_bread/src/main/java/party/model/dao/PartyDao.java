@@ -74,7 +74,7 @@ public class PartyDao {
 		
 		try {
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, (type == "open") ? "y" : "n");
+			pstmt.setString(1, (type == "open") ? "Y" : "N");
 			rset = pstmt.executeQuery();
 			
 			while(rset.next()) {
