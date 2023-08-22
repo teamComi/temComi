@@ -80,31 +80,11 @@
 	<main class="main_wrapper">
 		<div class="container side_margin_zero">
 
-			<div class="party_closed">종료된 모임이에요.</div>
-
 			<!-- 슬라이더 -->
 			<div class="main_slider">
-
 				<div id="slider_main">
-					<div>
-						<div class="slide_box">
-							<img class="picture_box" src="/comi/resources/images/pic01.jpg" />
-						</div>
-					</div>
-
-					<div>
-						<div class="slide_box">
-							<img class="picture_box" src="/comi/resources/images/pic01.jpg" />
-						</div>
-					</div>
-
-					<div>
-						<div class="slide_box">
-							<img class="picture_box" src="/comi/resources/images/pic01.jpg" />
-						</div>
-					</div>
 					
-				  </div>
+				</div>
 			</div>
 		</div>
 

@@ -60,9 +60,7 @@ PartyViewClick.prototype = {
         var callNum = party.likes;
         var chatNum = party.count;
         var selecNum = party.views;
-
-        var endStr = (partyType == 'disabled') ? '종료된 모임이에요.' : '';
-        $('.party_closed').append(endStr);
+        
 
         //프로필
         $("#article-profile-image-box img").attr("src", imgUrl);
