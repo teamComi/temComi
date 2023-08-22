@@ -359,6 +359,12 @@
 	margin-top: 30px;
 }
 
+@media screen and (max-width: 767px) {
+    .article-party-share .main_portfolio {
+        grid-template-columns: repeat(1,1fr);
+    }
+}
+
 /*********************************************채팅***********************************************/
 
 #chating {

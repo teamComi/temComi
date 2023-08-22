@@ -63,4 +63,27 @@ values(SEQ_PA_NUM.nextval, 1, sysdate, 32000, 12000, 10000, '6삼겹살 먹으�
 sysdate, null, null, 'N', 0, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
 
 
+
+insert into comphoto
+values(SEQ_COM_PH_NUM.nextval, null, null, null, null, null);
+
+insert into comments 
+values(SEQ_COM_NUM.nextval, 1, 1, 1, '정말 맛있었어요!', 3, 0, 
+sysdate, null, null, 1);
+
+
+insert into comphoto
+values(SEQ_COM_PH_NUM.nextval, null, null, null, null, null);
+
+insert into comments 
+values(SEQ_COM_NUM.nextval, 1, 1, 2, '2정말 맛있었어요!', 3, 0, 
+sysdate, null, null, 2);
+
+insert into comphoto
+values(SEQ_COM_PH_NUM.nextval, null, null, null, null, null);
+
+insert into comments 
+values(SEQ_COM_NUM.nextval, 1, 1, 3, '3정말 맛있었어요!', 3, 0, 
+sysdate, null, null, 3);
+
 commit;

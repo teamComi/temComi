@@ -246,6 +246,7 @@ body {
 
 .main_portfolio .port_box .text_box .port_box_address {
     font-size: 14px;
+    min-height: 27px;
 }
 
 .main_portfolio .port_box .text_box .port_box_date {

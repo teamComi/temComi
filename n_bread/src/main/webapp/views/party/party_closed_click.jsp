@@ -1,3 +1,11 @@
+<%@page import="member.model.vo.Member"%>
+<%@page import="party.model.vo.Party"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	Party party = (Party) request.getAttribute("party");
+	Member member = (Member) request.getAttribute("member");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +21,53 @@
 	<script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/lib/slick.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/common.js"></script>
+	<script type="text/javascript">
+    	var party = {
+    			paid : Number(<%= "\"" + party.getPaNum() + "\"" %>)
+    			,meid : Number(<%= "\"" + party.getMeNum() + "\"" %>)
+    			,title : <%= "\"" + party.getPaTitle() + "\"" %>
+    			,price : Number(<%= "\"" + party.getPaTotalAmount() + "\"" %>)
+    			,deposit : Number(<%= "\"" + party.getPaDeposit() + "\"" %>)
+    			,peoplePrice : Number(<%= "\"" + party.getPaPerAmount() + "\"" %>)
+    			
+    			,title : <%= "\"" + party.getPaTitle() + "\"" %>
+    			,contents : <%= "\"" + party.getPaCon() + "\"" %>
+    			,enroll : <%= "\"" + party.getPaEnroll() + "\"" %>
+    			,modDate : <%= "\"" + party.getPaModDate() + "\"" %>
+    			,delDate : <%= "\"" + party.getPaDelDate() + "\"" %>
+    			,act : <%= "\"" + party.getPaAct() + "\"" %>
+    			,views : Number(<%= "\"" + party.getPaViews() + "\"" %>)
+    			,likes : Number(<%= "\"" + party.getPaLike() + "\"" %>)
+    			,count : Number(<%= "\"" + party.getPaComCount() + "\"" %>)
+				
+    			,genderSet : <%= "\"" + party.getPaGenderSet() + "\"" %>
+    			,location : <%= "\"" + party.getPaLocation() + "\"" %>
+    			,totalNum : Number(<%= "\"" + party.getPaTotalNum() + "\"" %>)
+    			,genderLimit : <%= "\"" + party.getPaGenderLimit() + "\"" %>
+    			,phNum : Number(<%= "\"" + party.getPhNum() + "\"" %>)
+				,category : <%= "\"" + party.getCatNum() + "\"" %>
+    			
+    		}
+		var member = {
+			menum : Number(<%= "\"" + member.getMeNum() + "\"" %>)
+			,name : <%= "\"" + member.getMeName() + "\"" %>
+			,id : Number(<%= "\"" + member.getMeId() + "\"" %>)
+			,email : <%= "\"" + member.getMeEmail() + "\"" %>
+			,phone : <%= "\"" + member.getMePhone() + "\"" %>
+			,address : <%= "\"" + member.getMeAdd() + "\"" %>
+			,gender : <%= "\"" + member.getMeGender() + "\"" %>
+			,birthday : <%= "\"" + member.getMeBDay() + "\"" %>
+			,enroll : <%= "\"" + member.getMeEnroll() + "\"" %>
+			,nickname : <%= "\"" + member.getMeAka() + "\"" %>
+			,like : <%= "\"" + member.getMeLike() + "\"" %>
+			,photo : <%= "\"" + member.getMePhotoAdd() + "\"" %>
+			,admin : <%= "\"" + member.getMeAdmin() + "\"" %>
+			,ban : <%= "\"" + member.getMeBan() + "\"" %>
+			,point : Number(<%= "\"" + member.getMePoint() + "\"" %>)
+		}
+    </script>
+	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
+	<script type="text/javascript" src="/comi/resources/js/party_closed_click.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/slick_set.js"></script>
 </head>
 <body>
@@ -330,7 +385,20 @@
 
 			</section>
 			<!-- 게시글 리뷰 end-->
+			
+			<!-- 공유 모임 더 보기 -->
+			<section class="article-party-share">
+				<div class="article-party-share-box">
+					<div class="article-party-share-title">인기공유모임</div>
+					<a id="article-party-share-re" href="/comi/views/party/party_view.html">더보기</a>
+				</div>
 
+				<div class="main_portfolio" id="portf_box">
+					
+				</div>
+			</section>
+			<!-- 공유 모임 더 보기 end-->
+			
 		</div>
 	</main>
 	

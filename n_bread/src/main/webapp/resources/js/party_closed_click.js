@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
             for(var i in json.list) {
                 var obj = json.list[i];
-                $('#slider_main').append(makeP.setSlide(obj));
                 $('#portf_box').append(makeP.getTag(obj));
             }
         }

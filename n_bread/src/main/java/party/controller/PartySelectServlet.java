@@ -43,10 +43,10 @@ public class PartySelectServlet extends HttpServlet {
 		RequestDispatcher view = null;
 		System.out.println("member : " + member);
 		if(act != null) {
-			if(act.equals("Y")) 
-				view = request.getRequestDispatcher("views/party/party_view_click.jsp");
-			else 
-				view = request.getRequestDispatcher("views/party/party_closed_click.jsp");
+			String url = "views/party/party_view_click.jsp";
+			if(act.equals("N")) url = "views/party/party_closed_click.jsp";
+			
+			view = request.getRequestDispatcher(url);
 			request.setAttribute("party", party);
 			request.setAttribute("member", member);
 		}else {
