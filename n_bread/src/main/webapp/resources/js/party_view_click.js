@@ -17,11 +17,11 @@ document.addEventListener("DOMContentLoaded", function(){
             var value = '';
             console.log('json : ' + json.list);
 
+            //하단 리스트 불러오기
             var makeP = new makeParty();
 
             for(var i in json.list) {
                 var obj = json.list[i];
-                $('#slider_main').append(makeP.setSlide(obj));
                 $('#portf_box').append(makeP.getTag(obj));
             }
         }
@@ -60,7 +60,9 @@ PartyViewClick.prototype = {
         var callNum = party.likes;
         var chatNum = party.count;
         var selecNum = party.views;
-        
+
+        //슬라이드
+        $('#slider_main').append(makeP.setSlide(obj));
 
         //프로필
         $("#article-profile-image-box img").attr("src", imgUrl);
