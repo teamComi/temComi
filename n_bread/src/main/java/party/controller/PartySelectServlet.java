@@ -39,12 +39,12 @@ public class PartySelectServlet extends HttpServlet {
 		String panum = request.getParameter("panum");
 		String act = request.getParameter("act");//활성화 비활성화 여부
 		
-		System.out.println("panum : " + panum);
+		//System.out.println("select panum : " + panum);
 		Party party = new PartyService().selectParty(Integer.parseInt(panum));
-		System.out.println("party : " + party);
+		//System.out.println("party : " + party);
 		Member member = new MemberService().selectMember(party.getMeNum());
 		RequestDispatcher view = null;
-		System.out.println("member : " + member);
+		//System.out.println("member : " + member);
 		
 		JSONObject jparty = new JsonReturn().returnParty(party);
 		JSONObject jmember = new JsonReturn().returnMember(member);

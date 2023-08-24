@@ -62,7 +62,50 @@ values(SEQ_PA_NUM.nextval, 1, sysdate, 32000, 12000, 10000, '6삼겹살 먹으�
 '6즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
 sysdate, null, null, 'N', 0, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
 
-
+insert into party 
+values(SEQ_PA_NUM.nextval, 2, sysdate, 32000, 12000, 10000, '7삼겹살 먹으러 가실 분!', 
+'7즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 5, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 2, sysdate, 32000, 12000, 10000, '8삼겹살 먹으러 가실 분!', 
+'8즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 6, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 3, sysdate, 32000, 12000, 10000, '9삼겹살 먹으러 가실 분!', 
+'9즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 7, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 3, sysdate, 32000, 12000, 10000, '10삼겹살 먹으러 가실 분!', 
+'10즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 7, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 3, sysdate, 32000, 12000, 10000, '11삼겹살 먹으러 가실 분!', 
+'11즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 8, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 4, sysdate, 32000, 12000, 10000, '12삼겹살 먹으러 가실 분!', 
+'12즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 9, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 4, sysdate, 32000, 12000, 10000, '13삼겹살 먹으러 가실 분!', 
+'13즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 10, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 4, sysdate, 32000, 12000, 10000, '14삼겹살 먹으러 가실 분!', 
+'14즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 2, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 4, sysdate, 32000, 12000, 10000, '15삼겹살 먹으러 가실 분!', 
+'15즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 3, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 4, sysdate, 32000, 12000, 10000, '16삼겹살 먹으러 가실 분!', 
+'16즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 4, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
+insert into party 
+values(SEQ_PA_NUM.nextval, 4, sysdate, 32000, 12000, 10000, '17삼겹살 먹으러 가실 분!', 
+'17즐거운 모임을 가져보아요~ 장소는 강남역 삼겹살 집이에요~',
+sysdate, null, null, 'N', 1, 0, 0, 'N', '서울시 서초구 서초대로 123-3', 3, 'F', 1, 1);
 
 insert into comphoto
 values(SEQ_COM_PH_NUM.nextval, null, null, null, null, null);

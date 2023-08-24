@@ -94,13 +94,17 @@ public class PartySelectAllServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String type = request.getParameter("type");
+		String startStr = request.getParameter("start");
+		String endStr = request.getParameter("end");
+		int start = (startStr == null) ? 1 : Integer.parseInt(startStr);
+		int end = (endStr == null) ? 10 : Integer.parseInt(endStr);
 		
 		PartyService pservice = new PartyService();
 		ArrayList<Party> list = null;
-		System.out.println("type : " + type);
+		System.out.println("type : " + type + ", start : " + start + ", end : " + end);
 		
-		if(type.equals("findParty")) list = pservice.selectPartyAll("open");//활성화
-		else if(type.equals("findReview")) list = pservice.selectPartyAll("close");//비활성화
+		if(type.equals("findParty")) list = pservice.selectPartyAll("open", start, end);//활성화
+		else if(type.equals("findReview")) list = pservice.selectPartyAll("close", start, end);//비활성화
 		
 		System.out.println("list : " + list);
 		

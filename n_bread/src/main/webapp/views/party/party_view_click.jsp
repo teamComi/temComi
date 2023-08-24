@@ -1,11 +1,11 @@
-<%@page import="org.json.simple.JSONArray"%>
+<%@page import="org.json.simple.JSONObject"%>
 <%@page import="member.model.vo.Member"%>
 <%@page import="party.model.vo.Party"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% 
-	JSONArray jparty = (JSONArray) request.getAttribute("party");
-	JSONArray jmember = (JSONArray) request.getAttribute("member");
+	JSONObject jparty = (JSONObject) request.getAttribute("party");
+	JSONObject jmember = (JSONObject) request.getAttribute("member");
 %>
 <!DOCTYPE html>
 <html>
@@ -31,9 +31,11 @@
 	    console.log('partyStr : ' + partyStr);
 	    console.log('memberStr : ' + memberStr);
     </script>
+	<script type="text/javascript" src="/comi/resources/js/clickView.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
+	<script type="text/javascript" src="/comi/resources/js/slickSet.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/party_view_click.js"></script>
-	<script type="text/javascript" src="/comi/resources/js/slick_set.js"></script>
+	
 </head>
 <body>
     <!-- Header Section Begin -->
@@ -171,7 +173,7 @@
 			<section class="article-party-share">
 				<div class="article-party-share-box">
 					<div class="article-party-share-title">인기공유모임</div>
-					<a id="article-party-share-re" href="/comi/views/party/party_view.html">더보기</a>
+					<a id="article-party-share-re" href="/comi/partysall?type=findParty">더보기</a>
 				</div>
 
 				<div class="main_portfolio" id="portf_box">

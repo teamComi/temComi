@@ -3,6 +3,7 @@ package party.model.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import party.model.vo.Party;
@@ -29,29 +30,7 @@ public class PartyDao {
 			rset = ptst.executeQuery();
 			
 			if(rset.next()) {
-				party = new Party(
-						rset.getInt("PA_NUM")
-						,rset.getInt("ME_NUM")
-						,rset.getDate("PA_TIME")
-						,rset.getInt("PA_TOTAL_AMOUNT")
-						,rset.getInt("PA_DEPOSIT")
-						,rset.getInt("PA_PER_AMOUNT")
-						,rset.getString("PA_TITLE")
-						,rset.getString("PA_CON")
-						,rset.getDate("PA_ENROLL")
-						,rset.getDate("PA_MOD_DATE")
-						,rset.getDate("PA_DEL_DATE")
-						,rset.getString("PA_ACT")
-						,rset.getInt("PA_VIEWS")
-						,rset.getInt("PA_LIKE")
-						,rset.getInt("PA_COM_COUNT")
-						,rset.getString("PA_GENDER_SET")
-						,rset.getString("PA_LOCATION")
-						,rset.getInt("PA_TOTAL_NUM")
-						,rset.getString("PA_GENDER_LIMIT")
-						,rset.getInt("PH_NUM")
-						,rset.getInt("CAT_NUM")
-						);
+				party = makeParty(rset);
 			}
 			
 		} catch (Exception e) {
@@ -65,42 +44,72 @@ public class PartyDao {
 	}
 	
 	//전체 조회
-	public ArrayList<Party> selectPartyAll(Connection conn, String type) {
+	public ArrayList<Party> selectPartyAll(Connection conn, String type, int start, int end) {
 		ArrayList<Party> partyList = new ArrayList<Party>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		String query = "select * from party where pa_act=?";
+		String query = "select * "
+				+ "from (select rownum rnum, PA_NUM, ME_NUM, PA_TIME, PA_TOTAL_AMOUNT, "
+				+ "           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL, "
+				+ "           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE, "
+				+ "           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM, "
+				+ "           PA_GENDER_LIMIT, PH_NUM, CAT_NUM "
+				+ "     from (select * from party where PA_ACT = ?"
+				+ "           order by PA_ENROLL desc)) "
+				+ "where rnum >= ? and rnum <= ?";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, (type == "open") ? "Y" : "N");
+			pstmt.setInt(2, start);
+			pstmt.setInt(3, end);
+			
 			rset = pstmt.executeQuery();
 			
 			while(rset.next()) {
-				Party party = new Party(
-						rset.getInt("PA_NUM")
-						,rset.getInt("ME_NUM")
-						,rset.getDate("PA_TIME")
-						,rset.getInt("PA_TOTAL_AMOUNT")
-						,rset.getInt("PA_DEPOSIT")
-						,rset.getInt("PA_PER_AMOUNT")
-						,rset.getString("PA_TITLE")
-						,rset.getString("PA_CON")
-						,rset.getDate("PA_ENROLL")
-						,rset.getDate("PA_MOD_DATE")
-						,rset.getDate("PA_DEL_DATE")
-						,rset.getString("PA_ACT")
-						,rset.getInt("PA_VIEWS")
-						,rset.getInt("PA_LIKE")
-						,rset.getInt("PA_COM_COUNT")
-						,rset.getString("PA_GENDER_SET")
-						,rset.getString("PA_LOCATION")
-						,rset.getInt("PA_TOTAL_NUM")
-						,rset.getString("PA_GENDER_LIMIT")
-						,rset.getInt("PH_NUM")
-						,rset.getInt("CAT_NUM")
-						);
+				Party party = makeParty(rset);
+				//System.out.println("party : " + party);
+				partyList.add(party);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return partyList;
+	}
+	
+	//리스트 조회(나만 빼고)
+	public ArrayList<Party> selectPartyList(Connection conn, String type, int start, int end, String panum) {
+		ArrayList<Party> partyList = new ArrayList<Party>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String query = "select * "
+				+ "from (select rownum rnum, PA_NUM, ME_NUM, PA_TIME, PA_TOTAL_AMOUNT, "
+				+ "           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL, "
+				+ "           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE, "
+				+ "           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM, "
+				+ "           PA_GENDER_LIMIT, PH_NUM, CAT_NUM "
+				+ "     from (select * from party where PA_ACT = ? and PA_NUM != ? "
+				+ "           order by PA_ENROLL desc)) "
+				+ "where rnum >= ? and rnum <= ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, "Y");
+			pstmt.setString(2, panum);
+			pstmt.setInt(3, start);
+			pstmt.setInt(4, end);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Party party = makeParty(rset);
 				//System.out.println("party : " + party);
 				partyList.add(party);
 			}
@@ -198,6 +207,35 @@ public class PartyDao {
 	public ArrayList<Party> sortPartyCurrent(Connection conn, String keyword) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	
+	public Party makeParty(ResultSet rset) throws SQLException {
+		Party party = new Party(
+				rset.getInt("PA_NUM")
+				,rset.getInt("ME_NUM")
+				,rset.getDate("PA_TIME")
+				,rset.getInt("PA_TOTAL_AMOUNT")
+				,rset.getInt("PA_DEPOSIT")
+				,rset.getInt("PA_PER_AMOUNT")
+				,rset.getString("PA_TITLE")
+				,rset.getString("PA_CON")
+				,rset.getDate("PA_ENROLL")
+				,rset.getDate("PA_MOD_DATE")
+				,rset.getDate("PA_DEL_DATE")
+				,rset.getString("PA_ACT")
+				,rset.getInt("PA_VIEWS")
+				,rset.getInt("PA_LIKE")
+				,rset.getInt("PA_COM_COUNT")
+				,rset.getString("PA_GENDER_SET")
+				,rset.getString("PA_LOCATION")
+				,rset.getInt("PA_TOTAL_NUM")
+				,rset.getString("PA_GENDER_LIMIT")
+				,rset.getInt("PH_NUM")
+				,rset.getInt("CAT_NUM")
+		);
+		
+		return party;
 	}
 	
 	

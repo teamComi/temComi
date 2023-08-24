@@ -179,7 +179,7 @@ body {
 
 /*메인 포트폴리오*/
 .main_portfolio {
-    grid-template-columns: repeat(5,1fr);
+    grid-template-columns: repeat(4,1fr);
     display: grid;
     place-items: center;
     grid-row-gap: 15px;
@@ -245,7 +245,7 @@ body {
 }
 
 .main_portfolio .port_box .text_box .port_box_address {
-    font-size: 14px;
+    font-size: 13px;
     min-height: 27px;
 }
 

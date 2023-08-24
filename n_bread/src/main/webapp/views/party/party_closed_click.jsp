@@ -1,10 +1,11 @@
+<%@page import="org.json.simple.JSONObject"%>
 <%@page import="member.model.vo.Member"%>
 <%@page import="party.model.vo.Party"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	Party party = (Party) request.getAttribute("party");
-	Member member = (Member) request.getAttribute("member");
+<% 
+	JSONObject jparty = (JSONObject) request.getAttribute("party");
+	JSONObject jmember = (JSONObject) request.getAttribute("member");
 %>
 <!DOCTYPE html>
 <html>
@@ -22,50 +23,15 @@
 	<script type="text/javascript" src="/comi/resources/js/lib/slick.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/common.js"></script>
 	<script type="text/javascript">
-    	var party = {
-    			paid : Number(<%= "\"" + party.getPaNum() + "\"" %>)
-    			,meid : Number(<%= "\"" + party.getMeNum() + "\"" %>)
-    			,title : <%= "\"" + party.getPaTitle() + "\"" %>
-    			,price : Number(<%= "\"" + party.getPaTotalAmount() + "\"" %>)
-    			,deposit : Number(<%= "\"" + party.getPaDeposit() + "\"" %>)
-    			,peoplePrice : Number(<%= "\"" + party.getPaPerAmount() + "\"" %>)
-    			
-    			,title : <%= "\"" + party.getPaTitle() + "\"" %>
-    			,contents : <%= "\"" + party.getPaCon() + "\"" %>
-    			,enroll : <%= "\"" + party.getPaEnroll() + "\"" %>
-    			,modDate : <%= "\"" + party.getPaModDate() + "\"" %>
-    			,delDate : <%= "\"" + party.getPaDelDate() + "\"" %>
-    			,act : <%= "\"" + party.getPaAct() + "\"" %>
-    			,views : Number(<%= "\"" + party.getPaViews() + "\"" %>)
-    			,likes : Number(<%= "\"" + party.getPaLike() + "\"" %>)
-    			,count : Number(<%= "\"" + party.getPaComCount() + "\"" %>)
-				
-    			,genderSet : <%= "\"" + party.getPaGenderSet() + "\"" %>
-    			,location : <%= "\"" + party.getPaLocation() + "\"" %>
-    			,totalNum : Number(<%= "\"" + party.getPaTotalNum() + "\"" %>)
-    			,genderLimit : <%= "\"" + party.getPaGenderLimit() + "\"" %>
-    			,phNum : Number(<%= "\"" + party.getPhNum() + "\"" %>)
-				,category : <%= "\"" + party.getCatNum() + "\"" %>
-    			
-    		}
-		var member = {
-			menum : Number(<%= "\"" + member.getMeNum() + "\"" %>)
-			,name : <%= "\"" + member.getMeName() + "\"" %>
-			,id : Number(<%= "\"" + member.getMeId() + "\"" %>)
-			,email : <%= "\"" + member.getMeEmail() + "\"" %>
-			,phone : <%= "\"" + member.getMePhone() + "\"" %>
-			,address : <%= "\"" + member.getMeAdd() + "\"" %>
-			,gender : <%= "\"" + member.getMeGender() + "\"" %>
-			,birthday : <%= "\"" + member.getMeBDay() + "\"" %>
-			,enroll : <%= "\"" + member.getMeEnroll() + "\"" %>
-			,nickname : <%= "\"" + member.getMeAka() + "\"" %>
-			,like : <%= "\"" + member.getMeLike() + "\"" %>
-			,photo : <%= "\"" + member.getMePhotoAdd() + "\"" %>
-			,admin : <%= "\"" + member.getMeAdmin() + "\"" %>
-			,ban : <%= "\"" + member.getMeBan() + "\"" %>
-			,point : Number(<%= "\"" + member.getMePoint() + "\"" %>)
-		}
+		var partyStr = JSON.stringify(<%= jparty %>);
+		var partyData = JSON.parse(partyStr);
+		
+		var memberStr = JSON.stringify(<%= jmember %>);
+		var memberData = JSON.parse(memberStr);
+	    console.log('partyStr : ' + partyStr);
+	    console.log('memberStr : ' + memberStr);
     </script>
+	<script type="text/javascript" src="/comi/resources/js/clickView.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/party_closed_click.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/slick_set.js"></script>
@@ -79,30 +45,13 @@
 	<!-- main -->
 	<main class="main_wrapper">
 		<div class="container side_margin_zero">
+			<div class="party_closed_up">종료된 모임이에요.</div>
 
 			<!-- 슬라이더 -->
-			<div class="main_slider">
-
+			<div class="main_slider margin-bottom20px">
 				<div id="slider_main">
-					<div>
-						<div class="slide_box">
-							<img class="picture_box" src="/comi/resources/images/pic01.jpg" />
-						</div>
-					</div>
-
-					<div>
-						<div class="slide_box">
-							<img class="picture_box" src="/comi/resources/images/pic01.jpg" />
-						</div>
-					</div>
-
-					<div>
-						<div class="slide_box">
-							<img class="picture_box" src="/comi/resources/images/pic01.jpg" />
-						</div>
-					</div>
 					
-				  </div>
+				</div>
 			</div>
 		</div>
 
@@ -114,17 +63,17 @@
 						<div class="space-between">
 							<div class="display-align-items-center">
 								<div id="article-profile-image-box">
-									<img src="/comi/resources/images/ss.png" />
+									<img src="" />
 								</div>
 								<div id="article-profile-left">
-									<div id="article-nickname">긴급SOS</div>
-									<div id="article-region-name">순천시 왕조1동</div>
+									<div id="article-nickname"></div>
+									<div id="article-region-name"></div>
 								</div>
 							</div>
 							<div class="article-profile-right">
 								<div class="temperature-wrap">
 									<span>신뢰도</span>
-									<span class="text-color text-color-03" id="text-color-id">35</span>
+									<span class="text-color text-color-03" id="text-color-id"></span>
 								</div>
 								<div class="meters">
 									<div class="bar bar-color-03" id="bar-color-id"></div>
@@ -141,40 +90,37 @@
 			
 			<!-- 게시글 -->
 			<section id="article-description">
-				<h1 id="article-title">ex삼겹살 먹으러 가실 분!</h1>
+				<h1 id="article-title"></h1>
 				<p id="article-category">
 				  모임 ∙
 				  <span id="article-befordate">
-					 1일 전
+					
 				  </span>
+				</p>
+				<p id="article-location">
+
 				</p>
 				<div id="article-price-box">
 					
-					<div id="article-deposit">거치금 : 100,000원</div>
+					<div id="article-deposit"></div>
 					<div id="article-bar-box">
 						<span id="article-price-bar"></span>
 						<span id="article-deposit-bar"></span>
 					</div>
-					<div id="article-price">가격 : 150,000원</div>
+					<div id="article-price"></div>
 
 					<div class="article-people-box">
-						<div id="article-people">모집인원 2명</div>
-						<div id="article-people-price">인당 25,000원</div>
+						<div id="article-people"></div>
+						<div id="article-people-price"></div>
 					</div>
 				</div>
 				<div id="article-detail">
 					<p>
-						ex삼겹살 먹으러 가고 싶어요. 사람은 3명 정도면 좋을 것 같고요.
-						<br>제가 10만원 걸고 5만원만 둘이서 n빵하면 될것 같아요.
-						<br>장소는 동작구 성대시장 앞에 삼겹살 집이에요~ 
-						<br>7시까지 만나요~
+						
 					</p>
 				</div>
 				<p id="article-counts">
-				  찜 23 ∙
-					채팅 89
-				   ∙
-				  조회 817
+					
 				</p>
 			</section>
 			<!-- 게시글 end-->
@@ -386,11 +332,12 @@
 			</section>
 			<!-- 게시글 리뷰 end-->
 			
+			
 			<!-- 공유 모임 더 보기 -->
 			<section class="article-party-share">
 				<div class="article-party-share-box">
 					<div class="article-party-share-title">인기공유모임</div>
-					<a id="article-party-share-re" href="/comi/views/party/party_view.html">더보기</a>
+					<a id="article-party-share-re" href="/comi/partysall?type=findParty">더보기</a>
 				</div>
 
 				<div class="main_portfolio" id="portf_box">

@@ -2,12 +2,12 @@
 
 document.addEventListener("DOMContentLoaded", function(){
     
-    partyViewClick = new PartyViewClick();
-    partyViewClick.init();
-    partyViewClick.buttonEvent();
+    clickView = new ClickView();
+    clickView.init(partyData, memberData);
+    clickView.buttonEvent();
 
     $.ajax({
-        url : '/comi/partysall?type=findParty'
+        url : '/comi/partylist?type=findParty&start=1&end=6&panum=' + partyData.paid
         ,type : 'get'
         ,dataType : 'json'
         ,success : function(data){
@@ -17,11 +17,12 @@ document.addEventListener("DOMContentLoaded", function(){
             var value = '';
             console.log('json : ' + json.list);
 
-            var makeP = new makeParty();
+            //하단 리스트 불러오기
+            var makeParty = new MakeParty();
 
             for(var i in json.list) {
                 var obj = json.list[i];
-                $('#portf_box').append(makeP.getTag(obj));
+                $('#portf_box').append(makeParty.getTag(obj));
             }
         }
         ,error : function(jqXHR, textStatus, errorThrown){

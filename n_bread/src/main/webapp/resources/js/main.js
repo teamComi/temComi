@@ -3,7 +3,6 @@ var common;
 document.addEventListener("DOMContentLoaded", function(){
     
     common = new Common();
-    
     var header = document.querySelector('#header_view');
     fetch('/comi/views/common/header.html')
     .then(res => res.text())
@@ -45,12 +44,9 @@ function Common() {
 Common.prototype = {
     comma : function (num) {
         var str = String(num);
-        var str2 = str.split('.').shift();
-        var str3 = str2.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-
-
-        console.log('str3 : ' + str3);
-        return (str3 == undefined || str3 == null || str3 == 'undefined') ? '0' : str3;
+        var str2 = str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+        console.log('str2 : ' + str2);
+        return (str2 == undefined || str2 == null || str2 == 'undefined') ? '0' : str2;
     },
     chkArrayNull : function (arr) {
         if(arr !== null && arr !== undefined && arr && arr.length > 0) {

@@ -23,9 +23,17 @@ public class PartyService {
 	}
 	
 	//전체 조회
-	public ArrayList<Party> selectPartyAll(String type) {
+	public ArrayList<Party> selectPartyAll(String type, int start, int end) {
 		Connection conn = getConnection();
-		ArrayList<Party> list = dao.selectPartyAll(conn, type);
+		ArrayList<Party> list = dao.selectPartyAll(conn, type, start, end);
+		close(conn);
+		return list;
+	}
+
+	//몇개만 조회
+	public ArrayList<Party> selectPartyList(String type, int start, int end, String panum) {
+		Connection conn = getConnection();
+		ArrayList<Party> list = dao.selectPartyList(conn, type, start, end, panum);
 		close(conn);
 		return list;
 	}

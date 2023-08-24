@@ -47,8 +47,8 @@ public class JsonReturn {
 		json.put("deposit", party.getPaDeposit());
 		json.put("peoplePrice", party.getPaPerAmount());
 		
-		json.put("title", URLEncoder.encode(party.getPaTitle(), "UTF-8"));
-		json.put("contents", URLEncoder.encode(party.getPaCon(), "UTF-8"));
+		json.put("title", urlEncoderNullCheck(party.getPaTitle()));
+		json.put("contents", urlEncoderNullCheck(party.getPaCon()));
 		json.put("enroll", String.valueOf(party.getPaEnroll()));
 		json.put("modDate", String.valueOf(party.getPaModDate()));
 		json.put("delDate", String.valueOf(party.getPaDelDate()));
@@ -58,10 +58,10 @@ public class JsonReturn {
 		json.put("count", party.getPaComCount());
 		
 		json.put("genderSet", party.getPaGenderSet());
-		json.put("location", party.getPaLocation());
+		json.put("location", urlEncoderNullCheck(party.getPaLocation()));
 		json.put("totalNum", party.getPaTotalNum());
 		json.put("genderLimit", party.getPaGenderLimit());
-		json.put("phNum", party.getPhNum());
+		//json.put("phNum", party.getPhNum());
 		json.put("category", party.getCatNum());
 		
 		return json;
@@ -80,15 +80,15 @@ public class JsonReturn {
 	public JSONObject returnMember(Member member) throws UnsupportedEncodingException {
 		JSONObject json = new JSONObject();
 		json.put("menum", member.getMeNum());
-		json.put("name", URLEncoder.encode(member.getMeName(), "UTF-8"));
+		json.put("name", urlEncoderNullCheck(member.getMeName()));
 		json.put("id", member.getMeId());
 		json.put("email", member.getMeEmail());
 		json.put("phone", member.getMePhone());
-		json.put("address", URLEncoder.encode(member.getMeAdd(), "UTF-8"));
+		json.put("address", urlEncoderNullCheck(member.getMeAdd()));
 		json.put("gender", member.getMeGender());
 		json.put("birthday", String.valueOf(member.getMeBDay()));
 		json.put("enroll", String.valueOf(member.getMeEnroll()));
-		json.put("nickname", URLEncoder.encode(member.getMeAka(), "UTF-8"));
+		json.put("nickname", urlEncoderNullCheck(member.getMeAka()));
 		json.put("like", member.getMeLike());
 		json.put("photo", member.getMePhotoAdd());
 		json.put("admin", member.getMeAdmin());
@@ -98,4 +98,9 @@ public class JsonReturn {
 		return json;
 	}
 	
+	public String urlEncoderNullCheck(String str) throws UnsupportedEncodingException {
+		
+		String rstr = (str == null) ? "" : URLEncoder.encode(str, "UTF-8");
+		return rstr;
+	}
 }
