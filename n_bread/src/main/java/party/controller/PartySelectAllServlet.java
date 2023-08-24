@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import common.JsonReturn;
 import party.model.service.PartyService;
 import party.model.vo.Party;
 
@@ -36,6 +37,7 @@ public class PartySelectAllServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+    /*
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String type = request.getParameter("type");
@@ -86,6 +88,42 @@ public class PartySelectAllServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		out.print(sendJson);
 		out.flush();
+		
+	}*/
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String type = request.getParameter("type");
+		
+		PartyService pservice = new PartyService();
+		ArrayList<Party> list = null;
+		System.out.println("type : " + type);
+		
+		if(type.equals("findParty")) list = pservice.selectPartyAll("open");//활성화
+		else if(type.equals("findReview")) list = pservice.selectPartyAll("close");//비활성화
+		
+		System.out.println("list : " + list);
+		
+		JSONArray jarr = new JSONArray();
+		
+		for(Party party : list) {
+			JSONObject json = new JsonReturn().returnParty(party);
+			jarr.add(json);
+		}
+		
+		RequestDispatcher view = null;
+		
+		if(list != null && list.size() > 0) {
+			if(type.equals("findParty")) 
+				view = request.getRequestDispatcher("views/party/party_view.jsp");
+			else //if(type.equals("findReview"))
+				view = request.getRequestDispatcher("views/party/party_closed.jsp");
+			request.setAttribute("partyList", jarr);
+		}else {
+			view = request.getRequestDispatcher("views/common/error.jsp");
+			request.setAttribute("message", "파티 리스트 불러오기 실패");
+		}
+		view.forward(request, response);
 		
 	}
 

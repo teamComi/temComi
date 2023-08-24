@@ -29,11 +29,29 @@ document.addEventListener("DOMContentLoaded", function(){
     });
     
     */
+    
+    var type = ($('title').eq(0).text() == 'party_view') ? 'findParty' : 'findReview';
 
-    var makeP = new makeParty();
+    $.ajax({
+        url : '/comi/partysall?type=' + type
+        ,type : 'get'
+        ,dataType : 'json'
+        ,success : function(data){
+            
+            var str = JSON.stringify(data);
+            var json = JSON.parse(str);
+            var value = '';
+            console.log('json : ' + json.list);
 
-    for(var i in partyData) {
-        var obj = partyData[i];
-        $('#portf_box').append(makeP.getTag(obj));
-    }
+            var makeP = new makeParty();
+
+            for(var i in json.list) {
+                var obj = json.list[i];
+                $('#portf_box').append(makeP.getTag(obj));
+            }
+        }
+        ,error : function(jqXHR, textStatus, errorThrown){
+            console.log('error : ' + jqXHR + ', '+ textStatus + ', ' + errorThrown);
+        }
+    })
 });

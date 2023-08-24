@@ -1,8 +1,8 @@
+<%@page import="org.json.simple.JSONArray"%>
 <%@page import="party.model.vo.Party"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% ArrayList<Party> partyList = (ArrayList<Party>) request.getAttribute("partyList"); %>
+<% JSONArray json = (JSONArray) request.getAttribute("partyList"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,38 +18,12 @@
     <script type="text/javascript" src="/comi/resources/js/lib/lozad.min.js"></script>
     <script type="text/javascript" src="/comi/resources/js/common.js"></script>
     <script type="text/javascript">
-    	var partyData = [];
-        <%= partyList.size() %>
-    	<% for(Party p : partyList) { %>
-    		partyData.push({
-    			paid : Number(<%= "\"" + p.getPaNum() + "\"" %>)
-    			,meid : Number(<%= "\"" + p.getMeNum() + "\"" %>)
-    			,title : <%= "\"" + p.getPaTitle() + "\"" %>
-    			,price : Number(<%= "\"" + p.getPaTotalAmount() + "\"" %>)
-    			,deposit : Number(<%= "\"" + p.getPaDeposit() + "\"" %>)
-    			,peoplePrice : Number(<%= "\"" + p.getPaPerAmount() + "\"" %>)
-    			
-    			,title : <%= "\"" + p.getPaTitle() + "\"" %>
-    			,contents : <%= "\"" + p.getPaCon() + "\"" %>
-    			,enroll : <%= "\"" + p.getPaEnroll() + "\"" %>
-    			,modDate : <%= "\"" + p.getPaModDate() + "\"" %>
-    			,delDate : <%= "\"" + p.getPaDelDate() + "\"" %>
-    			,act : <%= "\"" + p.getPaAct() + "\"" %>
-    			,views : Number(<%= "\"" + p.getPaViews() + "\"" %>)
-    			,likes : Number(<%= "\"" + p.getPaLike() + "\"" %>)
-    			,count : Number(<%= "\"" + p.getPaComCount() + "\"" %>)
-				
-    			,genderSet : <%= "\"" + p.getPaGenderSet() + "\"" %>
-    			,location : <%= "\"" + p.getPaLocation() + "\"" %>
-    			,totalNum : Number(<%= "\"" + p.getPaTotalNum() + "\"" %>)
-    			,genderLimit : <%= "\"" + p.getPaGenderLimit() + "\"" %>
-    			,phNum : Number(<%= "\"" + p.getPhNum() + "\"" %>)
-				,category : <%= "\"" + p.getCatNum() + "\"" %>
-    			
-    		})
-    	<% } %>
-    	
+        var partyStr = JSON.stringify(<%= json %>);
+    	var partyData = JSON.parse(partyStr);
+        console.log('partyStr : ' + partyStr);
+        console.log('partyData : ' + partyData);
     </script>
+    <script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
     <script type="text/javascript" src="/comi/resources/js/party_view.js"></script>
 </head>
 <body>
@@ -87,17 +61,14 @@
 
                 </div>
             </div>
-
+            
             <div class="main_portfolio" id="portf_box">
-                
                 
             </div>
 
-            
         </div>
     </main>
     
-
     <!-- Footer Section Begin -->
     <footer id="footer_view">	
     </footer>

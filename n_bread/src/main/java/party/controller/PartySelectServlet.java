@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
+
+import common.JsonReturn;
 import member.model.service.MemberService;
 import member.model.vo.Member;
 import party.model.service.PartyService;
@@ -42,13 +45,17 @@ public class PartySelectServlet extends HttpServlet {
 		Member member = new MemberService().selectMember(party.getMeNum());
 		RequestDispatcher view = null;
 		System.out.println("member : " + member);
+		
+		JSONObject jparty = new JsonReturn().returnParty(party);
+		JSONObject jmember = new JsonReturn().returnMember(member);
+		
 		if(act != null) {
 			String url = "views/party/party_view_click.jsp";
 			if(act.equals("N")) url = "views/party/party_closed_click.jsp";
 			
 			view = request.getRequestDispatcher(url);
-			request.setAttribute("party", party);
-			request.setAttribute("member", member);
+			request.setAttribute("party", jparty);
+			request.setAttribute("member", jmember);
 		}else {
 			view = request.getRequestDispatcher("views/common/error.jsp");
 			request.setAttribute("message", "파티 리스트 불러오기 실패");

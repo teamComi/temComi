@@ -1,10 +1,11 @@
+<%@page import="org.json.simple.JSONArray"%>
 <%@page import="member.model.vo.Member"%>
 <%@page import="party.model.vo.Party"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	Party party = (Party) request.getAttribute("party");
-	Member member = (Member) request.getAttribute("member");
+<% 
+	JSONArray jparty = (JSONArray) request.getAttribute("party");
+	JSONArray jmember = (JSONArray) request.getAttribute("member");
 %>
 <!DOCTYPE html>
 <html>
@@ -22,49 +23,13 @@
 	<script type="text/javascript" src="/comi/resources/js/lib/axios.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/common.js"></script>
 	<script type="text/javascript">
-    	var party = {
-    			paid : Number(<%= "\"" + party.getPaNum() + "\"" %>)
-    			,meid : Number(<%= "\"" + party.getMeNum() + "\"" %>)
-    			,title : <%= "\"" + party.getPaTitle() + "\"" %>
-    			,price : Number(<%= "\"" + party.getPaTotalAmount() + "\"" %>)
-    			,deposit : Number(<%= "\"" + party.getPaDeposit() + "\"" %>)
-    			,peoplePrice : Number(<%= "\"" + party.getPaPerAmount() + "\"" %>)
-    			
-    			,title : <%= "\"" + party.getPaTitle() + "\"" %>
-    			,contents : <%= "\"" + party.getPaCon() + "\"" %>
-    			,enroll : <%= "\"" + party.getPaEnroll() + "\"" %>
-    			,modDate : <%= "\"" + party.getPaModDate() + "\"" %>
-    			,delDate : <%= "\"" + party.getPaDelDate() + "\"" %>
-    			,act : <%= "\"" + party.getPaAct() + "\"" %>
-    			,views : Number(<%= "\"" + party.getPaViews() + "\"" %>)
-    			,likes : Number(<%= "\"" + party.getPaLike() + "\"" %>)
-    			,count : Number(<%= "\"" + party.getPaComCount() + "\"" %>)
-				
-    			,genderSet : <%= "\"" + party.getPaGenderSet() + "\"" %>
-    			,location : <%= "\"" + party.getPaLocation() + "\"" %>
-    			,totalNum : Number(<%= "\"" + party.getPaTotalNum() + "\"" %>)
-    			,genderLimit : <%= "\"" + party.getPaGenderLimit() + "\"" %>
-    			,phNum : Number(<%= "\"" + party.getPhNum() + "\"" %>)
-				,category : <%= "\"" + party.getCatNum() + "\"" %>
-    			
-    		}
-		var member = {
-			menum : Number(<%= "\"" + member.getMeNum() + "\"" %>)
-			,name : <%= "\"" + member.getMeName() + "\"" %>
-			,id : Number(<%= "\"" + member.getMeId() + "\"" %>)
-			,email : <%= "\"" + member.getMeEmail() + "\"" %>
-			,phone : <%= "\"" + member.getMePhone() + "\"" %>
-			,address : <%= "\"" + member.getMeAdd() + "\"" %>
-			,gender : <%= "\"" + member.getMeGender() + "\"" %>
-			,birthday : <%= "\"" + member.getMeBDay() + "\"" %>
-			,enroll : <%= "\"" + member.getMeEnroll() + "\"" %>
-			,nickname : <%= "\"" + member.getMeAka() + "\"" %>
-			,like : <%= "\"" + member.getMeLike() + "\"" %>
-			,photo : <%= "\"" + member.getMePhotoAdd() + "\"" %>
-			,admin : <%= "\"" + member.getMeAdmin() + "\"" %>
-			,ban : <%= "\"" + member.getMeBan() + "\"" %>
-			,point : Number(<%= "\"" + member.getMePoint() + "\"" %>)
-		}
+		var partyStr = JSON.stringify(<%= jparty %>);
+		var partyData = JSON.parse(partyStr);
+		
+		var memberStr = JSON.stringify(<%= jmember %>);
+		var memberData = JSON.parse(memberStr);
+	    console.log('partyStr : ' + partyStr);
+	    console.log('memberStr : ' + memberStr);
     </script>
 	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/party_view_click.js"></script>
