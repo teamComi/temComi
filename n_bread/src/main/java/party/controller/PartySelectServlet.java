@@ -46,16 +46,17 @@ public class PartySelectServlet extends HttpServlet {
 		RequestDispatcher view = null;
 		//System.out.println("member : " + member);
 		
-		JSONObject jparty = new JsonReturn().returnParty(party);
-		JSONObject jmember = new JsonReturn().returnMember(member);
+		//JSONObject jparty = new JsonReturn().returnParty(party);
+		//JSONObject jmember = new JsonReturn().returnMember(member);
 		
 		if(act != null) {
-			String url = "views/party/party_view_click.jsp";
-			if(act.equals("N")) url = "views/party/party_closed_click.jsp";
+			String url = "views/party/party_click.jsp";
+			//if(act.equals("N")) url = "views/party/party_click.jsp";
 			
 			view = request.getRequestDispatcher(url);
-			request.setAttribute("party", jparty);
-			request.setAttribute("member", jmember);
+			request.setAttribute("act", act);
+			request.setAttribute("party", party);
+			request.setAttribute("member", member);
 		}else {
 			view = request.getRequestDispatcher("views/common/error.jsp");
 			request.setAttribute("message", "파티 리스트 불러오기 실패");

@@ -169,14 +169,78 @@ public class PartyDao {
 	
 	//수정
 	public int updateParty(Connection conn, Party party) {
-		// TODO Auto-generated method stub
-		return 0;
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String query = "update party "
+				+ "set PA_TIME = ?, PA_TOTAL_AMOUNT = ?, PA_DEPOSIT = ?, PA_TITLE = ?, "
+				+ "PA_CON = ?, PA_MOD_DATE = sysdate, PA_GENDER_SET = ?, "
+				+ "PA_GENDER_LIMIT = ?, PA_LOCATION = ?, PA_TOTAL_NUM = ?, CAT_NUM = ? "
+				+ "where pa_num = ?";
+		
+		try {
+			
+			pstmt = conn.prepareStatement(query);
+			pstmt.setDate(1, party.getPaTime());//시간
+			pstmt.setInt(2, party.getPaTotalAmount());//총금액
+			pstmt.setInt(3, party.getPaDeposit());//예치금
+			
+			pstmt.setString(4, party.getPaTitle());//제목
+			pstmt.setString(5, party.getPaCon());//내용
+			
+			pstmt.setString(6, party.getPaGenderSet());//성별 세팅
+			pstmt.setString(7, party.getPaGenderLimit());//all/m/f
+			pstmt.setString(8, party.getPaLocation());//all/m/f
+			pstmt.setInt(9, party.getPaTotalNum());//전체 인원
+			pstmt.setInt(10, party.getCatNum());//카테고리
+			
+			result = pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 	
 	//삭제
 	public int deleteParty(Connection conn, Party party) {
-		// TODO Auto-generated method stub
-		return 0;
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		String query = "delete from party "
+				+ "set PA_TIME = ?, PA_TOTAL_AMOUNT = ?, PA_DEPOSIT = ?, PA_TITLE = ?, "
+				+ "PA_CON = ?, PA_MOD_DATE = sysdate, PA_GENDER_SET = ?, "
+				+ "PA_GENDER_LIMIT = ?, PA_LOCATION = ?, PA_TOTAL_NUM = ?, CAT_NUM = ? "
+				+ "where pa_num = ?";
+		
+		try {
+			
+			pstmt = conn.prepareStatement(query);
+			pstmt.setDate(1, party.getPaTime());//시간
+			pstmt.setInt(2, party.getPaTotalAmount());//총금액
+			pstmt.setInt(3, party.getPaDeposit());//예치금
+			
+			pstmt.setString(4, party.getPaTitle());//제목
+			pstmt.setString(5, party.getPaCon());//내용
+			
+			pstmt.setString(6, party.getPaGenderSet());//성별 세팅
+			pstmt.setString(7, party.getPaGenderLimit());//all/m/f
+			pstmt.setString(8, party.getPaLocation());//all/m/f
+			pstmt.setInt(9, party.getPaTotalNum());//전체 인원
+			pstmt.setInt(10, party.getCatNum());//카테고리
+			
+			result = pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 	
 	//첨부파일 업로드

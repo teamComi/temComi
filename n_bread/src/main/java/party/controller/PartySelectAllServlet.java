@@ -107,22 +107,21 @@ public class PartySelectAllServlet extends HttpServlet {
 		else if(type.equals("findReview")) list = pservice.selectPartyAll("close", start, end);//비활성화
 		
 		System.out.println("list : " + list);
-		
+		/*
 		JSONArray jarr = new JSONArray();
 		
 		for(Party party : list) {
 			JSONObject json = new JsonReturn().returnParty(party);
 			jarr.add(json);
 		}
-		
+		*/
 		RequestDispatcher view = null;
 		
 		if(list != null && list.size() > 0) {
-			if(type.equals("findParty")) 
-				view = request.getRequestDispatcher("views/party/party_view.jsp");
-			else //if(type.equals("findReview"))
-				view = request.getRequestDispatcher("views/party/party_closed.jsp");
-			request.setAttribute("partyList", jarr);
+			view = request.getRequestDispatcher("views/party/party_view.jsp");
+				
+			request.setAttribute("type", type);
+			request.setAttribute("partyList", list);
 		}else {
 			view = request.getRequestDispatcher("views/common/error.jsp");
 			request.setAttribute("message", "파티 리스트 불러오기 실패");

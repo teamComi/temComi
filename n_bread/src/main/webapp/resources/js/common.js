@@ -3,7 +3,7 @@ var common;
 document.addEventListener("DOMContentLoaded", function(){
     
     common = new Common();
-    
+    /*
     var header = document.querySelector('#header_view');
     fetch('/comi/views/common/header.html')
     .then(res => res.text())
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function(){
     fetch('/comi/views/common/footer.html')
     .then(res => res.text())
     .then(data => footer.innerHTML = data);
-    
+    */
 });
 
 function listAddClass(){

@@ -30,10 +30,10 @@ document.addEventListener("DOMContentLoaded", function(){
     
     */
 
-    var makeParty = new MakeParty();
+    //var makeParty = new MakeParty();
 
     for(var i in partyData) {
         var obj = partyData[i];
-        $('#portf_box').append(makeParty.getTag(obj));
+        //$('#portf_box').append(makeParty.getTag(obj));
     }
 });

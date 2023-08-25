@@ -110,23 +110,32 @@ sysdate, null, null, 'N', 1, 0, 0, 'N', '서울시 서초구 서초대로 123-3'
 insert into comphoto
 values(SEQ_COM_PH_NUM.nextval, null, null, null, null, null);
 
-insert into comments 
-values(SEQ_COM_NUM.nextval, 1, 1, 1, '정말 맛있었어요!', 3, 0, 
-sysdate, null, null, 1);
-
+insert into comphoto
+values(SEQ_COM_PH_NUM.nextval, null, null, null, null, null);
 
 insert into comphoto
 values(SEQ_COM_PH_NUM.nextval, null, null, null, null, null);
 
 insert into comments 
-values(SEQ_COM_NUM.nextval, 1, 1, 2, '2정말 맛있었어요!', 3, 0, 
-sysdate, null, null, 2);
-
-insert into comphoto
-values(SEQ_COM_PH_NUM.nextval, null, null, null, null, null);
+values(SEQ_COM_NUM.nextval, 1, 1, 1, '1-1댓글 정말 맛있었어요!', 3, 0, 
+sysdate, null, null, null);
 
 insert into comments 
-values(SEQ_COM_NUM.nextval, 1, 1, 3, '3정말 맛있었어요!', 3, 0, 
-sysdate, null, null, 3);
+values(SEQ_COM_NUM.nextval, 1, 1, 2, '1-1-1댓글의 댓글 정말 맛있었어요!', 3, 0, 
+sysdate, null, null, null);
+
+insert into comments 
+values(SEQ_COM_NUM.nextval, 1, 1, 2, '1-1-2정말 맛있었어요!', 3, 0, 
+sysdate, null, null, null);
+
+insert into comments 
+values(SEQ_COM_NUM.nextval, 1, 1, 1, '1-2정말 맛있었어요!', 3, 0, 
+sysdate, null, null, null);
+
+insert into comments 
+values(SEQ_COM_NUM.nextval, 1, 1, 2, '1-2-1정말 맛있었어요!', 3, 0, 
+sysdate, null, null, null);
+
+
 
 commit;

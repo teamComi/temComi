@@ -1,8 +1,8 @@
-<%@page import="org.json.simple.JSONArray"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="party.model.vo.Party"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% JSONArray json = (JSONArray) request.getAttribute("partyList"); %>
+<% String type = (String) request.getAttribute("type"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,21 +14,13 @@
     <link rel="stylesheet" type="text/css" href="/comi/resources/css/party_view.css"/>
     <link rel="stylesheet" type="text/css" href="/comi/resources/css/party_view_click.css"/>
     <script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
-    <script type="text/javascript" src="/comi/resources/js/lib/axios.min.js"></script>
     <script type="text/javascript" src="/comi/resources/js/lib/lozad.min.js"></script>
     <script type="text/javascript" src="/comi/resources/js/common.js"></script>
-    <script type="text/javascript">
-        var partyStr = JSON.stringify(<%= json %>);
-    	var partyData = JSON.parse(partyStr);
-        console.log('partyStr : ' + partyStr);
-        console.log('partyData : ' + partyData);
-    </script>
-    <script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
-    <script type="text/javascript" src="/comi/resources/js/party_view.js"></script>
 </head>
 <body>
     <!-- Header Section Begin -->
-    <header id="header_view">    
+    <header id="header_view">
+    	<%@ include file="../common/header.jsp" %>
     </header>
     <!-- Header Section End -->
 
@@ -63,14 +55,15 @@
             </div>
             
             <div class="main_portfolio" id="portf_box">
-                
+                <%@ include file="./partyView.jsp" %>
             </div>
 
         </div>
     </main>
     
     <!-- Footer Section Begin -->
-    <footer id="footer_view">	
+    <footer id="footer_view">
+    	<%@ include file="../common/footer.jsp" %>
     </footer>
     <!-- Footer Section End -->
 </body>

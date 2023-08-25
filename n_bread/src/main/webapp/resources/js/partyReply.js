@@ -39,7 +39,7 @@ PartyReply.prototype = {
     buttonEvent : function(){
 
         $('.review-body-bottom-retext').each(function(){
-
+            
         })
         
 
