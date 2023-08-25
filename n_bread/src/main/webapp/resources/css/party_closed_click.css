@@ -10,8 +10,8 @@
     overflow: hidden;
     background: linear-gradient(to right, rgb(255 236 118), rgb(255 242 156), rgb(249 243 188));
 }
-.main_wrapper .main_slider.margin-bottom20px {
-    margin-bottom: 20px;
+.main_wrapper .main_slider.margin-top20px {
+    margin-top: 20px;
 }
 
 .party_closed_up {
@@ -339,11 +339,18 @@
 	margin-bottom: 0px;
 }
 
+#replyMoreBtn {
+    float: right;
+    cursor: pointer;
+}
+
 /*메인 포트폴리오*/
 .article-party-share {
-	width: 700px;
+    width: 700px;
     margin: 0 auto;
-	margin-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid #eeeeee;
+    padding-top: 20px;
 }
 .article-party-share .article-party-share-box {
 	position: relative;

@@ -2,33 +2,17 @@
 
 document.addEventListener("DOMContentLoaded", function(){
     
-    clickView = new ClickView();
+    //게시글 내용 붙이기
+    var clickView = new ClickView();
+    clickView.setSlide(partyData);
     clickView.init(partyData, memberData);
     clickView.buttonEvent();
-    
-    $.ajax({
-        url : '/comi/partylist?type=findParty&start=1&end=6&panum=' + partyData.paid
-        ,type : 'get'
-        ,dataType : 'json'
-        ,success : function(data){
-            
-            var str = JSON.stringify(data);
-            var json = JSON.parse(str);
-            var value = '';
-            console.log('json : ' + json.list);
 
-            //하단 리스트 불러오기
-            var makeParty = new MakeParty();
+    //채팅
 
-            for(var i in json.list) {
-                var obj = json.list[i];
-                $('#portf_box').append(makeParty.getTag(obj));
-            }
-        }
-        ,error : function(jqXHR, textStatus, errorThrown){
-            console.log('error : ' + jqXHR + ', '+ textStatus + ', ' + errorThrown);
-        }
-    })
+    //하단 파티 리스트
+    var setParty = new SetParty();
+    setParty.init(partyData, $('#portf_box'));
     
 });
 

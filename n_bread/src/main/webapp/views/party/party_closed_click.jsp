@@ -33,8 +33,10 @@
     </script>
 	<script type="text/javascript" src="/comi/resources/js/clickView.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
+	<script type="text/javascript" src="/comi/resources/js/setParty.js"></script>
+	<script type="text/javascript" src="/comi/resources/js/partyReply.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/party_closed_click.js"></script>
-	<script type="text/javascript" src="/comi/resources/js/slick_set.js"></script>
+	
 </head>
 <body>
 	<!-- Header Section Begin -->
@@ -48,7 +50,7 @@
 			<div class="party_closed_up">종료된 모임이에요.</div>
 
 			<!-- 슬라이더 -->
-			<div class="main_slider margin-bottom20px">
+			<div class="main_slider margin-top20px">
 				<div id="slider_main">
 					
 				</div>
@@ -131,7 +133,7 @@
 
 				<!--댓글 헤드-->
 				<div class="review-head">
-					<span class="review-head-title">54개의 댓글</span>
+					<span class="review-head-title" id="review_number">54개의 댓글</span>
 					<button type="button" class="review-head-refresh" alt="새로고침">
 						<img src="/comi/resources/images/refresh.png">
 					</button>
@@ -140,7 +142,7 @@
 
 				<!--댓글 쓰기-->
 				<div class="review-write">
-					<form>
+					<form action="" action="/comi/partycoins" method="post">
 						<fieldset>
 							<legend class="u_vc">댓글 쓰기</legend>
 							<div class="review-write-inner">
@@ -148,13 +150,13 @@
 								<div class="review-write-profilearea">
 									<div class="review-write-profile">
 										<img src="/comi/resources/images/deafault.png" class="img-profile">
-										<span class="write-name">donkihotex</span>
+										<span class="write-name" id></span>
 									</div>
 								</div>
 
 								<div class="review-write-area">
 									<div class="review-write-area-inbox">
-										<textarea title="댓글" class="review-write-textarea" id="review_write_textarea_1" rows="3" cols="30"></textarea>
+										<textarea name="reply" title="댓글" class="review-write-textarea" id="review_write_textarea_1" rows="3" cols="30"></textarea>
 										<label for="review_write_textarea_1" class="u_cbox_guide">
 											다양한 의견이 서로 존중될 수 있도록 다른 사람에게 불쾌감을 주는 욕설, 혐오, 비하의 표현이나 타인의 권리를 침해하는 내용은 주의해주세요.  
 											모든 작성자는 <em class="guide_emphasis">본인이 작성한 의견에 대해 법적 책임을 갖는다는 점</em> 유의하시기 바랍니다.
@@ -167,9 +169,7 @@
 										<strong class="review-write-count-num">0</strong>/
 										<span class="review-write-count-total">300</span>
 									</div>
-									<button type="button" class="review-write-upload">
-										<span class="review-write-upload-text">등록</span>
-									</button>
+									<input type="submit" class="review-write-upload" value="등록">
 								</div>
 							
 							</div>
@@ -329,6 +329,14 @@
 				</div>
 				<!--댓글 보기 end-->
 
+				<div class="review-bottom">
+					<button id="review_bottom_prev"></button>
+
+					<button id="review_bottom_next"></button>
+				</div>
+
+
+				<!--<button id="replyMoreBtn"><b>댓글 더보기</b></button>-->
 			</section>
 			<!-- 게시글 리뷰 end-->
 			

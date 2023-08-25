@@ -33,7 +33,7 @@
     </script>
 	<script type="text/javascript" src="/comi/resources/js/clickView.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
-	<script type="text/javascript" src="/comi/resources/js/slickSet.js"></script>
+	<script type="text/javascript" src="/comi/resources/js/setParty.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/party_view_click.js"></script>
 	
 </head>
