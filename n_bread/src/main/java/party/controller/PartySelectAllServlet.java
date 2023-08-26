@@ -119,7 +119,7 @@ public class PartySelectAllServlet extends HttpServlet {
 		
 		if(list != null && list.size() > 0) {
 			view = request.getRequestDispatcher("views/party/party_view.jsp");
-				
+			
 			request.setAttribute("type", type);
 			request.setAttribute("partyList", list);
 		}else {

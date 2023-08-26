@@ -1,6 +1,9 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	String type = (String) request.getAttribute("type");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,17 +27,10 @@
                 <!--메뉴-->
                 <div class="header_text center">
                     <ul>
-                        <li><a href="/comi/views/party/party_make.html">공유 해요</a>
-                            <!--<ul class="dropdown">
-                                <li><a href="#">Product 1</a></li>
-                                <li><a href="#">Product 2</a></li>
-                                <li><a href="#">Product 3</a></li>
-                                <li><a href="#">Product 3</a></li>
-                            </ul>-->
-                        </li>
-                        <li><a href="/comi/partysall?type=findParty">공유 찾기</a></li>
-                        <li><a href="/comi/partysall?type=findReview">공유 후기</a></li>
-                        <li><a href="/comi/views/qna/qna.html">Q&A</a></li>
+                        <li class="<%= (type != null && type.equals("make")) ? "active" : "" %>"><a href="/comi/views/party/party_make.jsp">공유 해요</a></li>
+                        <li class="<%= (type != null && type.equals("findParty")) ? "active" : "" %>"><a href="/comi/partysall?type=findParty">공유 찾기</a></li>
+                        <li class="<%= (type != null && type.equals("findReview")) ? "active" : "" %>"><a href="/comi/partysall?type=findReview">공유 후기</a></li>
+                        <li class="<%= (type != null && type.equals("qna")) ? "active" : "" %>"><a href="/comi/views/qna/qna.jsp">Q&A</a></li>
                     </ul>
                 </div>
 

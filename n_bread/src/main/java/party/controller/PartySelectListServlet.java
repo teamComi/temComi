@@ -21,13 +21,13 @@ import party.model.vo.Party;
  * Servlet implementation class PartySelectList
  */
 @WebServlet("/partylist")
-public class PartySelectList extends HttpServlet {
+public class PartySelectListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PartySelectList() {
+    public PartySelectListServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

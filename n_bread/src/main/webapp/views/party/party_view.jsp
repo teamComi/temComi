@@ -2,7 +2,9 @@
 <%@page import="party.model.vo.Party"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% String type = (String) request.getAttribute("type"); %>
+<% 
+	String pageType = (String) request.getAttribute("type"); 
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +17,12 @@
     <link rel="stylesheet" type="text/css" href="/comi/resources/css/party_view_click.css"/>
     <script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
     <script type="text/javascript" src="/comi/resources/js/lib/lozad.min.js"></script>
-    <script type="text/javascript" src="/comi/resources/js/common.js"></script>
+    <script type="text/javascript" src="/comi/resources/js/util.js"></script>
+    <script type="text/javascript">
+        var pageType = <%= "\"" + pageType + "\"" %>;
+    </script>
+    <script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
+    <script type="text/javascript" src="/comi/resources/js/party_view.js"></script>
 </head>
 <body>
     <!-- Header Section Begin -->
@@ -32,7 +39,11 @@
                     <button class="search-btn">
                         <img src="/comi/resources/images/search_btn.png" class="search-image">
                     </button>
-                    <input type="text" placeholder="찾고 싶은 공유 모임을 검색해보세요." class="search-box-text" value="">
+                    <% if(pageType.equals("findParty")){ %>
+                    	<input type="text" placeholder="찾고 싶은 공유 모임을 검색해보세요." class="search-box-text" value="">
+                    <% }else{ %>
+                    	<input type="text" placeholder="예전 공유 모임을 검색해보세요." class="search-box-text" value="">
+                    <% } %>
                 </div>
                 <div class="search-classify">
                     <span class="search-classify-title">분류</span>
@@ -55,7 +66,7 @@
             </div>
             
             <div class="main_portfolio" id="portf_box">
-                <%@ include file="./partyView.jsp" %>
+                <%@ include file="./view_list.jsp" %>
             </div>
 
         </div>

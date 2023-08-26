@@ -9,12 +9,10 @@
     <link rel="stylesheet" type="text/css" href="/comi/resources/css/lib/slick.min.css">
     <link rel="stylesheet" type="text/css" href="/comi/resources/css/lib/slick-theme.min.css">
     <link rel="stylesheet" type="text/css" href="/comi/resources/css/lib/jquery-ui.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/comi/resources/css/common.css"/>
     <link rel="stylesheet" type="text/css" href="/comi/resources/css/main.css"/>
     <script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
     <script type="text/javascript" src="/comi/resources/js/lib/slick.min.js"></script>
-    <script type="text/javascript" src="/comi/resources/js/slickSet.js"></script>
-    <script type="text/javascript" src="/comi/resources/js/common.js"></script>
+    <script type="text/javascript" src="/comi/resources/js/util.js"></script>
 </head>
 <body>
     <!-- Header Section Begin -->
@@ -80,7 +78,7 @@
             </div>
         </div>
 
-        <script type="text/javascript">new SlickSet().init();</script>
+        <script type="text/javascript">new Util().slide();</script>
 
         <div class="container">
             <!-- 메인 1 -->

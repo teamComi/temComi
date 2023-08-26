@@ -3,7 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% 
-	
+	//String type = (String) request.getAttribute("type");
 %>
 <!DOCTYPE html>
 <html>
@@ -15,11 +15,12 @@
 	<link rel="stylesheet" type="text/css" href="/comi/resources/css/lib/slick-theme.min.css">
 	<link rel="stylesheet" type="text/css" href="/comi/resources/css/lib/jquery-ui.min.css"/>
 	<link rel="stylesheet" type="text/css" href="/comi/resources/css/main.css"/>
-	<link rel="stylesheet" type="text/css" href="/comi/resources/css/party_view_click.css"/>
+	<link rel="stylesheet" type="text/css" href="/comi/resources/css/party_click.css"/>
 	<script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/lib/slick.min.js"></script>
-	<script type="text/javascript" src="/comi/resources/js/common.js"></script>
-	
+	<script type="text/javascript" src="/comi/resources/js/util.js"></script>
+	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
+	<script type="text/javascript" src="/comi/resources/js/party_click.js"></script>
 </head>
 <body>
     <!-- Header Section Begin -->
@@ -30,61 +31,40 @@
 
 	<!-- main -->
 	<main class="main_wrapper">
-		<div class="container side_margin_zero">
+		<% if(type.equals("findReview")) { //종료된 모임 %>
+		<div class="container side_margin_zero margin-top20px">
+			<div class="party_closed_up">종료된 모임이에요.</div>
 
 			<!-- 슬라이더 -->
+			<div class="main_slider margin-top20px">
+		<% }else { //종료되지 않은 모임 %>
+		<div class="container side_margin_zero">
+		
+			<!-- 슬라이더 -->
 			<div class="main_slider">
+		<% } %>
 				<div id="slider_main">
-					
+				<% for(int i=0; i<4; i++){ %>
+					<div>
+		                <div class="slide_box">
+		                    <img class="picture_box" src="<%= "/comi/resources/images/pic01.jpg" %>" />
+		                </div>
+		            </div>
+				<% } %>
 				</div>
 			</div>
 		</div>
-
+		
+		<script type="text/javascript">new Util().slide();</script>
+		
 		<div class="container">
-			<%@ include file="./partyClickView.jsp" %>
-			<!-- 채팅 리뷰-->
-			<section id="chating">
-				<!--채팅 헤드-->
-				<div class="chating-head">
-					<span class="chating-head-title">엔브레드톡</span>
-				</div>
-				<!--채팅 헤드 end-->
-				
-				<!--채팅 바디-->
-				<div class="chating-body">
-					<div class="chating-body-box" id="chating_box">
-		
-						
-		
-					</div>
-				</div>
-		
-				<!--채팅 바디end-->
-		
-				<!--채팅 입력-->
-				<div class="chating-input" id="chating-input-talk">
-					<div class="chating-input-area">
-						<textarea placeholder="엔브레드톡에 참여해보세요" class="chating-input-area-write"></textarea> 
-						<button type="button" class="chating-post-stickerbtn">
-							<img class="chating-post-sendbtn-image" src="/comi/resources/images/stickerbtn.png">
-						</button>
-					</div>
-					<div class="chating-post-area">
-						<button type="button" class="chating-post-sendbtn">
-							<img class="chating-post-sendbtn-image" src="/comi/resources/images/sendbtn.png">
-						</button>
-					</div>
-				</div>
-				<!--채팅 입력 end-->
-			</section>
-		
-		
-			<!--참여 버튼 버튼을 클릭해야 채팅을 할 수 있음 - 참여하지 않으면 채팅기록만 볼수 있음-->
-			<section class="chating-allow">
-				<button class="chating-allow-btn">참여</button>
-			</section>
-			<!--참여 버튼 end-->
-		
+			<%@ include file="./view_click.jsp" %>
+			
+			<% if(type.equals("findReview")) { //종료된 모임 %>
+				<%@ include file="./view_reply.jsp" %>
+			<% }else { //종료되지 않은 모임 %>
+				<%@ include file="./view_chat.jsp" %>
+			<% } %>
 		
 			<!-- 공유 모임 더 보기 -->
 			<section class="article-party-share">
@@ -94,7 +74,7 @@
 				</div>
 		
 				<div class="main_portfolio" id="portf_box">
-					<%@ include file="./partyView.jsp" %>
+					<%@ include file="./view_list.jsp" %>
 				</div>
 			</section>
 			<!-- 공유 모임 더 보기 end-->

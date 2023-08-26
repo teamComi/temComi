@@ -13,7 +13,7 @@ ArrayList<Party> partyList = (ArrayList<Party>) request.getAttribute("partyList"
 </head>
 <body>
 	<% for(Party p : partyList){ %>
-     <a class="port_box flexBox" href="/comi/partysel?panum=<%= p.getPaNum() %>&act='<%= p.getPaAct() %>">
+     <a class="port_box flexBox" href="/comi/partysel?panum=<%= p.getPaNum() %>&act=<%= p.getPaAct() %>">
             <div class="image featured">
                 <img src="/comi/resources/images/empty.png" alt="" />
             </div>
@@ -33,8 +33,8 @@ ArrayList<Party> partyList = (ArrayList<Party>) request.getAttribute("partyList"
                     <div class="port_box_text">인원 모집 <%= p.getPaTotalNum() %>명</div>
                     <div class="port_box_text port_box_text_right">인당 <%= p.getPaPerAmount() %>원</div>
                 </div>
-                <%if(p.getPaAct() == "N") {%>
-                <div class="party_closed_bottom">종료된 모임이에요.</div>
+                <%if(p.getPaAct().equals("N")) {%>
+                    <div class="party_closed_bottom">종료된 모임이에요.</div>
                 <%}%>
             </div>
         </a>

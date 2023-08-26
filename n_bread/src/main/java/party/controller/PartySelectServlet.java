@@ -60,7 +60,8 @@ public class PartySelectServlet extends HttpServlet {
 			//if(act.equals("N")) url = "views/party/party_click.jsp";
 			
 			view = request.getRequestDispatcher(url);
-			request.setAttribute("act", act);
+			System.out.println("act : " + act);
+			request.setAttribute("type", (act.equals("Y")) ? "findParty" : "findReview");
 			request.setAttribute("party", party);
 			request.setAttribute("partyList", list);
 			request.setAttribute("member", member);

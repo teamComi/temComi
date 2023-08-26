@@ -1,8 +1,34 @@
 
-function SlickSet(){}
+function Util() {
+}
 
-SlickSet.prototype ={
-    init : function(){
+Util.prototype = {
+    comma : function (num) {
+        var str = String(num);
+        var str2 = str.split('.').shift();
+        var str3 = str2.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+
+
+        console.log('str3 : ' + str3);
+        return (str3 == undefined || str3 == null || str3 == 'undefined') ? '0' : str3;
+    },
+    chkArrayNull : function (arr) {
+        if(arr !== null && arr !== undefined && arr && arr.length > 0) {
+            return true;
+        }
+        return false;
+    },
+    chkJsonNull : function (json) {
+        if(json !== null && json !== undefined && json && Object.keys(json).length > 0) {
+            return true;
+        }
+        return false;
+    },
+    decode : function(str) {
+        var str2 = decodeURIComponent(str);
+        return str2.replace(/\+/g, ' ');
+    },
+    slide : function() {
         $('#slider_main').slick({
             slide: 'div',        //슬라이드 되어야 할 태그 ex) div, li 
             infinite : true,     //무한 반복 옵션 
@@ -34,6 +60,10 @@ SlickSet.prototype ={
                 }
             ]
         });
+        
     }
 }
-    
+
+
+
+
