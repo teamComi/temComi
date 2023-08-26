@@ -1,5 +1,11 @@
+<%@page import="member.model.vo.Member"%>
+<%@page import="party.model.vo.Party"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<% 
+	Party party = (Party) request.getAttribute("party");
+	Member member = (Member) request.getAttribute("member");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,20 +20,21 @@
 				<div class="space-between">
 					<div class="display-align-items-center">
 						<div id="article-profile-image-box">
-							<img src="" />
+							<img src="/comi/resources/images/launcher.png" />
 						</div>
 						<div id="article-profile-left">
-							<div id="article-nickname"><%=  %></div>
-							<div id="article-region-name"></div>
+							<div id="article-nickname"><%= member.getMeAka() %></div>
+							<div id="article-region-name"><%= party.getPaLocation() %></div>
 						</div>
 					</div>
 					<div class="article-profile-right">
 						<div class="temperature-wrap">
 							<span>신뢰도</span>
-							<span class="text-color text-color-03" id="text-color-id"></span>
+							<span class="text-color text-color-03" id="text-color-id"><%= member.getMeLike() %>>%</span>
 						</div>
 						<div class="meters">
-							<div class="bar bar-color-03" id="bar-color-id"></div>
+							<div class="bar bar-color-03" 
+							id="bar-color-id" style="width:<%= member.getMeLike() %>%;"></div>
 						</div>
 						<div class="temperature-face">
 							<img id="temperature-face-id" src="/comi/resources/images/launcher.png" />

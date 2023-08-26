@@ -18,7 +18,7 @@
             <nav class="header_menu">
                 <!--로고-->
                 <div class="header_logo left">
-                    <a href="/comi/main.html"><img src="/comi/resources/images/logo.png" alt=""></a>
+                    <a href="/comi/main.jsp"><img src="/comi/resources/images/logo.png" alt=""></a>
                 </div>
 
                 <!--메뉴-->

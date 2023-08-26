@@ -13,16 +13,16 @@ import notice.model.service.NoticeService;
 import notice.model.vo.Notice;
 
 /**
- * Servlet implementation class NoticeInsertServlet
+ * Servlet implementation class NoticeMovePageServlet
  */
-@WebServlet("/noticeins")
-public class NoticeInsertServlet extends HttpServlet {
+@WebServlet("/nomovepage")
+public class NoticeMovePageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NoticeInsertServlet() {
+    public NoticeMovePageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,22 +32,25 @@ public class NoticeInsertServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		request.setCharacterEncoding("UTF-8");
-		
-		Notice notice = new Notice();
-		
-		notice.setNoTitle(request.getParameter("title"));	
-		notice.setMeNum(Integer.parseInt(request.getParameter("writer")));
-		notice.setNoCon(request.getParameter("content"));
-		int result = new NoticeService().insertNotice(notice);
-		
-		if(result>0) {
-			response.sendRedirect("/comi/noticesall");
-		}else {
-			RequestDispatcher view = request.getRequestDispatcher("main.html");
-			//에러페이지 주세요
-			view.forward(request, response);
+
+		int result = 0;
+		int noNum = Integer.parseInt(request.getParameter("nonum"));
+		Notice notice = new NoticeService().selectNotice(noNum);
+
+		RequestDispatcher view = null;
+
+		if(notice != null){
+			view = request.getRequestDispatcher("views/notice/notice_update.jsp");
+			request.setAttribute("notice",notice);
+			view.forward(request,response);
+			//수정할 글 찾으면 
+		}else{
+			response.sendRedirect("main.html");
+			//에러페이지 급구
+			//수정할 글 못찾으면
 		}
+
+
 	}
 
 	/**

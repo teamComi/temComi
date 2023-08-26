@@ -1,6 +1,7 @@
 package party.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -36,6 +37,7 @@ public class PartySelectServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//파티 클릭시 
 		String panum = request.getParameter("panum");
 		String act = request.getParameter("act");//활성화 비활성화 여부
 		
@@ -49,6 +51,10 @@ public class PartySelectServlet extends HttpServlet {
 		//JSONObject jparty = new JsonReturn().returnParty(party);
 		//JSONObject jmember = new JsonReturn().returnMember(member);
 		
+		ArrayList<Party> list = new PartyService().selectPartyList("open", 1, 6, panum);
+		System.out.println("==list : " + list);
+		
+		
 		if(act != null) {
 			String url = "views/party/party_click.jsp";
 			//if(act.equals("N")) url = "views/party/party_click.jsp";
@@ -56,6 +62,7 @@ public class PartySelectServlet extends HttpServlet {
 			view = request.getRequestDispatcher(url);
 			request.setAttribute("act", act);
 			request.setAttribute("party", party);
+			request.setAttribute("partyList", list);
 			request.setAttribute("member", member);
 		}else {
 			view = request.getRequestDispatcher("views/common/error.jsp");

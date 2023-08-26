@@ -1,10 +1,9 @@
-<%@page import="member.model.vo.Member"%>
 <%@page import="party.model.vo.Party"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% 
-	Party party = (Party) request.getAttribute("party");
-	Member member = (Member) request.getAttribute("member");
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -20,15 +19,12 @@
 	<script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/lib/slick.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/common.js"></script>
-	<script type="text/javascript" src="/comi/resources/js/clickView.js"></script>
-	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
-	<script type="text/javascript" src="/comi/resources/js/setParty.js"></script>
-	<script type="text/javascript" src="/comi/resources/js/party_view_click.js"></script>
 	
 </head>
 <body>
     <!-- Header Section Begin -->
-    <header id="header_view">    
+    <header id="header_view">
+    	<%@ include file="../common/header.jsp" %>
     </header>
     <!-- Header Section End -->
 
@@ -45,6 +41,7 @@
 		</div>
 
 		<div class="container">
+			<%@ include file="./partyClickView.jsp" %>
 			<!-- 채팅 리뷰-->
 			<section id="chating">
 				<!--채팅 헤드-->
@@ -97,7 +94,7 @@
 				</div>
 		
 				<div class="main_portfolio" id="portf_box">
-					
+					<%@ include file="./partyView.jsp" %>
 				</div>
 			</section>
 			<!-- 공유 모임 더 보기 end-->
@@ -107,7 +104,8 @@
 	
 
 	<!-- Footer Section Begin -->
-	<footer id="footer_view">	
+	<footer id="footer_view">
+		<%@ include file="../common/footer.jsp" %>	
 	</footer>
 	<!-- Footer Section End -->
 </body>

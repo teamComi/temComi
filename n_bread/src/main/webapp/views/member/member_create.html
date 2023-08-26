@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>member_create</title>
+</head>
+<body>
+<link rel="stylesheet" type="text/css" href="/comi/resources/css/member_create.css">
+
+</head>
+<body>
+  <div id="login_container">
+    <h4>엔브레드</h4>
+    <h2>회원가입</h2>
+    <br>
+<form action="/first/enroll" method="post" onsubmit="return validate();">
+<table id="outer" align="center" width="500" cellspacing="5" cellpadding="0">
+	<tr><th colspan="2">회원 정보를 입력해 주세요. (* 표시는 필수입력 항목입니다.)</th></tr>
+	<tr><th width="120">*아이디</th>
+	<td><input type="text" name="userid" id="userid" required> &nbsp;
+		<input type="button" value="중복체크" onclick="return dupIDCheck();">
+	</td></tr>
+	<tr><th>*암호</th>
+	<td><input type="password" name="userpwd" id="userpwd" required></td></tr>
+	<tr><th>*암호확인</th>
+	<td><input type="password" id="userpwd2" required></td></tr>
+	<tr><th>*이름</th>
+	<td><input type="text" name="username" required></td></tr>
+	<tr><th>*성별</th>
+	<td>
+		<input type="radio" name="gender" value="M"> 남자 &nbsp;
+		<input type="radio" name="gender" value="F"> 여자
+	</td></tr>
+	<tr><th>*나이</th>
+	<td><input type="number" name="age" min="19" value="20" required></td></tr>
+	<tr><th>*전화번호</th>
+	<td><input type="tel" name="phone" required></td></tr>
+	<tr><th>*이메일</th>
+	<td><input type="email" name="email" required></td></tr>
+	<tr><th>관심사</th>
+	<td>
+		<table width="350">
+		<tr>
+			<td><input type="checkbox" name="hobby" value="game"> 게임</td>
+			<td><input type="checkbox" name="hobby" value="reading"> 독서</td>
+			<td><input type="checkbox" name="hobby" value="climb"> 등산</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="hobby" value="sport"> 운동</td>
+			<td><input type="checkbox" name="hobby" value="music"> 음악</td>
+			<td><input type="checkbox" name="hobby" value="movie"> 영화</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="hobby" value="travel"> 여행</td>
+			<td><input type="checkbox" name="hobby" value="gook"> 요리</td>
+			<td><input type="checkbox" name="hobby" value="etc" checked> 기타</td>
+		</tr>
+		</table>
+	</td></tr>
+	<tr><th colspan="2">
+		<input type="submit" value="가입하기"> &nbsp;
+		<input type="reset" value="작성취소"> &nbsp;
+		<a href="/comi/main.html">시작페이지로 이동</a>
+	</th></tr>
+</table>
+</form>
+  
+    <button class="kakao_start">카카오로 시작하기</button> <br>
+ 	<button class="css-t4iwkq eicf9yf0" style="border-radius: 50px;"><svg width="20px" height="20px" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.708 9.184c0-.544-.043-1.09-.135-1.626H9.195v3.08h4.225a3.71 3.71 0 0 1-1.564 2.432v1.999h2.52c1.481-1.394 2.332-3.451 2.332-5.885Z" fill="#4285F4"></path><path d="M9.195 17c2.11 0 3.889-.708 5.185-1.931l-2.52-1.999c-.702.488-1.607.764-2.662.764-2.04 0-3.77-1.408-4.392-3.3h-2.6v2.06C3.533 15.295 6.238 17 9.196 17Z" fill="#34A853"></path><path d="M4.804 10.533a4.895 4.895 0 0 1 0-3.063V5.41H2.206a8.17 8.17 0 0 0 0 7.184l2.598-2.06Z" fill="#FBBC04"></path><path d="M9.195 4.166a4.199 4.199 0 0 1 3 1.2l2.234-2.284A7.426 7.426 0 0 0 9.195 1C6.238 1 3.533 2.705 2.205 5.41l2.599 2.06c.618-1.896 2.35-3.304 4.391-3.304Z" fill="#EA4335"></path></svg>구글로 시작하기</button><br>
+ 	<button class="css-15chg7f eicf9yf0" style="border-radius: 50px;"><svg width="20px" height="20px" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.094 10.11v-.62c.003-.025.008-.05.01-.075.015-.161.025-.323.044-.483.084-.711.285-1.385.65-2 .778-1.315 1.913-2.045 3.426-2.137.431-.026.844.088 1.25.223.438.148.873.305 1.312.452.167.056.338.089.514.029.364-.125.732-.238 1.093-.37a6.604 6.604 0 0 1 1.283-.348 3.577 3.577 0 0 1 1.052.019c.643.094 1.248.296 1.79.668.374.255.683.576.944.949-.128.09-.257.176-.38.269-.375.283-.7.616-.949 1.021a3.344 3.344 0 0 0-.479 1.46c-.05.552-.01 1.097.167 1.624.34 1.018 1.029 1.717 1.959 2.19.04.02.083.037.126.057l-.015.052a9.485 9.485 0 0 1-1.365 2.638c-.306.417-.615.832-1.006 1.174-.551.484-1.174.689-1.9.52-.333-.078-.65-.2-.969-.323-.39-.149-.79-.253-1.207-.268-.517-.018-1.01.098-1.49.283-.341.131-.682.266-1.042.34-.348.072-.69.067-1.024-.07-.343-.14-.63-.365-.894-.623-.516-.506-.933-1.093-1.324-1.699-.503-.778-.864-1.627-1.14-2.512a9.261 9.261 0 0 1-.412-2.133l-.024-.307ZM12.712.5c.001.204.014.408.001.611a3.186 3.186 0 0 1-.527 1.538 4.904 4.904 0 0 1-1.698 1.614c-.573.33-1.2.503-1.89.486-.078-.002-.11-.018-.117-.096-.053-.555.066-1.083.31-1.59.325-.681.806-1.26 1.472-1.709a5.19 5.19 0 0 1 2.07-.819c.092-.015.185-.023.277-.035h.102Z" fill="#131314"></path></svg>애플로 시작하기</button>
+ 	</div>
+  </div>
+</body>
+</html>
+</body>
+</html>
