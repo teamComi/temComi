@@ -58,7 +58,7 @@ public class PartyCoSelectServlet extends HttpServlet {
 		paging.calculator();
 		
 		
-		ArrayList<PartyCo> list = coservice.selectPartyCoAll(panum);
+		ArrayList<PartyCo> list = coservice.selectPartyCoList(panum);
 		
 		System.out.println("list : " + list);
 		

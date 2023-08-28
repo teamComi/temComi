@@ -29,6 +29,15 @@ public class PartyCoService {
 		return list;
 	}
 	
+	
+	
+	public ArrayList<PartyCo> selectPartyCoList(int panum, int startRow, int endRow) {
+		Connection conn = getConnection();
+		ArrayList<PartyCo> list = dao.selectPartyCoList(conn, panum, startRow, endRow);
+		close(conn);
+		return list;
+	}
+	
 	//삽입
 	public int insertPartyCo(PartyCo partyCo) {
 		Connection conn = getConnection();
@@ -107,4 +116,6 @@ public class PartyCoService {
 		close(conn);
 		return list;
 	}
+
+	
 }

@@ -15,13 +15,64 @@ public class PartyCoDao {
 		return null;
 	}
 	
-	public int getListCount(Connection conn) {
-		
-		int listCount = 0;
-		Statement stmt = null;
+	public ArrayList<PartyCo> selectPartyCoAll(Connection conn, int panum, int startRow, int endRow) {
+		ArrayList<PartyCo> list = new ArrayList<PartyCo>();
+		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		String query = "select count(*) from comments";
+		try {
+			String query = "select * "
+					+ "from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
+					+ "           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
+					+ "           COM_DEL_DATE, COM_PHOTO_NUM "
+					+ "     from (select * from comments where PA_NUM = ? "
+					+ "           order by COM_ENROLL desc)) "
+					+ "where rnum >= 1 and rnum <= 10";
+			
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, panum);
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Board board = new Board();
+				
+				board.setBoardNum(rset.getInt("board_num"));
+				board.setBoardWriter(rset.getString("board_writer"));
+				board.setBoardTitle(rset.getString("board_title"));
+				board.setBoardDate(rset.getDate("board_date"));
+				board.setBoardOriginalFileName(rset.getString("board_original_fileName"));
+				board.setBoardRenameFileName(rset.getString("board_rename_fileName"));
+				board.setBoardContent(rset.getString("board_content"));
+				board.setBoardLev(rset.getInt("board_lev"));
+				board.setBoardRef(rset.getInt("board_ref"));
+				board.setBoardReplyRef(rset.getInt("board_reply_ref"));
+				board.setBoardReplySeq(rset.getInt("board_reply_seq"));
+				board.setBoardReadCount(rset.getInt("board_readcount"));
+				
+				//System.out.println("board : " + board);
+				list.add(board);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return list;
+	}
+	
+	public int getListCount(Connection conn, panum) {
+		
+		int listCount = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String query = "select count(*) from comments where pa_num = ?";
 		
 		try {
 			stmt = conn.createStatement();
@@ -31,28 +82,31 @@ public class PartyCoDao {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			pstmt
 		}
 		
 		return listCount;
 	}
 	
-	public ArrayList<PartyCo> selectPartyCoAll(Connection conn, int panum) {
+	public ArrayList<PartyCo> selectPartyCoList(Connection conn, int panum, int startRow, int endRow) {
 		ArrayList<PartyCo> list = new ArrayList<PartyCo>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
 		try {
 			String query = "select * "
-					+ "from (select rownum rnum, board_num, board_writer, board_title, board_content, "
-					+ "           board_original_filename, board_rename_filename, board_ref, "
-					+ "           board_reply_ref, board_lev, board_reply_seq, board_readcount, board_date "
-					+ "     from (select * from board "
-					+ "           order by board_ref desc, board_reply_ref desc, board_lev asc, board_reply_seq asc)) "
-					+ "where rnum >= ? and rnum <= ?";
+					+ "from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
+					+ "           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
+					+ "           COM_DEL_DATE, COM_PHOTO_NUM "
+					+ "     from (select * from comments where PA_NUM = ? "
+					+ "           order by COM_ENROLL desc)) "
+					+ "where rnum >= 1 and rnum <= 10";
 			
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, startRow);
-			pstmt.setInt(2, endRow);
+			pstmt.setInt(1, panum);
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
 			
 			rset = pstmt.executeQuery();
 			
