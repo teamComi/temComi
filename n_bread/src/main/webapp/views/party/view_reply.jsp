@@ -42,20 +42,20 @@
 
                         <div class="review-write-area">
                             <div class="review-write-area-inbox">
-                                <textarea name="reply" title="댓글" class="review-write-textarea" id="review_textarea_1" rows="3" cols="30"></textarea>
-                                <label for="review_write_textarea_1" id="review_textlabel_1" class="u_cbox_guide">
+                                <textarea name="reply" title="댓글" class="review-write-textarea" id="review_textarea_1" rows="3" cols="30" maxlength="300"></textarea>
+                                <!--<label for="review_write_textarea_1" id="review_textlabel_1" class="u_cbox_guide">
                                     다양한 의견이 서로 존중될 수 있도록 다른 사람에게 불쾌감을 주는 욕설, 혐오, 비하의 표현이나 타인의 권리를 침해하는 내용은 주의해주세요.  
                                     모든 작성자는 <em class="guide_emphasis">본인이 작성한 의견에 대해 법적 책임을 갖는다는 점</em> 유의하시기 바랍니다.
-                                </label>
+                                </label>-->
                             </div>
                         </div>
                         
                         <div class="review-write-count-box">
                             <div class="review-write-count">
-                                <strong class="review-write-count-num">0</strong>/
+                                <strong class="review-write-count-num" id="write_count_1">0</strong>/
                                 <span class="review-write-count-total">300</span>
                             </div>
-                            <input type="submit" class="review-write-upload" id="upload_btn_1" value="등록">
+                            <input type="button" class="review-write-upload" id="upload_btn_1" value="등록">
                         </div>
                     
                     </div>
@@ -122,7 +122,7 @@
                             <button class="review-body-bottom-heart">
                                 <img class="review-body-bottom-heart-img" src="/comi/resources/images/heart.png">
                             </button>
-                            <span>0</span>
+                            <span class="review-body-heart">0</span>
                         </div>
                     </div>
 
@@ -170,7 +170,7 @@
                             <button class="review-body-bottom-heart">
                                 <img class="review-body-bottom-heart-img" src="/comi/resources/images/heart.png">
                             </button>
-                            <span>0</span>
+                            <span class="review-body-heart">0</span>
                         </div>
                     </div>
 
@@ -196,10 +196,10 @@
                             <div class="review-write-area">
                                 <div class="review-write-area-inbox">
                                     <textarea title="댓글" class="review-write-textarea" id="review_write_textarea_2" rows="3" cols="30"></textarea>
-                                    <label for="review_write_textarea_2" class="u_cbox_guide">
+                                    <!--<label for="review_write_textarea_2" class="u_cbox_guide">
                                         다양한 의견이 서로 존중될 수 있도록 다른 사람에게 불쾌감을 주는 욕설, 혐오, 비하의 표현이나 타인의 권리를 침해하는 내용은 주의해주세요.  
                                         모든 작성자는 <em class="guide_emphasis">본인이 작성한 의견에 대해 법적 책임을 갖는다는 점</em> 유의하시기 바랍니다.
-                                    </label>
+                                    </label>-->
                                 </div>
                             </div>
                             

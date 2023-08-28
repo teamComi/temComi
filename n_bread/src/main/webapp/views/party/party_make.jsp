@@ -99,22 +99,16 @@
 						<div class="view-notice-box">
 							<div class="view-notice-box-title">제목</div>
 							<div class="review-write-area-inbox">
-								<input title="댓글" class="review-write-textarea input" name="pa_title" id="notice_write_input"></textarea>
-								<label for="review_write_textarea" class="u_cbox_guide">
-									다양한 의견이 서로 존중될 수 있도록 다른 사람에게 불쾌감을 주는 욕설, 혐오, 비하의 표현이나 타인의 권리를 침해하는 내용은 주의해주세요.  
-									모든 작성자는 <em class="guide_emphasis">본인이 작성한 의견에 대해 법적 책임을 갖는다는 점</em> 유의하시기 바랍니다.
-								</label>
+								<input title="제목" class="review-write-textarea input" name="pa_title" id="notice_write_input"></textarea>
+								
 							</div>
 						</div>
 
 						<div class="view-notice-box">
 							<div class="view-notice-box-title">자세한 설명</div>
 							<div class="review-write-area-inbox">
-								<textarea title="댓글" class="review-write-textarea" name="pa_con" id="notice_write_textarea" rows="3" cols="30"></textarea>
-								<label for="notice_write_textarea" class="u_cbox_guide">
-									다양한 의견이 서로 존중될 수 있도록 다른 사람에게 불쾌감을 주는 욕설, 혐오, 비하의 표현이나 타인의 권리를 침해하는 내용은 주의해주세요.  
-									모든 작성자는 <em class="guide_emphasis">본인이 작성한 의견에 대해 법적 책임을 갖는다는 점</em> 유의하시기 바랍니다.
-								</label>
+								<textarea title="자세한 설명" class="review-write-textarea" name="pa_con" id="notice_write_textarea" rows="3" cols="30"></textarea>
+								
 							</div>
 						</div>
 

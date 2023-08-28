@@ -1,22 +1,18 @@
 
 document.addEventListener("DOMContentLoaded", function(){
     var viewReply = new View_reply();
-
-    
-
     viewReply.buttonEvent();
 })
-
 
 function View_reply(){
     
 }
 
 View_reply.prototype = {
-    init : function(page) {
+    connection : function(panum, page) {
 
         $.ajax({
-            url : '/comi/partycosel?page=' + page
+            url : '/comi/partycosel?panum=' + panum + '&page=' + page
             ,type : 'get'
             ,dataType : 'json'
             ,success : function(data){
@@ -62,13 +58,22 @@ View_reply.prototype = {
 
         //댓글쓰기
         $('#review_textarea_1').on('input', function(){
-            console.log('????');
+            console.log('댓글 길이 ');
             $('#review_textlabel_1').hide();
-            $('#upload_btn_1').css({'background' : 'rgb(100 166 245)'})
+            $('#upload_btn_1').css({'background' : 'rgb(100, 166, 245)'});//#64A6F5
+
+            $('#write_count_1').text($('#review_textarea_1').val().length);
         })
 
         $('#upload_btn_1').on('click', function(){
             //댓글 올리기
+            //console.log('background-color : ' + $(this).css('background-color'))
+            if($(this).css('background-color') == 'rgb(100, 166, 245)') {
+                console.log('댓글 올리기');
+
+            }
+
+            return false;
         })
     }
 }

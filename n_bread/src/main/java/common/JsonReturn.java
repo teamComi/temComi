@@ -2,6 +2,7 @@ package common;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.sql.Date;
 
 import org.json.simple.JSONObject;
 
@@ -69,11 +70,24 @@ public class JsonReturn {
 	
 	public JSONObject returnPartyCh(PartyCh partyCh) {
 		JSONObject json = new JSONObject();
+		
 		return json;
 	}
 	
 	public JSONObject returnPartyCo(PartyCo partyCo) {
 		JSONObject json = new JSONObject();
+		json.put("comNum", partyCo.getComNum());
+		json.put("paNum", partyCo.getPaNum());
+		json.put("comParent", partyCo.getComParent());
+		json.put("comDepth", partyCo.getComDepth());
+		json.put("comCon", partyCo.getComCon());
+		json.put("comViews", partyCo.getComViews());
+		json.put("comCount", partyCo.getComCount());
+		json.put("comEnroll", partyCo.getComEnroll());
+		json.put("comModDate", partyCo.getComModDate());
+		json.put("comDelDate", partyCo.getComDelDate());
+		json.put("comPhotoNum", partyCo.getComPhotoNum());
+		
 		return json;
 	}
 	
@@ -95,6 +109,19 @@ public class JsonReturn {
 		json.put("ban", member.getMeBan());
 		json.put("point", member.getMePoint());
 		
+		return json;
+	}
+	
+	public JSONObject returnPaging(Paging paging) {
+		JSONObject json = new JSONObject();
+		json.put("startRow", paging.getStartRow());// 페이지에 출력할 시작행
+		json.put("endRow", paging.getEndRow());// 페이지에 출력할 마지막행
+		json.put("listCount", paging.getListCount());// 총 목록 갯수
+		json.put("limit", paging.getLimit());// 한 페이지에 출력할 목록 갯수
+		json.put("currentPage", paging.getCurrentPage());// 출력할 현제 페이지
+		json.put("maxPage", paging.getMaxPage());// 총 페이지 수
+		json.put("startPage", paging.getStartPage());// 페이지 그룹의 시작값
+		json.put("endPage", paging.getEndPage());// 페이지 그룹의 끝값
 		return json;
 	}
 	

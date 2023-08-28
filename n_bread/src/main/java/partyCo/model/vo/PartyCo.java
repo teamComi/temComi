@@ -40,7 +40,7 @@ public class PartyCo implements Serializable {
 	public int getComNum() {
 		return comNum;
 	}
-
+	
 	public void setComNum(int comNum) {
 		this.comNum = comNum;
 	}

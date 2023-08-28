@@ -20,7 +20,6 @@
 	<script type="text/javascript" src="/comi/resources/js/lib/slick.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/util.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
-	<script type="text/javascript" src="/comi/resources/js/party_click.js"></script>
 </head>
 <body>
     <!-- Header Section Begin -->

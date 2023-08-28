@@ -14,17 +14,17 @@ public class PartyCoService {
 	public PartyCoService() {}
 	
 	//조회 
-	public PartyCo selectPartyCo(int partyid) {
+	public PartyCo selectPartyCo(int panum) {
 		Connection conn = getConnection();
-		PartyCo partyCo = dao.selectPartyCo(conn, partyid);
+		PartyCo partyCo = dao.selectPartyCo(conn, panum);
 		close(conn);
 		return partyCo;
 	}
 	
 	//전체 조회
-	public ArrayList<PartyCo> selectPartyCoAll() {
+	public ArrayList<PartyCo> selectPartyCoAll(int panum) {
 		Connection conn = getConnection();
-		ArrayList<PartyCo> list = dao.selectPartyCoAll(conn);
+		ArrayList<PartyCo> list = dao.selectPartyCoAll(conn, panum);
 		close(conn);
 		return list;
 	}
