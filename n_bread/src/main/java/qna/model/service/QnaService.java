@@ -9,14 +9,14 @@ import qna.model.dao.QnaDao;
 import qna.model.vo.Qna;
 
 public class QnaService {
-	private QnaDao dao = new QnaDao();
+	private QnaDao qdao = new QnaDao();
 	
 	public QnaService() {}
 	
 	//조회 
 	public Qna selectQna(int qnaid) {
 		Connection conn = getConnection();
-		Qna qna = dao.selectQna(conn, qnaid);
+		Qna qna = qdao.selectQna(conn, qnaid);
 		close(conn);
 		return qna;
 	}
@@ -24,7 +24,7 @@ public class QnaService {
 	//전체 조회
 	public ArrayList<Qna> selectQnaAll() {
 		Connection conn = getConnection();
-		ArrayList<Qna> list = dao.selectQnaAll(conn);
+		ArrayList<Qna> list = qdao.selectQnaAll(conn);
 		close(conn);
 		return list;
 	}
@@ -32,7 +32,7 @@ public class QnaService {
 	//삽입
 	public int insertQna(Qna qna) {
 		Connection conn = getConnection();
-		int result = dao.insertQna(conn, qna);
+		int result = qdao.insertQna(conn, qna);
 		
 		if(result > 0) commit(conn);
 		else rollback(conn);
@@ -44,7 +44,7 @@ public class QnaService {
 	//수정
 	public int updateQna(Qna qna) {
 		Connection conn = getConnection();
-		int result = dao.updateQna(conn, qna);
+		int result = qdao.updateQna(conn, qna);
 		
 		if(result > 0) commit(conn);
 		else rollback(conn);
@@ -54,9 +54,9 @@ public class QnaService {
 	}
 	
 	//삭제
-	public int deleteQna(Qna qna) {
+	public int deleteQna(int qnaNum) {
 		Connection conn = getConnection();
-		int result = dao.deleteQna(conn, qna);
+		int result = qdao.deleteQna(conn, qnaNum);
 		
 		if(result > 0) commit(conn);
 		else rollback(conn);
@@ -68,7 +68,7 @@ public class QnaService {
 	//첨부파일 업로드
 	public int loadQna(Qna qna) {
 		Connection conn = getConnection();
-		int result = dao.loadQna(conn, qna);
+		int result = qdao.loadQna(conn, qna);
 		if(result > 0) commit(conn);
 		else rollback(conn);
 			
@@ -79,7 +79,49 @@ public class QnaService {
 	//검색
 	public ArrayList<Qna> searchQna(String keyword){
 		Connection conn = getConnection();
-		ArrayList<Qna> list = dao.searchQna(conn, keyword);
+		ArrayList<Qna> list = qdao.searchQna(conn, keyword);
+		close(conn);
+		return list;
+	}
+
+	public int getListCount() {
+		Connection conn = getConnection();
+		int listCount = qdao.getListCount(conn);
+		close(conn);
+		return listCount;
+	}
+
+	public ArrayList<Qna> selectList(int startRow, int endRow) {
+		Connection conn = getConnection();
+		ArrayList<Qna> list = qdao.selectList(conn, startRow, endRow);
+		close(conn);
+		return list;
+	}
+
+	public int insertOriginQa(Qna qna) {
+		Connection conn = getConnection();
+		int result = qdao.insertOriginQa(conn, qna);
+		if(result > 0)
+			commit(conn);
+		else
+			rollback(conn);
+		return result;
+	}
+
+	public void addReadCount(int qnaNum) {
+		Connection conn = getConnection();
+		int result = qdao.addReadCount(conn, qnaNum);
+		if(result > 0)
+			commit(conn);
+		else
+			rollback(conn);
+		close(conn);
+		
+	}
+
+	public ArrayList<Qna> selectTop3() {
+		Connection conn = getConnection();
+		ArrayList<Qna> list = qdao.selectTop3(conn);
 		close(conn);
 		return list;
 	}

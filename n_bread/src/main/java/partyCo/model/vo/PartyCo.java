@@ -20,7 +20,15 @@ public class PartyCo implements Serializable {
 	private int comPhotoNum;
 	
 	public PartyCo() {}
-
+	
+	public PartyCo(int paNum, int comParent, int comDepth, String comCon) {
+		super();
+		this.paNum = paNum;
+		this.comParent = comParent;
+		this.comDepth = comDepth;
+		this.comCon = comCon;
+	}
+	
 	public PartyCo(int comNum, int paNum, int comParent, int comDepth, String comCon, int comViews, int comCount,
 			Date comEnroll, Date comModDate, Date comDelDate, int comPhotoNum) {
 		super();

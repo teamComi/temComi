@@ -2,6 +2,7 @@ package partyCo.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -52,13 +53,14 @@ public class PartyCoSelectServlet extends HttpServlet {
 		System.out.println("panum : " + panum);
 		PartyCoService coservice = new PartyCoService();
 		
-		int listCount = coservice.getListCount();
+		int listCount = coservice.getListCount(panum);
 		System.out.println("listCount : " + listCount);
 		Paging paging = new Paging(listCount, currentPage, limit);
-		paging.calculator();
+		paging.calcuator();
+		System.out.println("getStartRow : " + paging.getStartRow() + "   getEndRow : " + paging.getEndRow());
 		
-		
-		ArrayList<PartyCo> list = coservice.selectPartyCoList(panum);
+		ArrayList<PartyCo> list 
+		= coservice.selectPartyCoList(panum, paging.getStartRow(), paging.getEndRow());
 		
 		System.out.println("list : " + list);
 		

@@ -15,10 +15,15 @@ from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
            COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, 
            COM_DEL_DATE, COM_PHOTO_NUM
      from (select * from comments where PA_NUM = ?
-           order by COM_ENROLL desc))
+           order by COM_NUM desc, COM_DEPTH desc))
 where rnum >= 1 and rnum <= 10;
 
+alter TABLE comments
+ADD    com_like  number;
 
+alter TABLE comments
+ADD    menum  number;
+commit;
 
 
 

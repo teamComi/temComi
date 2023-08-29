@@ -84,7 +84,7 @@ public class PartyDao {
 	}
 	
 	//리스트 조회(나만 빼고)
-	public ArrayList<Party> selectPartyList(Connection conn, String type, int start, int end, String panum) {
+	public ArrayList<Party> selectPartyList(Connection conn, String type, int start, int end, int panum) {
 		ArrayList<Party> partyList = new ArrayList<Party>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -102,7 +102,7 @@ public class PartyDao {
 		try {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, "Y");
-			pstmt.setString(2, panum);
+			pstmt.setInt(2, panum);
 			pstmt.setInt(3, start);
 			pstmt.setInt(4, end);
 			

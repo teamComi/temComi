@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 public class Qna implements Serializable{
+	private static final long serialVersionUID = -7606627212449014239L;
 	
 	private int qaNum;
 	private int meNum;

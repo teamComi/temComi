@@ -107,14 +107,7 @@ public class PartySelectAllServlet extends HttpServlet {
 		else if(type.equals("findReview")) list = pservice.selectPartyAll("close", start, end);//비활성화
 		
 		System.out.println("list : " + list);
-		/*
-		JSONArray jarr = new JSONArray();
 		
-		for(Party party : list) {
-			JSONObject json = new JsonReturn().returnParty(party);
-			jarr.add(json);
-		}
-		*/
 		RequestDispatcher view = null;
 		
 		if(list != null && list.size() > 0) {

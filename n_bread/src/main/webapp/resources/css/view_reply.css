@@ -49,6 +49,7 @@
 .review-write.review-rewriting {
     margin-top: 15px;
     padding-left: 20px;
+    display: none;
 }
 
 .review-write fieldset {
@@ -68,7 +69,7 @@
 }
 
 
-.review-write .review-write-inner {
+.review-write-inner {
     overflow: hidden;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -236,6 +237,7 @@
 .review-body .review-body-container.reviewbody-second {
     background-color: #f7f8ff;
     padding-left: 20px;
+    display: none;
 }
 
 .review-body .review-body-container .review-body-box {
@@ -344,6 +346,53 @@
     white-space: nowrap;
 }
 
+.review-fold-btn {
+    display: none;
+    width: 100%;
+    padding: 15px 0px;
+    
+    border-bottom: 1px solid #dde1eb;
+    text-decoration: none;
+    cursor: pointer;
+}
 
+.review-fold-btn .review-fold-btn-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: #222;
+}
+
+.review-write-inner-reply {
+    display: none;
+    margin-top: 10px;
+}
+
+.review-bottom {
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+}
+
+.review-bottom-btn {
+    width: 30px;
+    height: 30px;
+    background-color: #ecf0ff;
+    color: #222;
+	border-radius: 10px;
+	cursor: pointer;
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+
+.review-bottom-btn.active, .review-bottom-btn:hover {
+    background-color: #4878f4;
+    color: #fff;
+    font-weight: bold;
+}
+
+#review_bottom_next {
+    margin-right: 0px;
+}
 
 /*********************************************리뷰 끝***********************************************/

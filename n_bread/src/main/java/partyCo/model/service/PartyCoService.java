@@ -29,8 +29,15 @@ public class PartyCoService {
 		return list;
 	}
 	
+	//리스트 카운트 조회
+	public int getListCount(int pa_num) {
+		Connection conn = getConnection();
+		int listCount = dao.getListCount(conn, pa_num);
+		close(conn);
+		return listCount;
+	}
 	
-	
+	//리스트 조회
 	public ArrayList<PartyCo> selectPartyCoList(int panum, int startRow, int endRow) {
 		Connection conn = getConnection();
 		ArrayList<PartyCo> list = dao.selectPartyCoList(conn, panum, startRow, endRow);
@@ -116,6 +123,8 @@ public class PartyCoService {
 		close(conn);
 		return list;
 	}
+
+	
 
 	
 }

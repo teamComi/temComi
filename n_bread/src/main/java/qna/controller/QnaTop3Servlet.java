@@ -1,7 +1,8 @@
-package party.controller;
+package qna.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -13,21 +14,20 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import common.JsonReturn;
-import party.model.service.PartyService;
-import party.model.vo.Party;
+import qna.model.service.QnaService;
+import qna.model.vo.Qna;
 
 /**
- * Servlet implementation class PartySelectList
+ * Servlet implementation class QnaTop3Servlet
  */
-@WebServlet("/partylist")
-public class PartySelectListServlet extends HttpServlet {
+@WebServlet("/qtop3")
+public class QnaTop3Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PartySelectListServlet() {
+    public QnaTop3Servlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,32 +36,30 @@ public class PartySelectListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String startStr = request.getParameter("start");
-		String endStr = request.getParameter("end");
-		int panum = Integer.parseInt(request.getParameter("panum"));
-		int start = (startStr == null) ? 1 : Integer.parseInt(startStr);
-		int end = (endStr == null) ? 10 : Integer.parseInt(endStr);
+		// ajax 요청으로 조회수 많은 인기 게시글 3개 조회 요청 처리용 컨트롤러
 		
-		System.out.println("panum : " + panum + ", start : " + start);
-		
-		ArrayList<Party> list = new PartyService().selectPartyList("open", start, end, panum);//활성화
-		
-		System.out.println("list : " + list);
+		ArrayList<Qna> list = new QnaService().selectTop3();
 		
 		JSONArray jarr = new JSONArray();
 		
-		for(Party party : list) {
-			JSONObject json = new JsonReturn().returnParty(party);
-			jarr.add(json);
+		for(Qna qna : list) {
+			JSONObject job = new JSONObject();
+			
+			job.put("qnum", qna.getQaNum());
+			job.put("qtitle", URLEncoder.encode(qna.getQaTitle(), "UTF-8"));
+			job.put("rcount", qna.getQaViews());
+			
+			jarr.add(job);
 		}
+		
 		JSONObject sendJson = new JSONObject();
 		sendJson.put("list", jarr);
 		
-		response.setContentType("application/json; charset=UTF-8");
+		response.setContentType("application/json; charset=utf-8");
 		PrintWriter out = response.getWriter();
-		out.print(sendJson);
+		out.print(sendJson.toJSONString());
 		out.flush();
-		
+		out.close();
 	}
 
 	/**

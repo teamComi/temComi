@@ -1,11 +1,20 @@
 package qna.controller;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+
+import qna.model.vo.Qna;
 
 /**
  * Servlet implementation class QnaUpdateServlet
@@ -26,8 +35,43 @@ public class QnaUpdateServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		// 게시글 원글 수정 처리용 컨트롤러
+		
+		RequestDispatcher view = null;
+		if(!ServletFileUpload.isMultipartContent(request)) {
+			view = request.getRequestDispatcher("views/common/error.jsp");
+			request.setAttribute("message", "form의 enctype='multipart/form-data' 속성 누락됨.");
+			view.forward(request, response);
+		}
+		int maxSize = 1024 * 1024 * 10;
+		
+		//업로드되는 파일의 저장 폴더 지정
+		String savePath = request.getSession().getServletContext().getRealPath("/resources/qna_upfiles");
+		
+		//request 를 MultipartRequest 로 변환해야 함
+		MultipartRequest mrequest = new MultipartRequest(request, savePath, maxSize, "UTF-8",
+		new DefaultFileRenamePolicy());
+		
+		//데이터베이스 QA 테이블에 기록할 값 추출
+		Qna qna = new Qna();
+		
+		qna.setQaTitle(mrequest.getParameter("title"));
+		qna.setMeNum(Integer.parseInt(mrequest.getParameter("writer")));
+		qna.setQaCon(mrequest.getParameter("content"));
+		
+		int currentPage = Integer.parseInt(mrequest.getParameter("page"));
+		
+		//이전 첨부파일에 대한 삭제여부 값 추출
+		String deleteFlag = mrequest.getParameter("deleteFlag");
+		
+		//이전 첨부파일의 파일명 추출
+		String originalFilePath = mrequest.getParameter("ofile");
+		String renameFilePath = mrequest.getParameter("rfile");
+		
+		//새로 업로드된 원본 파일이름 추출
+		String originalFileName = mrequest.getFilesystemName("upfile");
+		
+		//첨부파일 확인
 	}
 
 	/**

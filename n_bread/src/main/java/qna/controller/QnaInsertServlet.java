@@ -1,11 +1,22 @@
 package qna.controller;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+
+import common.FileNameChange;
+import qna.model.service.QnaService;
+import qna.model.vo.Qna;
 
 /**
  * Servlet implementation class QnaInsertServlet
@@ -26,8 +37,55 @@ public class QnaInsertServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		//mulipart 방식으로 전송 확인 or 에러 처리
+		RequestDispatcher view = null;
+		if(!ServletFileUpload.isMultipartContent(request)) {
+			view = request.getRequestDispatcher("views/common/error.jsp");
+			request.setAttribute("message", "form의 enctype='multipart/form-data' 속성 누락됨.");
+			view.forward(request, response);
+		}
+		
+		//업로드 할 파일의 용량 제한 설정 : 10메가바이트로 제한
+		int maxSize = 1024 * 1024 * 10;
+		
+		//업로드되는 파일의 저장 폴더를 지정
+		String savePath = request.getSession().getServletContext().getRealPath("/resources/qna_upfiles");
+	
+		//request 를 MultipartRequest 로 변환
+		MultipartRequest mrequest = new MultipartRequest(request, savePath, maxSize, "UTF-8",
+				new DefaultFileRenamePolicy());
+		
+		//데이터베이스 qna 테이블에 기록할 값 추출
+		Qna qna = new Qna();
+		
+		qna.setQaTitle(mrequest.getParameter("title"));
+		qna.setMeNum(Integer.parseInt(mrequest.getParameter("writer")));	//보류
+		qna.setQaCon(mrequest.getParameter("content"));
+		
+		//6. 업로드된 원본 파일 이름 추출
+		String originlFileName = mrequest.getFilesystemName("upfile");
+		//보류
+		
+		//7. 폴더에 저장된 파일의 이름바꾸기 처리
+		if(originlFileName != null) {
+			
+			String renameFileName = FileNameChange.change(originlFileName, savePath, "yyyyMMddHHmmss");
+		
+			// 보류 qna.setqare
+		
+		}
+		
+		int result = new QnaService().insertOriginQa(qna);
+		
+		//받은 결과로 성공/실패 페이지 내보내기
+		if (result > 0) {
+			// 서블릿에서 서블릿을 실행
+			response.sendRedirect("/comi/qlist?page=1");
+		} else {
+			view = request.getRequestDispatcher("views/common/error.jsp");
+			request.setAttribute("message", "새 게시 원글 등록 실패.");
+			view.forward(request, response);
+		}
 	}
 
 	/**
