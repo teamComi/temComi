@@ -35,13 +35,26 @@ select max(com_num) from comments;
 
 
 insert into comments values 
-((select max(com_num) from comments) + 1, 1, (select max(com_num) from comments) + 1, 1, 1, 1, 1, sysdate, null, null, null, 1);
+((select max(com_num) from comments) + 1, ?, (select max(com_num) from comments) + 1, 
+?, ?, ?, ?, sysdate, null, null, null, ?);
 
 
 
 
 
-
+select *
+from comments
+where COM_PARENT in 
+(select COM_NUM
+from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
+           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, 
+           COM_DEL_DATE, COM_PHOTO_NUM
+     from (select * from comments where PA_NUM = 1
+           order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc)
+        
+    )
+where rnum >= 1 and rnum <= 10)
+order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc;
 
 
 

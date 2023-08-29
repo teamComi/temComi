@@ -40,6 +40,8 @@ View_reply.prototype = {
     }
     ,
     connInsert : function(menum, panum, depth, parent, content, page){
+        var _this = this;
+
         $.ajax({
             url : '/comi/partycoins?menum='+menum+'&panum=' + panum + '&depth=' + depth + '&parent=' + parent + '&content=' + content + '&page' + page
             ,type : 'post'
@@ -57,6 +59,7 @@ View_reply.prototype = {
                 //댓글 리스트 불러오기
                 var login = 'login';
                 $('#review').append(viewReplyInit(json, login));
+                _this.buttonEvent();
                 
             }
             ,error : function(jqXHR, textStatus, errorThrown){
@@ -64,116 +67,6 @@ View_reply.prototype = {
             }
         })
     }
-    ,
-    
-    setTag : function(data, nextDepth, len, i) {
-
-        var myNick = 'donki2';
-        var login = 'login'
-
-        var tag1 = (data.depth == 1) ? 'reviewbody-first' : 'reviewbody-second';
-        var el = 
-        `<!--댓글 첫번째-->
-        <div class="review-body-container `+tag1+` review_parent_`+data.comParent+`">
-
-            <div class="review-body-box">
-            
-            <div class="review-body-list">
-                <div class="review-body-list-profile">
-                    <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
-                    <div class="review-body-list-profile-box">
-                        <div class="review-body-list-name">`+data.meName+`</div>
-                        <div class="review-body-list-date">`+data.comEnroll+`</div>
-                    </div>
-                </div>
-                <div class="review-body-list-right">
-                    <button class="review-body-list-right-btn">
-                        <img class="review-body-list-right-btn-img" src="/comi/resources/images/1.png">
-                    </button>
-                </div>
-            </div>
-
-            <div class="review-body-read">
-                <div class="review-body-read-text">
-                    `+data.comCon+`
-                </div>
-            </div>
-
-            <div class="review-body-bottom">
-                <button class="review-body-bottom-retext review_parent_`+data.comParent+`" data-parent="`+data.comParent+`" >
-                    하트 <b>`+data.comCount+`</b>
-                </button>
-                <div class="review-body-bottom-heartbox">
-                    <button class="review-body-bottom-heart">
-                        <img class="review-body-bottom-heart-img" src="/comi/resources/images/heart.png">
-                    </button>
-                    <span class="review-body-heart">
-                        `+data.comViews+`
-                    </span>
-                </div>
-            </div>
-
-        </div>
-        <!--댓글 첫번째 end-->`
-        
-        if(data.comDepth == 2 && (nextDepth == 1 || i == len-1 )){
-            if(login == 'login'){
-                el += `
-                <!--댓글 쓰기-->
-                <div class="review-write review-rewriting review_parent_` +data.comParent+ `" data-parent="` +data.comParent+ `">
-                    <form>
-                        <fieldset>
-                            <legend class="u_vc">댓글 쓰기</legend>
-                            <div class="review-write-inner review_mynum_` +data.comNum+ `" data-panum="` +data.paNum+ `" data-mynum="` +data.comNum+ `">
-                                
-                                <div class="review-write-profilearea">
-                                    <div class="review-write-profile">
-                                        <img src="/comi/resources/images/deafault.png" class="img-profile">
-                                        <span class="write-name">`+myNick+`</span>
-                                    </div>
-                                </div>
-        
-                                <div class="review-write-area">
-                                    <div class="review-write-area-inbox">
-                                        <textarea title="댓글" class="review-write-textarea" rows="3" cols="30"></textarea>
-                                        <label for="review_write_textarea_2" class="u_cbox_guide">
-                                            다양한 의견이 서로 존중될 수 있도록 다른 사람에게 불쾌감을 주는 욕설, 혐오, 비하의 표현이나 타인의 권리를 침해하는 내용은 주의해주세요.  
-                                            모든 작성자는 <em class="guide_emphasis">본인이 작성한 의견에 대해 법적 책임을 갖는다는 점</em> 유의하시기 바랍니다.
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="review-write-count-box">
-                                    <div class="review-write-count">
-                                        <strong class="review-write-count-num">0</strong>/
-                                        <span class="review-write-count-total">300</span>
-                                    </div>
-                                    <input type="button" class="review-write-upload" value="등록">
-                                </div>
-                            
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-                <!--댓글 쓰기 end--> `
-            }else{
-                el += `
-                <div class="review-write-inner review-write-inner-reply review_parent_` +data.comParent+ `">
-                    <div class="review-write-oucontainer">
-                        <textarea title="댓글" id="review-write-outtext" class="review-write-outbox" rows="3" cols="30"></textarea>
-                        <label for="review-write-outtext" class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
-                    </div>
-                </div>`
-            }
-
-            el += `
-            <button class="review-fold-btn review_parent_` +data.comParent+ `" data-parent="` +data.comParent+ `">
-                <span class="review-fold-btn-text">답글 접기</span>
-            </button>`
-        }
-    }
-    
-
     ,
     buttonEvent : function(){
         
@@ -604,6 +497,41 @@ function viewReplyInit(data, login){
         el += `
         </div>
 		<!--review-body end-->
+
+        <!-- review-bottom -->
+		<div class="review-bottom">`
+        
+        var copage = data.paging;
+        if(copage.currentPage <= 1){ 
+            el += `<button class="review-bottom-btn" id="review_bottom_prev"></button>`;
+        }else{ 
+            el += `<button class="review-bottom-btn active" id="review_bottom_prev"></button>`
+        } 
+        
+            
+        for(var p=copage.startPage; p<=copage.endPage; p++){ 
+            if(p == copage.currentPage) {
+                el += `
+                <button class="review-bottom-btn active" id="review_pagebtn_"` + p + `>
+                    <span class="review-pagespan">` + p + `</span>
+                </button>`
+            }else{
+                el += `
+                <button class="review-bottom-btn" id="review_pagebtn_"` + p + `>
+                    <span class="review-pagespan">` + p + `</span>
+                </button>`
+            } 
+        }
+        
+        if((copage.currentPage + copage.limit) < copage.endPage 
+                && (copage.currentPage + copage.limit) > copage.maxPage){ 
+            el += `<button class="review-bottom-btn active" id="review_bottom_next"></button>`;
+        }else{
+            el += `<button class="review-bottom-btn" id="review_bottom_next"></button>`;
+        }
+        el += `
+        </div>
+        <!-- review-bottom end -->
     `
 
     return el;

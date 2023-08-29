@@ -323,6 +323,43 @@
         </div>
 		<!--review-body end-->
 		
+		<!-- review-bottom -->
+		<div class="review-bottom">
+        
+        	<% 
+        	//out.print(copage);
+        	   if(copage.getCurrentPage() <= 1){ %>
+            	<button class="review-bottom-btn" id="review_bottom_prev"></button>
+            <% }else{ %>
+	    		<button class="review-bottom-btn active" id="review_bottom_prev"></button>
+	    	<% } %>
+            
+			<% 
+			for(int p=copage.getStartPage(); p<=copage.getEndPage(); p++){ 
+				if(p == copage.getCurrentPage()) {
+			%>	
+				<button class="review-bottom-btn active" id="review_pagebtn_"<%= p %>>
+  					<span class="review-pagespan"><%= p %></span>
+  				</button>
+			<%	}else{ %>
+				<button class="review-bottom-btn" id="review_pagebtn_"<%= p %>>
+  					<span class="review-pagespan"><%= p %></span>
+  				</button>
+			
+			<%}%>
+				
+			<%}//for문 %>
+			
+			<% if((copage.getCurrentPage() + copage.getLimit()) < copage.getEndPage() 
+					&& (copage.getCurrentPage() + copage.getLimit()) > copage.getMaxPage()){ //이전그룹이 있다면 %>
+	    		<button class="review-bottom-btn active" id="review_bottom_next"></button>
+	    	<% }else{ %>
+	    		<button class="review-bottom-btn" id="review_bottom_next"></button>
+	    	<% } %>
+            
+        </div>
+        <!-- review-bottom end -->
+		
         <!--<button id="replyMoreBtn"><b>댓글 더보기</b></button>-->
     </section>
     <!-- 게시글 리뷰 end-->

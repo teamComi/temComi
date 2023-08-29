@@ -56,13 +56,21 @@ public class PartyCoDao {
 		ResultSet rset = null;
 		
 		try {
+			
 			String query = "select * "
+					+ "from comments "
+					+ "where COM_PARENT in "
+					+ "(select COM_NUM "
 					+ "from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
 					+ "           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
 					+ "           COM_DEL_DATE, COM_PHOTO_NUM "
 					+ "     from (select * from comments where PA_NUM = ? "
-					+ "           order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc)) "
-					+ "where rnum >= ? and rnum <= ?";
+					+ "           order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc) "
+					+ "         "
+					+ "    ) "
+					+ "where rnum >= ? and rnum <= ?) "
+					+ "order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc;";
+			
 			
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, panum);
@@ -122,6 +130,7 @@ public class PartyCoDao {
 			}else {
 				query = "insert into comments values " 
 						+ "((select max(com_num) from comments) + 1, ?, ?, ?, ?, ?, ?, sysdate, null, null, null, ?)";
+				pstmt = conn.prepareStatement(query);
 				pstmt.setInt(1, partyCo.getPaNum());
 				pstmt.setInt(2, partyCo.getComParent());
 				pstmt.setInt(3, partyCo.getComDepth());
