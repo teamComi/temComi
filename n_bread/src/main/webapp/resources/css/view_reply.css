@@ -49,7 +49,6 @@
 .review-write.review-rewriting {
     margin-top: 15px;
     padding-left: 20px;
-    display: none;
 }
 
 .review-write fieldset {
@@ -237,7 +236,6 @@
 .review-body .review-body-container.reviewbody-second {
     background-color: #f7f8ff;
     padding-left: 20px;
-    display: none;
 }
 
 .review-body .review-body-container .review-body-box {
@@ -347,7 +345,6 @@
 }
 
 .review-fold-btn {
-    display: none;
     width: 100%;
     padding: 15px 0px;
     
@@ -363,7 +360,6 @@
 }
 
 .review-write-inner-reply {
-    display: none;
     margin-top: 10px;
 }
 
@@ -393,6 +389,10 @@
 
 #review_bottom_next {
     margin-right: 0px;
+}
+
+.review-reply-area {
+    display: none;
 }
 
 /*********************************************리뷰 끝***********************************************/

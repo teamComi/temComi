@@ -25,12 +25,17 @@ alter TABLE comments
 ADD    menum  number;
 commit;
 
+alter table comments
+drop column COM_LIKE;
+
+select max(com_num)
+from comments;
+
+select max(com_num) from comments;
 
 
-
-
-
-
+insert into comments values 
+((select max(com_num) from comments) + 1, 1, (select max(com_num) from comments) + 1, 1, 1, 1, 1, sysdate, null, null, null, 1);
 
 
 

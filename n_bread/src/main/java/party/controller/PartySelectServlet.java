@@ -71,17 +71,17 @@ public class PartySelectServlet extends HttpServlet {
 			int currentPage = 1;//댓글의 카운트
 			int limit = 10;//한페이지당 목록 갯수
 			
-			System.out.println("panum : " + panum);
+			//System.out.println("panum : " + panum);
 			PartyCoService coservice = new PartyCoService();
 			
 			listCount = coservice.getListCount(panum);
-			System.out.println("==listCount : " + listCount);
+			//System.out.println("==listCount : " + listCount);
 			paging = new Paging(listCount, currentPage, limit);
 			paging.calcuator();
 			
 			//댓글 부분
 			partyCoList = coservice.selectPartyCoList(panum, 1, limit);
-			System.out.println("==partyCoList : " + partyCoList);
+			//System.out.println("==partyCoList : " + partyCoList);
 			
 			//이중배열 만들어 보내기
 			int count = 0;
@@ -91,7 +91,7 @@ public class PartySelectServlet extends HttpServlet {
 				ArrayList<PartyCo> cList = new ArrayList<PartyCo>();
 				
 				for(int i=0; i<partyCoList.size(); i++) {
-					System.out.println("i : " + i);
+					//System.out.println("i : " + i);
 					int nextDepth = (i < partyCoList.size()-1) ? partyCoList.get(i+1).getComDepth() : -1;//다음번 뎁스
 					
 					cList.add(partyCoList.get(i));
@@ -105,7 +105,7 @@ public class PartySelectServlet extends HttpServlet {
 					}
 				}
 			}
-			System.out.println("coList : " + coList);
+			//System.out.println("coList : " + coList);
 			
 		}
 		

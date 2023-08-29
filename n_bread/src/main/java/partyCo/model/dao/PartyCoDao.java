@@ -101,8 +101,45 @@ public class PartyCoDao {
 	}
 
 	public int insertPartyCo(Connection conn, PartyCo partyCo) {
-		// TODO Auto-generated method stub
-		return 0;
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		try {
+			String query = null;
+			if(partyCo.getComParent() == -1) {
+				query = "insert into comments values "
+					+ "((select max(com_num) from comments) + 1, ?, (select max(com_num) from comments) + 1, "
+					+ "?, ?, ?, ?, sysdate, null, null, null, ?)";
+				//System.out.println("partyCo.getPaNum() : " + partyCo.getPaNum());
+				//System.out.println("partyCo.getComDepth() : " + partyCo.getComDepth());
+				pstmt = conn.prepareStatement(query);
+				pstmt.setInt(1, partyCo.getPaNum());
+				pstmt.setInt(2, partyCo.getComDepth());
+				pstmt.setString(3, partyCo.getComCon());
+				pstmt.setInt(4, partyCo.getComViews());
+				pstmt.setInt(5, partyCo.getComCount());
+				pstmt.setInt(6, partyCo.getMeNum());
+			}else {
+				query = "insert into comments values " 
+						+ "((select max(com_num) from comments) + 1, ?, ?, ?, ?, ?, ?, sysdate, null, null, null, ?)";
+				pstmt.setInt(1, partyCo.getPaNum());
+				pstmt.setInt(2, partyCo.getComParent());
+				pstmt.setInt(3, partyCo.getComDepth());
+				pstmt.setString(4, partyCo.getComCon());
+				pstmt.setInt(5, partyCo.getComViews());
+				pstmt.setInt(6, partyCo.getComCount());
+				pstmt.setInt(7, partyCo.getMeNum());
+			}
+			
+			result = pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 
 	public int updatePartyCo(Connection conn, PartyCo partyCo) {

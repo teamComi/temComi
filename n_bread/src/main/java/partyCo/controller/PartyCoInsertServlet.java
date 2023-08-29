@@ -41,6 +41,7 @@ public class PartyCoInsertServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		request.setCharacterEncoding("UTF-8");
+		int menum = Integer.parseInt(request.getParameter("menum"));
 		int panum = Integer.parseInt(request.getParameter("panum"));
 		int depth = Integer.parseInt(request.getParameter("depth"));
 		int parent = Integer.parseInt(request.getParameter("parent"));
@@ -50,8 +51,10 @@ public class PartyCoInsertServlet extends HttpServlet {
 		}
 		String content = request.getParameter("content");
 		
+		System.out.println("??parent : " + parent);
+		
 		PartyCoService coservice = new PartyCoService();
-		PartyCo partyCo = new PartyCo(panum, parent, depth, content);
+		PartyCo partyCo = new PartyCo(panum, parent, depth, content, menum);
 		int result = coservice.insertPartyCo(partyCo);
 		
 		if(result > 0) {
@@ -67,16 +70,41 @@ public class PartyCoInsertServlet extends HttpServlet {
 			ArrayList<PartyCo> partyCoList = coservice.selectPartyCoList(panum, paging.getStartRow(), paging.getEndRow());
 			System.out.println("??partyCoList : " + partyCoList);
 			
-			//리스트 불러오기 
-			JSONArray jarr = new JSONArray();
 			
-			for(PartyCo pc : partyCoList) {
-				JSONObject json = new JsonReturn().returnPartyCo(pc);
-				jarr.add(json);
+			//이중배열 만들어 보내기
+			JSONArray coList = null;
+			//ArrayList<ArrayList<PartyCo>> coList = null;
+			int count = 0;
+			if(partyCoList.size() > 0) {
+				
+				//coList = new ArrayList<ArrayList<PartyCo>>();
+				coList = new JSONArray();
+				//ArrayList<PartyCo> cList = new ArrayList<PartyCo>();
+				JSONArray cList = new JSONArray();
+				
+				for(int i=0; i<partyCoList.size(); i++) {
+					System.out.println("i : " + i);
+					int nextDepth = (i < partyCoList.size()-1) ? partyCoList.get(i+1).getComDepth() : -1;//다음번 뎁스
+					
+					cList.add(new JsonReturn().returnPartyCo(partyCoList.get(i)));
+					
+					if(nextDepth == 1 || i == partyCoList.size()-1) {//마지막이거나 다음 뎁스가 1일때
+						
+						JSONArray ctemp = (JSONArray) cList.clone();
+						coList.add(ctemp);
+						cList.clear();
+						count ++;
+					}
+				}
 			}
+			JSONObject pagingJason = new JsonReturn().returnPaging(paging);
+			
 			
 			JSONObject sendJson = new JSONObject();
-			sendJson.put("list", jarr);
+			sendJson.put("paging", pagingJason);
+			sendJson.put("list", coList);
+			sendJson.put("listCount", listCount);
+			System.out.println("sendJson : " + sendJson);
 			
 			response.setContentType("application/json; charset=UTF-8");
 			PrintWriter out = response.getWriter();

@@ -83,10 +83,11 @@ public class JsonReturn {
 		json.put("comCon", partyCo.getComCon());
 		json.put("comViews", partyCo.getComViews());
 		json.put("comCount", partyCo.getComCount());
-		json.put("comEnroll", partyCo.getComEnroll());
-		json.put("comModDate", partyCo.getComModDate());
-		json.put("comDelDate", partyCo.getComDelDate());
+		json.put("comEnroll", String.valueOf(partyCo.getComEnroll()));
+		json.put("comModDate", String.valueOf(partyCo.getComModDate()));
+		json.put("comDelDate", String.valueOf(partyCo.getComDelDate()));
 		json.put("comPhotoNum", partyCo.getComPhotoNum());
+		json.put("meNum", partyCo.getMeNum());
 		
 		return json;
 	}
