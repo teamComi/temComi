@@ -77,12 +77,12 @@ public class PartySelectServlet extends HttpServlet {
 			listCount = coservice.getListCount(panum);
 			//System.out.println("==listCount : " + listCount);
 			paging = new Paging(listCount, currentPage, limit);
-			paging.calcuator();
+			paging.calculator();
 			
 			//댓글 부분
 			partyCoList = coservice.selectPartyCoList(panum, 1, limit);
 			//System.out.println("==partyCoList : " + partyCoList);
-			
+			System.out.println("==partyCoList size : " + partyCoList.size());
 			//이중배열 만들어 보내기
 			int count = 0;
 			if(partyCoList.size() > 0) {
@@ -114,14 +114,17 @@ public class PartySelectServlet extends HttpServlet {
 			//if(act.equals("N")) url = "views/party/party_click.jsp";
 			
 			view = request.getRequestDispatcher(url);
-			System.out.println("act : " + act);
+			//System.out.println("act : " + act);
 			request.setAttribute("type", (act.equals("Y")) ? "findParty" : "findReview");
 			request.setAttribute("party", party);
 			request.setAttribute("partyList", list);
+			
 			request.setAttribute("member", member);
 			request.setAttribute("partyColistCount", listCount);
 			request.setAttribute("partyCoPaging", paging);
 			request.setAttribute("partyCoList", coList);
+			System.out.println(">>partyCoList : " + coList.size());
+			System.out.println(">>partyColistCount : " + listCount);
 			
 		}else {
 			view = request.getRequestDispatcher("views/common/error.jsp");

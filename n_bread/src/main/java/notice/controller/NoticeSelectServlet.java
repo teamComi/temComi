@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import notice.model.service.NoticeService;
 import notice.model.vo.Notice;
+import photo.model.service.PhotoService;
+import photo.model.vo.Photo;
+import static common.PhotoTemplate.*;
 
 /**
  * Servlet implementation class NoticeSelectServlet
@@ -35,12 +38,15 @@ public class NoticeSelectServlet extends HttpServlet {
 		int currentPage = Integer.parseInt(request.getParameter("page"));
 
 		Notice notice = new NoticeService().selectNotice(noNum);
-
+		Photo photo = searchPhoto(notice, "notice");
 		RequestDispatcher view = null;
+
+
 
 		if(notice != null){
 			view = request.getRequestDispatcher("views/notice/notice_detail.jsp");
 			request.setAttribute("notice",notice);
+			request.setAttribute("photo",photo);
 			request.setAttribute("currentPage",currentPage);
 
 		}else{

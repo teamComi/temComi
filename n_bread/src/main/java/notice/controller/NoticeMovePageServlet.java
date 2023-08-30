@@ -45,7 +45,7 @@ public class NoticeMovePageServlet extends HttpServlet {
 			view.forward(request,response);
 			//수정할 글 찾으면 
 		}else{
-			response.sendRedirect("main.html");
+			response.sendRedirect("main.jsp");
 			//에러페이지 급구
 			//수정할 글 못찾으면
 		}

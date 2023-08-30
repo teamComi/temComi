@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
+import qna.model.service.QnaService;
 import qna.model.vo.Qna;
 
 /**
@@ -56,22 +57,36 @@ public class QnaUpdateServlet extends HttpServlet {
 		Qna qna = new Qna();
 		
 		qna.setQaTitle(mrequest.getParameter("title"));
-		qna.setMeNum(Integer.parseInt(mrequest.getParameter("writer")));
+		//qna.setMeNum(Integer.parseInt(mrequest.getParameter("writer")));
 		qna.setQaCon(mrequest.getParameter("content"));
+		qna.setQaNum(Integer.parseInt(mrequest.getParameter("qnum")));
 		
 		int currentPage = Integer.parseInt(mrequest.getParameter("page"));
 		
 		//이전 첨부파일에 대한 삭제여부 값 추출
-		String deleteFlag = mrequest.getParameter("deleteFlag");
+//		String deleteFlag = mrequest.getParameter("deleteFlag");
 		
 		//이전 첨부파일의 파일명 추출
-		String originalFilePath = mrequest.getParameter("ofile");
-		String renameFilePath = mrequest.getParameter("rfile");
+//		String originalFilePath = mrequest.getParameter("ofile");
+//		String renameFilePath = mrequest.getParameter("rfile");
 		
 		//새로 업로드된 원본 파일이름 추출
-		String originalFileName = mrequest.getFilesystemName("upfile");
+//		String originalFileName = mrequest.getFilesystemName("upfile");
 		
-		//첨부파일 확인
+		// 모델 서비스 메소드로 전달하고 결과받기
+		int result = new QnaService().updateQna(qna);
+		
+		if (result > 0) {
+			// 서블릿에서 서블릿을 실행함
+			response.sendRedirect("/first/bdetail?bnum=" + qna.getQaNum() 
+								+ "&page=" + currentPage);
+		} else {
+			view = request.getRequestDispatcher("views/common/error.jsp");
+			request.setAttribute("message", qna.getQaNum() + "번 게시 원글 수정 실패.");
+			view.forward(request, response);
+		}
+		
+		
 	}
 
 	/**

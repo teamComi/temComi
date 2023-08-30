@@ -46,7 +46,7 @@ public class NoticeSelectAllServlet extends HttpServlet {
 		int listCount = noService.getListCount();
 		System.out.println(listCount);
 		Paging paging = new Paging(listCount,currentPage,limit);
-		paging.calcuator();
+		paging.calculator();
 		//System.out.println(listCount + ", " + currentPage + ", " + limit);
 
 		ArrayList<Notice> list = noService.selectNoticeAll(paging.getStartRow(),paging.getEndRow());

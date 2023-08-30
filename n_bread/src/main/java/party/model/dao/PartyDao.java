@@ -1,14 +1,16 @@
 package party.model.dao;
 
+
+import static common.JDBCTemplate.close;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import party.model.vo.Party;
-
-import static common.JDBCTemplate.*;
 
 public class PartyDao {
 	
@@ -84,7 +86,7 @@ public class PartyDao {
 	}
 	
 	//리스트 조회(나만 빼고)
-	public ArrayList<Party> selectPartyList(Connection conn, String type, int start, int end, int panum) {
+	public ArrayList<Party> selectPartyList(Connection conn, String type, int start, int end, String panum) {
 		ArrayList<Party> partyList = new ArrayList<Party>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -102,7 +104,7 @@ public class PartyDao {
 		try {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, "Y");
-			pstmt.setInt(2, panum);
+			pstmt.setString(2, panum);
 			pstmt.setInt(3, start);
 			pstmt.setInt(4, end);
 			
@@ -129,41 +131,28 @@ public class PartyDao {
 		
 		PreparedStatement pstmt = null;
 		int result = 0;
-		
+		String query = "insert into party " + 
+				"values ((select count(*) from party)+1,2,sysdate,?,?,?,?,?,default,NULL,NULL,default,default, " +
+				"        default,default,default,?,?,default,?,null)";
+
 		try {
-			String query = "insert into party values " 
-			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate, null, null, ?, 0, 0, 0, ?, ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, party.getPaNum());
-			pstmt.setInt(2, party.getMeNum());
-			pstmt.setDate(3, party.getPaTime());
-			pstmt.setInt(4, party.getPaTotalAmount());
-			pstmt.setInt(5, party.getPaDeposit());
-			pstmt.setInt(6, party.getPaPerAmount());
+			pstmt.setInt(1,party.getPaTotalAmount());
+			pstmt.setInt(2, party.getPaDeposit());
+			pstmt.setInt(3, party.getPaPerAmount());
+			pstmt.setString(4, party.getPaTitle());
+			pstmt.setString(5, party.getPaCon());
+			pstmt.setString(6,party.getPaLocation());
+			pstmt.setInt(7, party.getPaTotalNum());
+			pstmt.setInt(8, party.getPhNum());
 			
-			pstmt.setString(7, party.getPaTitle());
-			pstmt.setString(8, party.getPaCon());
-			//pstmt.setDate(9, party.getPaEnroll());
-			//pstmt.setDate(10, party.getPaModDate());
-			//pstmt.setDate(11, party.getPaDelDate());
-			pstmt.setString(9, party.getPaAct());
-			//pstmt.setInt(13, party.getPaViews());
-			//pstmt.setInt(14, party.getPaLike());
-			//pstmt.setInt(15, party.getPaComCount());
-			pstmt.setString(10, party.getPaGenderSet());
-			pstmt.setString(11, party.getPaLocation());
-			pstmt.setInt(12, party.getPaTotalNum());
-			pstmt.setString(13, party.getPaGenderLimit());
-			pstmt.setInt(14, party.getPhNum());
-			pstmt.setInt(15, party.getCatNum());
 			result = pstmt.executeUpdate();
-			
+
 		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			close(pstmt);
 		}
-		
 		return result;
 	}
 	
@@ -300,6 +289,29 @@ public class PartyDao {
 		);
 		
 		return party;
+	}
+
+	public String getNowPartyNum(Connection conn) {
+		Statement stmt = null;
+		ResultSet rset = null;
+		String nowPartyNum = null;
+		String query = "select count(*) from party";
+
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(query);
+
+			if(rset.next()){
+				nowPartyNum = rset.getString(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			close(rset);
+			close(stmt);
+		}
+		return nowPartyNum;
 	}
 	
 	

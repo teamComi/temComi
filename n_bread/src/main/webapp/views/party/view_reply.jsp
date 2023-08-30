@@ -22,6 +22,7 @@
     <script type="text/javascript">
     var currentPage = Number(<%= "\"" + copage.getCurrentPage() + "\"" %>);
     </script>
+    <script type="text/javascript" src="/comi/resources/js/util.js"></script>
     <script type="text/javascript" src="/comi/resources/js/view_reply.js"></script>
 </head>
 <body>
@@ -29,7 +30,7 @@
 	<!-- 게시글 리뷰-->
     <section id="review">
         <!--댓글 헤드-->
-        <div class="review-head">
+        <div class="review-head" data-panum="<%= partyCoList.get(0).get(0).getPaNum() %>">
             <span class="review-head-title" id="review_number"><%= partyColistCount %>개의 댓글</span>
             <button type="button" class="review-head-refresh" alt="새로고침">
                 <img src="/comi/resources/images/refresh.png">
@@ -43,7 +44,7 @@
                 <fieldset>
                 <% if(login.equals("login")) { %>
                     <legend class="u_vc">댓글 쓰기</legend>
-                    <div class="review-write-inner" 
+                    <div class="review-write-inner review-rewriting" 
             			data-panum="<%= partyCoList.get(0).get(0).getPaNum() %>">
                         
                         <div class="review-write-profilearea">
@@ -73,13 +74,14 @@
                     
                     </div>
                 <% }else{ %>    
-                    <div class="review-write-inner review-write-inner-login">
+                    
+                <% } %>
+                	<div class="review-write-inner review-write-inner-login">
                     	<div class="review-write-oucontainer">
-                    		<textarea title="댓글" id="review-write-outtext" class="review-write-outbox" rows="3" cols="30"></textarea>
-                    		<label for="review-write-outtext" class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
+                    		<textarea title="댓글" class="review-write-outbox" rows="3" cols="30" readonly></textarea>
+                    		<label class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
                     	</div>
                     </div>
-                <% } %>
                 </fieldset>
             </form>
         </div>
@@ -116,7 +118,7 @@
 		                    <div class="review-body-list-profile">
 		                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 		                        <div class="review-body-list-profile-box">
-		                            <div class="review-body-list-name">마이프레셔스</div>
+		                            <div class="review-body-list-name"><%= depth1Obj.getMeAka() %></div>
 		                            <div class="review-body-list-date"><%= depth1Obj.getComEnroll() %></div>
 		                        </div>
 		                    </div>
@@ -163,7 +165,7 @@
 					            <form>
 					                <fieldset>
 					                    <legend class="u_vc">댓글 쓰기</legend>
-					                    <div class="review-write-inner">
+					                    <div class="review-write-inner review-rewriting">
 					                        
 					                        <div class="review-write-profilearea">
 					                            <div class="review-write-profile">
@@ -196,13 +198,14 @@
 					        </div>
 					        <!--댓글 쓰기 end--> 
     					<% }else{ %>    
-					        <div class="review-write-inner review-write-inner-reply">
+					        
+    					<%}%>
+    						<div class="review-write-inner review-write-inner-reply">
 					        	<div class="review-write-oucontainer">
-					        		<textarea title="댓글" id="review-write-outtext" class="review-write-outbox" rows="3" cols="30"></textarea>
-					        		<label for="review-write-outtext" class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
+					        		<textarea title="댓글" class="review-write-outbox" rows="3" cols="30" readonly></textarea>
+					        		<label class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
 					        	</div>
 					        </div>
-    					<%}%>
     						<button class="review-fold-btn">
 								<span class="review-fold-btn-text">답글 접기</span>
 							</button>
@@ -220,7 +223,7 @@
 					                    <div class="review-body-list-profile">
 					                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 					                        <div class="review-body-list-profile-box">
-					                            <div class="review-body-list-name">마이프레셔스</div>
+					                            <div class="review-body-list-name"><%= tempList.get(j).getMeAka() %></div>
 					                            <div class="review-body-list-date"><%= tempList.get(j).getComEnroll() %></div>
 					                        </div>
 					                    </div>
@@ -263,7 +266,7 @@
 							            <form>
 							                <fieldset>
 							                    <legend class="u_vc">댓글 쓰기</legend>
-							                    <div class="review-write-inner">
+							                    <div class="review-write-inner review-rewriting">
 							                        
 							                        <div class="review-write-profilearea">
 							                            <div class="review-write-profile">
@@ -296,13 +299,14 @@
 							        </div>
 							        <!--댓글 쓰기 end--> 
 		       					<% }else{ %>    
-							        <div class="review-write-inner review-write-inner-reply">
-							        	<div class="review-write-oucontainer">
-							        		<textarea title="댓글" id="review-write-outtext" class="review-write-outbox" rows="3" cols="30"></textarea>
-							        		<label for="review-write-outtext" class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
-							        	</div>
-							        </div>
+							        
 		       					<%}%>
+		       					<div class="review-write-inner review-write-inner-reply">
+						        	<div class="review-write-oucontainer">
+						        		<textarea title="댓글" class="review-write-outbox" rows="3" cols="30" readonly></textarea>
+						        		<label class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
+						        	</div>
+						        </div>
 		       					<button class="review-fold-btn">
 									<span class="review-fold-btn-text">답글 접기</span>
 								</button>
@@ -329,20 +333,20 @@
         	<% 
         	//out.print(copage);
         	   if(copage.getCurrentPage() <= 1){ %>
-            	<button class="review-bottom-btn" id="review_bottom_prev"></button>
+            	<!-- <button class="review-bottom-btn" id="review_bottom_prev"></button> -->
             <% }else{ %>
-	    		<button class="review-bottom-btn active" id="review_bottom_prev"></button>
+	    		<!-- <button class="review-bottom-btn" id="review_bottom_prev"></button>-->
 	    	<% } %>
             
 			<% 
 			for(int p=copage.getStartPage(); p<=copage.getEndPage(); p++){ 
 				if(p == copage.getCurrentPage()) {
 			%>	
-				<button class="review-bottom-btn active" id="review_pagebtn_"<%= p %>>
+				<button class="review-bottom-btn active" id="reviewPagebtn_<%= p %>">
   					<span class="review-pagespan"><%= p %></span>
   				</button>
 			<%	}else{ %>
-				<button class="review-bottom-btn" id="review_pagebtn_"<%= p %>>
+				<button class="review-bottom-btn" id="reviewPagebtn_<%= p %>">
   					<span class="review-pagespan"><%= p %></span>
   				</button>
 			
@@ -352,9 +356,9 @@
 			
 			<% if((copage.getCurrentPage() + copage.getLimit()) < copage.getEndPage() 
 					&& (copage.getCurrentPage() + copage.getLimit()) > copage.getMaxPage()){ //이전그룹이 있다면 %>
-	    		<button class="review-bottom-btn active" id="review_bottom_next"></button>
+	    		<!-- <button class="review-bottom-btn" id="review_bottom_next" disabled></button>-->
 	    	<% }else{ %>
-	    		<button class="review-bottom-btn" id="review_bottom_next"></button>
+	    		<!-- <button class="review-bottom-btn" id="review_bottom_next"></button> -->
 	    	<% } %>
             
         </div>

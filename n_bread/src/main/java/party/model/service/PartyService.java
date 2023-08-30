@@ -31,7 +31,7 @@ public class PartyService {
 	}
 
 	//몇개만 조회
-	public ArrayList<Party> selectPartyList(String type, int start, int end, int panum) {
+	public ArrayList<Party> selectPartyList(String type, int start, int end, String panum) {
 		Connection conn = getConnection();
 		ArrayList<Party> list = dao.selectPartyList(conn, type, start, end, panum);
 		close(conn);
@@ -115,6 +115,12 @@ public class PartyService {
 		ArrayList<Party> list = dao.sortPartyCurrent(conn, keyword);
 		close(conn);
 		return list;
+	}
+
+	public String getNowPartyNum() {
+		Connection conn = getConnection();
+		String result = dao.getNowPartyNum(conn);
+		return result;
 	}
 	
 }

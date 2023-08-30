@@ -30,9 +30,9 @@ public class NoticeService {
 	}
 	
 	//삽입
-	public int insertNotice(Notice notice) {
+	public int insertNotice(Notice notice, int photoNum) {
 		Connection conn = getConnection();
-		int result = dao.insertNotice(conn, notice);
+		int result = dao.insertNotice(conn, notice,photoNum);
 		
 		if(result > 0) commit(conn);
 		else rollback(conn);
@@ -90,4 +90,5 @@ public class NoticeService {
 		close(conn);
 		return result;
 	}
+
 }

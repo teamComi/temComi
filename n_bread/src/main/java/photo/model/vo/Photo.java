@@ -23,7 +23,7 @@ public class Photo implements Serializable{
 		this.photo4 = photo4;
 		this.photo5 = photo5;
 	}
-
+	
 	public int getPhotonum() {
 		return photonum;
 	}

@@ -21,7 +21,7 @@
                                 <label class="footer_right_sub_label">서비스</label>
                                 <div class="footer_right_subsub">
                                     <span class="footer_right_sub_text">앱 다운로드</span>
-                                    <span class="footer_right_sub_text">공지사항</span>
+                                    <span class="footer_right_sub_text"><a href="/comi/noticesall">공지사항</a></span>
                                     <span class="footer_right_sub_text">고객센터</span>
                                 </div>
                             </div>

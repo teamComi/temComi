@@ -62,20 +62,18 @@ public class QnaInsertServlet extends HttpServlet {
 		qna.setMeNum(Integer.parseInt(mrequest.getParameter("writer")));	//보류
 		qna.setQaCon(mrequest.getParameter("content"));
 		
-		//6. 업로드된 원본 파일 이름 추출
-		String originlFileName = mrequest.getFilesystemName("upfile");
-		//보류
+//		//6. 업로드된 원본 파일 이름 추출
+//		String originlFileName = mrequest.getFilesystemName("upfile");
+//		//보류
+//		
+//		//7. 폴더에 저장된 파일의 이름바꾸기 처리
+//		if(originlFileName != null) {
+//			
+//			String renameFileName = FileNameChange.change(originlFileName, savePath, "yyyyMMddHHmmss");
+//		
 		
-		//7. 폴더에 저장된 파일의 이름바꾸기 처리
-		if(originlFileName != null) {
-			
-			String renameFileName = FileNameChange.change(originlFileName, savePath, "yyyyMMddHHmmss");
-		
-			// 보류 qna.setqare
-		
-		}
-		
-		int result = new QnaService().insertOriginQa(qna);
+		// 모델 서비스 메소드로 전달하고 결과받기
+		int result = new QnaService().insertQna(qna);
 		
 		//받은 결과로 성공/실패 페이지 내보내기
 		if (result > 0) {

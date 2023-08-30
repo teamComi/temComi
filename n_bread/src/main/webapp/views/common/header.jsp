@@ -37,7 +37,7 @@
                 <!--장바구니, 찜-->
                 <div class="header_right right">
                     <ul class="header_right_widget">
-                        <li><a href="/comi/views/party/login.html">로그인</a></li>
+                        <li><a href="/comi/views/member/member_login.html">로그인</a></li>
                         <li><a href="#"><img src="/comi/resources/images/search.png" class="icon_mypage" />
                             <div class="tip">2</div>
                         </a></li>

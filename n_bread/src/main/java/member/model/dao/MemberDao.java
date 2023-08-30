@@ -132,11 +132,21 @@ public class MemberDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		String query = "insert into member values()";
+		String query = "insert into member "
+				+ "values ((select count(*)+1 from member), ?, ?, ?, default, "
+				+ "            default, default, ?, ?, default, "
+				+ "            ?, ?, default, default, default, "
+				+ "            default, default, default, default, default, null)";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
-			
+			pstmt.setString(1, member.getMeName());
+			pstmt.setString(2, member.getMeId());
+			pstmt.setString(3, member.getMePwd());
+			pstmt.setString(4, member.getMeEmail());
+			pstmt.setString(5, member.getMePhone());
+			pstmt.setString(6, member.getMeGender());
+			pstmt.setDate(7, member.getMeBDay());
 			//결과매핑 : 컬럼값 꺼내서 필드에 옮기기
 			
 			result = pstmt.executeUpdate();			

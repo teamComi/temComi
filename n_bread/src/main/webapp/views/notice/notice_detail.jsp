@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="notice.model.vo.Notice"%>
+    pageEncoding="UTF-8" import="notice.model.vo.Notice, photo.model.vo.Photo"%>
 <%
 	Notice notice = (Notice)request.getAttribute("notice");
 	int currentPage = ((Integer) request.getAttribute("currentPage")).intValue();
+	Photo photo = (Photo)request.getAttribute("photo");
 %>
 <!DOCTYPE html>
 <html>
@@ -14,6 +15,7 @@
 	<link rel="stylesheet" href="/comi/resources/css/main.css"/>
 	<link rel="stylesheet" href="/comi/resources/css/review.css"/>
 	<link rel="stylesheet" href="/comi/resources/css/question.css"/>
+	<link rel="stylesheet" href="/comi/resources/css/notice_detail.css"/>
 	<script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/common.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/question.js"></script>
@@ -21,6 +23,7 @@
 <body>
 <!-- Header Section Begin -->
     <header id="header_view">    
+    <%@ include file="../common/header.jsp" %>
     </header>
 <main class="main_wrapper">
 		<div class="container">
@@ -60,8 +63,15 @@
 					<%}%>
 				</tr>
 				<tr>
-					<th width="120">첨부파일</th>
-					<td></td>
+					<% if(photo.getPhotonum()  > 0){ %>
+						<td>
+							<div class="photo">
+								<div class="photo_box">
+									<img class="photo_img" src="/comi/resources/noticefile/<%=photo.getPhotonum()%>/<%=photo.getPhoto1()%>">
+								</div>
+							</div>
+						</td>
+					<%}%>
 				</tr>
 				<tr>
 					<th width="120">내 용</th>
@@ -99,6 +109,7 @@
 
 	<!-- Footer Section Begin -->
 	<footer id="footer_view">	
+	<%@ include file="../common/footer.jsp" %>
 	</footer>
 	<!-- Footer Section End -->
 </body>

@@ -42,44 +42,59 @@ public class PartyCoSelectServlet extends HttpServlet {
 		
 		int panum = Integer.parseInt(request.getParameter("panum"));
 		int currentPage = 1;
+		int limit = 10;
 		//전송온 페이지 값이 있다면 추출함
 		if(request.getParameter("page") != null) {
 			currentPage = Integer.parseInt(request.getParameter("page"));
 		}
 		
-		//한페이지당 목록 갯수
-		int limit = 10;
-		
-		System.out.println("panum : " + panum);
 		PartyCoService coservice = new PartyCoService();
 		
+		//한페이지당 목록 갯수
+		
 		int listCount = coservice.getListCount(panum);
-		System.out.println("listCount : " + listCount);
+		System.out.println("??listCount : " + listCount);
 		Paging paging = new Paging(listCount, currentPage, limit);
-		paging.calcuator();
-		System.out.println("getStartRow : " + paging.getStartRow() + "   getEndRow : " + paging.getEndRow());
+		paging.calculator();
 		
-		ArrayList<PartyCo> list 
-		= coservice.selectPartyCoList(panum, paging.getStartRow(), paging.getEndRow());
+		//댓글 부분
+		ArrayList<PartyCo> partyCoList = coservice.selectPartyCoList(panum, paging.getStartRow(), paging.getEndRow());
+		System.out.println("??partyCoList : " + partyCoList);
 		
-		System.out.println("list : " + list);
-		
-		JsonReturn jsonR = new JsonReturn();
-		JSONArray jarr = new JSONArray();
-		JSONArray pagingArr = new JSONArray();
-		
-		for(PartyCo partyCo : list) {
-			JSONObject json = jsonR.returnPartyCo(partyCo);
-			jarr.add(json);
+		//이중배열 만들어 보내기
+		JSONArray coList = null;
+		//ArrayList<ArrayList<PartyCo>> coList = null;
+		int count = 0;
+		if(partyCoList.size() > 0) {
+			
+			//coList = new ArrayList<ArrayList<PartyCo>>();
+			coList = new JSONArray();
+			//ArrayList<PartyCo> cList = new ArrayList<PartyCo>();
+			JSONArray cList = new JSONArray();
+			
+			for(int i=0; i<partyCoList.size(); i++) {
+				System.out.println("i : " + i);
+				int nextDepth = (i < partyCoList.size()-1) ? partyCoList.get(i+1).getComDepth() : -1;//다음번 뎁스
+				
+				cList.add(new JsonReturn().returnPartyCo(partyCoList.get(i)));
+				
+				if(nextDepth == 1 || i == partyCoList.size()-1) {//마지막이거나 다음 뎁스가 1일때
+					
+					JSONArray ctemp = (JSONArray) cList.clone();
+					coList.add(ctemp);
+					cList.clear();
+					count ++;
+				}
+			}
 		}
-		for(PartyCo partyCo : list) {
-			JSONObject json2 = jsonR.returnPaging(paging);
-			pagingArr.add(json2);
-		}
+		JSONObject pagingJason = new JsonReturn().returnPaging(paging);
+		
 		
 		JSONObject sendJson = new JSONObject();
-		sendJson.put("list", jarr);
-		sendJson.put("paging", pagingArr);
+		sendJson.put("paging", pagingJason);
+		sendJson.put("list", coList);
+		sendJson.put("listCount", listCount);
+		System.out.println("sendJson : " + sendJson);
 		
 		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();

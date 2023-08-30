@@ -18,6 +18,7 @@
 <body>
 <!-- Header Section Begin -->
     <header id="header_view">    
+    <%@ include file="../common/header.jsp" %>
     </header>
 <main class="main_wrapper">
 		<div class="container">
@@ -40,7 +41,7 @@
 			<h1>공지사항 쓰는곳</h1>
 			<!--공지사항 출력-->
 			<div style="width: 500px; border: 1px solid #ffed76; margin: 0 auto; text-align: center; background-color: #ffed76;">
-				<form action="/comi/noticeins" method="post">
+				<form action="/comi/noticeins" method="post" enctype="multipart/form-data">
                     <table>
                     <tr>
                         <th>제 목</th>
@@ -54,6 +55,26 @@
                         <th>내 용</th>
                         <td><textarea rows="5" cols="50" name="content"></textarea></td>
                     </tr>
+					<tr>
+						<th>첨부파일1</th>
+						<td><input type="file" name="inputfile1" ></td>
+					</tr>
+					<tr>
+						<th>첨부파일2</th>
+						<td><input type="file" name="inputfile2"></td>
+					</tr>
+					<tr>
+						<th>첨부파일3</th>
+						<td><input type="file" name="inputfile3"></td>
+					</tr>
+					<tr>
+						<th>첨부파일4</th>
+						<td><input type="file" name="inputfile4"></td>
+					</tr>
+					<tr>
+						<th>첨부파일5</th>
+						<td><input type="file" name="inputfile5"></td>
+					</tr>
                     <tr>
                         <th colspan="2">
                             <input type="submit" value="등록하기">
@@ -97,6 +118,7 @@
 
 	<!-- Footer Section Begin -->
 	<footer id="footer_view">	
+	<%@ include file="../common/footer.jsp" %>
 	</footer>
 	<!-- Footer Section End -->
 </body>

@@ -43,6 +43,7 @@
 }
 
 .review-write {
+    
 	position: relative;
 }
 
@@ -72,8 +73,16 @@
     overflow: hidden;
     border: 1px solid #ddd;
     border-radius: 4px;
+    
 }
 
+.review-write-inner.review-rewriting {
+    display: none;
+}
+
+.review-write-inner.review-write-inner-login {
+    display: block;
+}
 
 .review-write-profilearea {
     position: relative;

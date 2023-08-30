@@ -1,6 +1,7 @@
 package qna.controller;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -33,43 +34,75 @@ public class QnaSelectServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 페이지별로 출력되는 게시글 목록 조회 요청처리용 컨트롤러
+		// 관리자용 회원관리 서비스에서 회원 검색 처리용 컨트롤러
 		
-		//출력할 페이지 지정
+		// 전송온 값에 한글이 있다면 인코딩 처리함
+		request.setCharacterEncoding("utf-8");
+		
+		//전송온 값 꺼내서 변수 또는 객체에 저장함
+		String action = request.getParameter("action");
+		String keyword = null, begin = null, end = null;
+		
+		if(action.equals("date")) {
+			begin = request.getParameter("begin");
+			end = request.getParameter("end");
+		}else {
+			keyword = request.getParameter("keyword");
+		}
+		//검색결과에 대한 페이징 처리
 		int currentPage = 1;
 		//전송온 페이지 값이 있다면 추출함
 		if(request.getParameter("page") != null) {
 			currentPage = Integer.parseInt(request.getParameter("page"));
 		}
-		
-		//한 페이지당 출력할 목록 개수 지정
+		//한 페이지당 출력할 목록 갯수 지정
 		int limit = 10;
 		
-		//조회용 모델측 서비스 객체 생성
+		//총 페이지 수 계산을 위한 검색 결과 목록 갯수 조회
 		QnaService qservice = new QnaService();
+		int listCount = 0;
+		switch(action) {
+		case "title": listCount = qservice.getSearchTitleCount(keyword); break;
+		case "date": listCount = qservice.getSearchDateCount(
+				Date.valueOf(begin), Date.valueOf(end)); break; 
+		}
 		
-		//총 페이지 수 계산을 위한 전체 목록 개수 조회
-		int listCount = qservice.getListCount();
-		
-		//뷰 페이지에서 사용할 페이징 관련 값 계산처리
+		//뷰 페이지에서 사용할 페이징 관련 값 계산 처리
 		Paging paging = new Paging(listCount, currentPage, limit);
 		paging.calculator();
 		
-		//모델 서비스로 해당 페이지를 출력할 게시글만 조해회 옴
-		ArrayList<Qna> list = qservice.selectList(paging.getStartRow(), paging.getEndRow());
+		//모델 서비스 메소드로 값 전달 실행하고 결과 받기
+		ArrayList<Qna> list = null;
 		
-		//받은 결과에 따라 성공 or 실패 페이지 내보내기
+		switch(action) {
+		case "title": list = qservice.selectSearchTitle(keyword, paging); break;
+		case "date": list = qservice.selectSearchDate(
+				Date.valueOf(begin), Date.valueOf(end), paging); break;	
+		}
+		
+		//받은 결과로 성공/실페 페이지 내보내기
 		RequestDispatcher view = null;
 		if(list.size() > 0) {
 			view = request.getRequestDispatcher("views/qna/qnaListView.jsp");
-			
-			request.setAttribute("list", list);
-			request.setAttribute("paging", paging);
-			request.setAttribute("currentPage", currentPage);
+				   request.setAttribute("list", list);
+				   request.setAttribute("paging", paging);
+				   request.setAttribute("currentPage", currentPage);
+				   request.setAttribute("action", action);
+				   if(action.equals("date")) {
+					   request.setAttribute("begin", begin);
+					   request.setAttribute("end", end);
+				   }else {
+					   request.setAttribute("keyword", keyword);
+				   }
 		}else {
 			view = request.getRequestDispatcher("views/common/error.jsp");
-			
-			request.setAttribute("message", currentPage + "페이지에 대한 목록 조회 실패");
+			if(keyword != null) {
+				request.setAttribute("message", 
+						action + " 검색에 대한 " + keyword + "결과가 존재하지 않습니다.");
+			}else {
+				request.setAttribute(end, action + " 검색에 대한 " + begin + " 부터" + end 
+						+ " 사이에 등록한 게시글이 존재하지 않습니다.");
+			}
 		}
 		view.forward(request, response);
 	}

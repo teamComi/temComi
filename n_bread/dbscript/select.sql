@@ -22,11 +22,14 @@ alter TABLE comments
 ADD    com_like  number;
 
 alter TABLE comments
-ADD    menum  number;
+ADD    me_num  number;
 commit;
 
 alter table comments
 drop column COM_LIKE;
+
+alter table comments
+drop column menum;
 
 select max(com_num)
 from comments;
@@ -44,12 +47,13 @@ insert into comments values
 
 select *
 from comments
+left join member using(me_num)
 where COM_PARENT in 
 (select COM_NUM
 from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
            COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, 
            COM_DEL_DATE, COM_PHOTO_NUM
-     from (select * from comments where PA_NUM = 1
+     from (select * from comments where PA_NUM = 1 and COM_DEPTH = 1
            order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc)
         
     )

@@ -3,8 +3,10 @@ package qna.model.service;
 import static common.JDBCTemplate.*;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 
+import common.Paging;
 import qna.model.dao.QnaDao;
 import qna.model.vo.Qna;
 
@@ -22,9 +24,9 @@ public class QnaService {
 	}
 	
 	//전체 조회
-	public ArrayList<Qna> selectQnaAll() {
+	public ArrayList<Qna> selectQnaAll(int startPage, int endPage) {
 		Connection conn = getConnection();
-		ArrayList<Qna> list = qdao.selectQnaAll(conn);
+		ArrayList<Qna> list = qdao.selectQnaAll(conn, startPage, endPage);
 		close(conn);
 		return list;
 	}
@@ -98,16 +100,6 @@ public class QnaService {
 		return list;
 	}
 
-	public int insertOriginQa(Qna qna) {
-		Connection conn = getConnection();
-		int result = qdao.insertOriginQa(conn, qna);
-		if(result > 0)
-			commit(conn);
-		else
-			rollback(conn);
-		return result;
-	}
-
 	public void addReadCount(int qnaNum) {
 		Connection conn = getConnection();
 		int result = qdao.addReadCount(conn, qnaNum);
@@ -125,6 +117,33 @@ public class QnaService {
 		close(conn);
 		return list;
 	}
-	
+
+	public int getSearchTitleCount(String keyword) {
+		Connection conn = getConnection();
+		int listCount = qdao.getSearchTitleCount(conn, keyword);
+		close(conn);
+		return listCount;
+	}
+
+	public int getSearchDateCount(Date begin, Date end) {
+		Connection conn = getConnection();
+		int listCount = qdao.getSearchDateCount(conn, begin, end);
+		close(conn);
+		return listCount;
+	}
+
+	public ArrayList<Qna> selectSearchTitle(String keyword, Paging paging) {
+		Connection conn = getConnection();
+		ArrayList<Qna> list = qdao.selectSearchTitle(conn, keyword, paging);
+		close(conn);
+		return list;
+	}
+
+	public ArrayList<Qna> selectSearchDate(Date begin, Date end, Paging paging) {
+		Connection conn = getConnection();
+		ArrayList<Qna> list = qdao.selectSearchDate(conn, begin, end, paging);
+		close(conn);
+		return list;
+	}
 	
 }

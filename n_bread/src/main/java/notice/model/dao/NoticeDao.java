@@ -56,9 +56,6 @@ public class NoticeDao {
 				"    from(select * from notice " + //
 				"        order by no_enroll desc)) " + //
 				"where rownum between ? and ?";
-		System.out.println(startPage);
-		System.out.println();
-		System.out.println(endPage);
 		try {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, startPage);
@@ -91,7 +88,7 @@ public class NoticeDao {
 		return list;
 	}
 
-	public int insertNotice(Connection conn, Notice notice) {
+	public int insertNotice(Connection conn, Notice notice, int photoNum) {
 		// 공지사항 추가 부분
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -99,13 +96,18 @@ public class NoticeDao {
 		String query = "insert into notice " + //
 				"values(seq_no_num.nextval,?,?,?,default, " + //
 				"default, default, default, default " + //
-				", null)";
+				", ?)";
 
 		try {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, notice.getMeNum());
 			pstmt.setString(2, notice.getNoTitle());
 			pstmt.setString(3, notice.getNoCon());
+			if(photoNum == -1){
+				pstmt.setString(4, null);
+			}else{
+				pstmt.setInt(4, photoNum);
+			}
 			result = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

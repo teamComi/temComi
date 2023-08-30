@@ -1,49 +1,24 @@
 var veiwArr = [];
+var login = 'login';
 
 document.addEventListener("DOMContentLoaded", function(){
+    
     var viewReply = new View_reply();
     viewReply.buttonEvent();
 })
 
 function View_reply(){
-    
 }
 
 View_reply.prototype = {
-    connSelect : function(panum, page) {
-        $.ajax({
-            url : '/comi/partycosel?panum=' + panum + '&page=' + page
-            ,type : 'get'
-            ,dataType : 'json'
-            ,success : function(data){
-                
-                var str = JSON.stringify(data);
-                var json = JSON.parse(str);
-                var value = '';
-                console.log('json.paging : ' + json.paging);
-                console.log('json.list : ' + json.list);
-
-                $('#review_number').html(reviewLength + '개의 댓글');
-
-                //댓글 리스트 불러오기
-                for(var i=0; i<json.list.length; i++) {
-                    var obj = json.list[i];
-                    console.log('i : ' + i);
-                    //$('').append(this.setReply(obj));
-                }
-            }
-            ,error : function(jqXHR, textStatus, errorThrown){
-                console.log('error : ' + jqXHR + ', '+ textStatus + ', ' + errorThrown);
-            }
-        })
-        
-    }
-    ,
-    connInsert : function(menum, panum, depth, parent, content, page){
+    
+    connect : function(type, menum, panum, page, depth, parent, content){
         var _this = this;
-
+        var url = (type == 'insert') 
+                    ? '/comi/partycoins?menum='+menum +'&panum=' + panum + '&depth=' + depth + '&parent=' + parent + '&content=' + content + '&page' + page
+                    : '/comi/partycosel?menum='+menum +'&panum=' + panum + '&page=' + page;
         $.ajax({
-            url : '/comi/partycoins?menum='+menum+'&panum=' + panum + '&depth=' + depth + '&parent=' + parent + '&content=' + content + '&page' + page
+            url : url
             ,type : 'post'
             ,dataType : 'json'
             ,success : function(data){
@@ -57,7 +32,7 @@ View_reply.prototype = {
                 //$('#review_number').html(reviewLength + '개의 댓글');
                 $('#review').empty();
                 //댓글 리스트 불러오기
-                var login = 'login';
+                
                 $('#review').append(viewReplyInit(json, login));
                 _this.buttonEvent();
                 
@@ -71,18 +46,28 @@ View_reply.prototype = {
     buttonEvent : function(){
         
         var _this = this;
-        $('.review-body-bottom-retext').each(function(){
-            
-        })
-        
-        $('.review-write-inner-login').each(function(){
+        //로그인 페이지
+        $('.review-write-oucontainer').each(function(){
+            if(login == 'login'){
+                $(this).find('.review-write-guide').text('댓글을 작성하려면 클릭하세요.');
+            }else{
+                $(this).find('.review-write-guide').text('댓글을 작성하려면 로그인하세요.');
+            }
+
             $(this).on('click', function(){
-            
-                if(confirm('로그인을 하신 후 이용해 주시기 바랍니다.')) {
-                    //로그인 페이지로 이동
-                    location.href = '/comi/main.jsp';
+                if(login == 'login'){
+                    //$(this).hide();
+                    
+                    $(this).parent().parent().find('.review-write-inner-reply').hide();
+                    $(this).parent().parent().find('.review-write-inner-login').hide();
+                    $(this).parent().parent().find('.review-rewriting').show();
                 }else{
-    
+                    if(confirm('로그인을 하신 후 이용해 주시기 바랍니다.')) {
+                        //로그인 페이지로 이동
+                        //location.href = '/comi/main.jsp';
+                    }else{
+                        
+                    }
                 }
             })
         })
@@ -147,7 +132,7 @@ View_reply.prototype = {
                     veiwArr.push(data);
                     */
                     console.log('댓글 달기 depth : ' + depth + ' panum : ' + panum + ' parent : ' + parent + ' content : ' + textarea.val());
-                    _this.connInsert(1, panum, depth, parent, textarea.val(), currentPage);
+                    _this.connect('insert', 1, panum, currentPage, depth, parent, textarea.val());
                     
                 }
                 return false;
@@ -180,22 +165,63 @@ View_reply.prototype = {
                 _this.showReply(package, visible);
             })
         })
+
+        //네비 버튼
+        $('.review-bottom-btn').each(function(){
+            $(this).on('click', function(){
+                var arr = $(this).attr('id').split('_')
+                var name = arr[0];
+                var id;
+                var page = currentPage;
+
+                if(name == 'reviewPagebtn') {
+                    id = Number(arr[1]);
+                    page = id;
+                }else{
+                    id = arr[1];
+                    //백넥스트
+                    //if($(this).attr('class') == 'disabled')
+                    if(id == 'next'){
+                        page ++;
+                    }else{
+                        page --;
+                    }
+
+                }
+                var panum = $('.review-head').attr('data-panum');
+                _this.connect('select', 1, panum, page);
+
+
+            })
+        })
     },
     showReply : function(package, visible) {
-        if(visible == 'block') package.find('.review-reply-area').hide();
-        else package.find('.review-reply-area').show();
+        if(visible == 'block') {
+            package.find('.review-reply-area').hide();
+            package.find('.review-rewriting').hide();
+        }else {
+            package.find('.review-reply-area').show();
+            package.find('.review-write-inner-reply').show();
+        }
     }
     
 }
 
+function decode (str) {
+    var str2 = decodeURIComponent(str);
+    return str2.replace(/\+/g, ' ');
+}
 
-function viewReplyInit(data, login){
+//태그 붙이기
+function viewReplyInit(data){
     //var parent = Number(parent);
     console.log('data : ', JSON.stringify(data));
+    var myNick = '??';
     
+    console.log('login : ' + login);
     var el = `
     <!--댓글 헤드-->
-        <div class="review-head">
+        <div class="review-head" data-panum="` + data.list[0][0].paNum + `">
             <span class="review-head-title" id="review_number">`+data.listCount+`개의 댓글</span>
             <button type="button" class="review-head-refresh" alt="새로고침">
                 <img src="/comi/resources/images/refresh.png">
@@ -211,13 +237,13 @@ function viewReplyInit(data, login){
                 if(login == 'login') {
                     el += `
                     <legend class="u_vc">댓글 쓰기</legend>
-                    <div class="review-write-inner" 
+                    <div class="review-write-inner review-rewriting" 
             			data-panum="` + data.list[0][0].paNum + `">
                         
                         <div class="review-write-profilearea">
                             <div class="review-write-profile">
                                 <img src="/comi/resources/images/deafault.png" class="img-profile">
-                                <span class="write-name">` + data.list[0][0].meNum + `</span>
+                                <span class="write-name">` + myNick + `</span>
                             </div>
                         </div>
 
@@ -241,15 +267,15 @@ function viewReplyInit(data, login){
                     
                     </div>`
                 }else{ 
-                    el += `
-                    <div class="review-write-inner review-write-inner-login">
-                    	<div class="review-write-oucontainer">
-                    		<textarea title="댓글" id="review-write-outtext" class="review-write-outbox" rows="3" cols="30"></textarea>
-                    		<label for="review-write-outtext" class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
-                    	</div>
-                    </div>`
+                    
                 }
                 el += `
+                    <div class="review-write-inner review-write-inner-login">
+                    	<div class="review-write-oucontainer">
+                    		<textarea title="댓글" class="review-write-outbox" rows="3" cols="30" readonly></textarea>
+                    		<label class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
+                    	</div>
+                    </div>
                 </fieldset>
             </form>
         </div>
@@ -289,7 +315,7 @@ function viewReplyInit(data, login){
 		                    <div class="review-body-list-profile">
 		                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 		                        <div class="review-body-list-profile-box">
-		                            <div class="review-body-list-name">마이프레셔스</div>
+		                            <div class="review-body-list-name">` + decode(depth1Obj.meAka) + `</div>
 		                            <div class="review-body-list-date">`+ depth1Obj.comEnroll +`</div>
 		                        </div>
 		                    </div>
@@ -337,12 +363,12 @@ function viewReplyInit(data, login){
 					            <form>
 					                <fieldset>
 					                    <legend class="u_vc">댓글 쓰기</legend>
-					                    <div class="review-write-inner">
+					                    <div class="review-write-inner review-rewriting">
 					                        
 					                        <div class="review-write-profilearea">
 					                            <div class="review-write-profile">
 					                                <img src="/comi/resources/images/deafault.png" class="img-profile">
-					                                <span class="write-name">`+ tempList[0].meNum + `</span>
+					                                <span class="write-name">`+ myNick + `</span>
 					                            </div>
 					                        </div>
 					
@@ -370,15 +396,15 @@ function viewReplyInit(data, login){
 					        </div>
 					        <!--댓글 쓰기 end--> `
     					 }else{
-                            el += `
-					        <div class="review-write-inner review-write-inner-reply">
-					        	<div class="review-write-oucontainer">
-					        		<textarea title="댓글" id="review-write-outtext" class="review-write-outbox" rows="3" cols="30"></textarea>
-					        		<label for="review-write-outtext" class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
-					        	</div>
-					        </div>`
+                            
     					}
                             el += `
+                            <div class="review-write-inner review-write-inner-reply">
+                                <div class="review-write-oucontainer">
+                                    <textarea title="댓글" class="review-write-outbox" rows="3" cols="30" readonly></textarea>
+                                    <label class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
+                                </div>
+                            </div>
     						<button class="review-fold-btn">
 								<span class="review-fold-btn-text">답글 접기</span>
 							</button>`
@@ -395,7 +421,7 @@ function viewReplyInit(data, login){
 					                    <div class="review-body-list-profile">
 					                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 					                        <div class="review-body-list-profile-box">
-					                            <div class="review-body-list-name">마이프레셔스</div>
+					                            <div class="review-body-list-name">` + decode(tempList[j].meAka) + `</div>
 					                            <div class="review-body-list-date">` + tempList[j].comEnroll + `</div>
 					                        </div>
 					                    </div>
@@ -439,7 +465,7 @@ function viewReplyInit(data, login){
 							            <form>
 							                <fieldset>
 							                    <legend class="u_vc">댓글 쓰기</legend>
-							                    <div class="review-write-inner">
+							                    <div class="review-write-inner review-rewriting">
 							                        
 							                        <div class="review-write-profilearea">
 							                            <div class="review-write-profile">
@@ -472,18 +498,18 @@ function viewReplyInit(data, login){
 							        </div>
 							        <!--댓글 쓰기 end-->`
 		       					}else{
-                                    el += `
-							        <div class="review-write-inner review-write-inner-reply">
-							        	<div class="review-write-oucontainer">
-							        		<textarea title="댓글" id="review-write-outtext" class="review-write-outbox" rows="3" cols="30"></textarea>
-							        		<label for="review-write-outtext" class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
-							        	</div>
-							        </div>`
+                                    
 		       					}
-                                el += `
-		       					<button class="review-fold-btn">
-									<span class="review-fold-btn-text">답글 접기</span>
-								</button>`
+                                   el += `
+                                   <div class="review-write-inner review-write-inner-reply">
+                                       <div class="review-write-oucontainer">
+                                           <textarea title="댓글" class="review-write-outbox" rows="3" cols="30" readonly></textarea>
+                                           <label class="review-write-guide" >댓글을 작성하려면 로그인 해주세요</label>
+                                       </div>
+                                   </div>
+                                    <button class="review-fold-btn">
+                                        <span class="review-fold-btn-text">답글 접기</span>
+                                    </button>`
 		       				}
 		              	}
               		}
@@ -503,21 +529,21 @@ function viewReplyInit(data, login){
         
         var copage = data.paging;
         if(copage.currentPage <= 1){ 
-            el += `<button class="review-bottom-btn" id="review_bottom_prev"></button>`;
+            //el += `<button class="review-bottom-btn" id="review_bottom_prev"></button>`;
         }else{ 
-            el += `<button class="review-bottom-btn active" id="review_bottom_prev"></button>`
+            //el += `<button class="review-bottom-btn active" id="review_bottom_prev"></button>`
         } 
         
             
         for(var p=copage.startPage; p<=copage.endPage; p++){ 
             if(p == copage.currentPage) {
                 el += `
-                <button class="review-bottom-btn active" id="review_pagebtn_"` + p + `>
+                <button class="review-bottom-btn active" id="reviewPagebtn_` + p + `">
                     <span class="review-pagespan">` + p + `</span>
                 </button>`
             }else{
                 el += `
-                <button class="review-bottom-btn" id="review_pagebtn_"` + p + `>
+                <button class="review-bottom-btn" id="reviewPagebtn_` + p + `">
                     <span class="review-pagespan">` + p + `</span>
                 </button>`
             } 
@@ -525,9 +551,9 @@ function viewReplyInit(data, login){
         
         if((copage.currentPage + copage.limit) < copage.endPage 
                 && (copage.currentPage + copage.limit) > copage.maxPage){ 
-            el += `<button class="review-bottom-btn active" id="review_bottom_next"></button>`;
+            //el += `<button class="review-bottom-btn active" id="review_bottom_next"></button>`;
         }else{
-            el += `<button class="review-bottom-btn" id="review_bottom_next"></button>`;
+            //el += `<button class="review-bottom-btn" id="review_bottom_next"></button>`;
         }
         el += `
         </div>

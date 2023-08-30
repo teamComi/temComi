@@ -74,7 +74,7 @@ public class JsonReturn {
 		return json;
 	}
 	
-	public JSONObject returnPartyCo(PartyCo partyCo) {
+	public JSONObject returnPartyCo(PartyCo partyCo) throws UnsupportedEncodingException {
 		JSONObject json = new JSONObject();
 		json.put("comNum", partyCo.getComNum());
 		json.put("paNum", partyCo.getPaNum());
@@ -88,7 +88,8 @@ public class JsonReturn {
 		json.put("comDelDate", String.valueOf(partyCo.getComDelDate()));
 		json.put("comPhotoNum", partyCo.getComPhotoNum());
 		json.put("meNum", partyCo.getMeNum());
-		
+		json.put("meAka", urlEncoderNullCheck(partyCo.getMeAka()));
+		json.put("mePhotoAdd", partyCo.getMePhotoAdd());
 		return json;
 	}
 	

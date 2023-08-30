@@ -19,6 +19,8 @@ public class PartyCo implements Serializable {
 	private Date comDelDate;
 	private int comPhotoNum;
 	private int meNum;
+	private String meAka;
+	private int mePhotoAdd;
 	
 	public PartyCo() {}
 	
@@ -45,6 +47,26 @@ public class PartyCo implements Serializable {
 		this.comModDate = comModDate;
 		this.comDelDate = comDelDate;
 		this.comPhotoNum = comPhotoNum;
+	}
+	
+
+	public PartyCo(int comNum, int paNum, int comParent, int comDepth, String comCon, int comViews, int comCount,
+			Date comEnroll, Date comModDate, Date comDelDate, int comPhotoNum, int meNum, String meAka, int mePhotoAdd) {
+		super();
+		this.comNum = comNum;
+		this.paNum = paNum;
+		this.comParent = comParent;
+		this.comDepth = comDepth;
+		this.comCon = comCon;
+		this.comViews = comViews;
+		this.comCount = comCount;
+		this.comEnroll = comEnroll;
+		this.comModDate = comModDate;
+		this.comDelDate = comDelDate;
+		this.comPhotoNum = comPhotoNum;
+		this.meNum = meNum;
+		this.meAka = meAka;
+		this.mePhotoAdd = mePhotoAdd;
 	}
 
 	public int getComNum() {
@@ -141,6 +163,24 @@ public class PartyCo implements Serializable {
 
 	public void setMeNum(int meNum) {
 		this.meNum = meNum;
+	}
+	
+	
+
+	public String getMeAka() {
+		return meAka;
+	}
+
+	public void setMeAka(String meAka) {
+		this.meAka = meAka;
+	}
+
+	public int getMePhotoAdd() {
+		return mePhotoAdd;
+	}
+
+	public void setMePhotoAdd(int mePhotoAdd) {
+		this.mePhotoAdd = mePhotoAdd;
 	}
 
 	@Override

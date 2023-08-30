@@ -26,6 +26,7 @@
 <body>
 	<!-- Header Section Begin -->
     <header id="header_view">    
+    <%@ include file="../common/header.jsp" %>
     </header>
     <!-- Header Section End -->
 
@@ -94,6 +95,7 @@
 
 	<!-- Footer Section Begin -->
 	<footer id="footer_view">	
+	<%@ include file="../common/footer.jsp" %>
 	</footer>
 	<!-- Footer Section End -->
 </body>
