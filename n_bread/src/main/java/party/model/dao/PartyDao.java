@@ -132,7 +132,7 @@ public class PartyDao {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String query = "insert into party " + 
-				"values ((select count(*) from party)+1,2,sysdate,?,?,?,?,?,default,NULL,NULL,default,default, " +
+				"values ((select count(*)+1 from party),2,sysdate,?,?,?,?,?,default,NULL,NULL,default,default, " +
 				"        default,default,default,?,?,default,?,null)";
 
 		try {

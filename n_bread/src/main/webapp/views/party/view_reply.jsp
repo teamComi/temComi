@@ -140,7 +140,7 @@
 		                        댓글 <b><%= depth1Obj.getComCount() %></b>
 		                    </button>
 		                    <div class="review-body-bottom-heartbox">
-		                        <button class="review-body-bottom-heart">
+		                        <button class="review-body-bottom-heart" data-heart="empty">
 		                            <img class="review-body-bottom-heart-img" src="/comi/resources/images/heart.png">
 		                        </button>
 		                        <span class="review-body-heart">
@@ -245,7 +245,7 @@
 					                        댓글 <b><%= tempList.get(j).getComCount() %></b>
 					                    </button>
 					                    <div class="review-body-bottom-heartbox">
-					                        <button class="review-body-bottom-heart">
+					                        <button class="review-body-bottom-heart" data-heart="empty">
 					                            <img class="review-body-bottom-heart-img" src="/comi/resources/images/heart.png">
 					                        </button>
 					                        <span class="review-body-heart">

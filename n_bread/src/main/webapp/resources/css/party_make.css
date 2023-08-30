@@ -279,6 +279,14 @@
 .review-write-textarea.input {
 	height: 40px;
 }
+.review-input-date {
+	width: 150px;
+    height: 40px;
+    padding: 0px 15px;
+    border: 1px solid #dde1eb;
+    border-radius: 5px;
+}
+
 
 .view-notice-location {
 	position: relative;

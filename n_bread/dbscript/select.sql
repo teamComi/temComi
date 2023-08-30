@@ -44,7 +44,7 @@ insert into comments values
 
 
 
-
+-- 댓글 검색 뎁스 1 먼저 10개 검색하고 그에 따른 뎁스 2도 같이 검색
 select *
 from comments
 left join member using(me_num)
@@ -60,8 +60,17 @@ from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
 where rnum >= 1 and rnum <= 10)
 order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc;
 
-
-
+-- 인서트 순간 댓글의 카운트 올리기
+-- 트리거 작성
+CREATE OR REPLACE TRIGGER TR_COM_COUNT
+AFTER DELETE ON 입고
+FOR EACH ROW
+BEGIN
+  UPDATE 상품 
+  SET 재고수량 = 재고수량 - :OLD.입고수량
+  WHERE 상품코드 = :OLD.상품코드;
+END;
+/
 
 
 

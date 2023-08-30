@@ -327,6 +327,16 @@
 					<div class="view-notice-area">
 
 						<div class="view-notice-box">
+							<div class="view-notice-box-title">공유 날짜</div>
+							<div class="review-write-area-inbox">
+								<input type="date" title="공유 날짜" value="2023-09-01" class="review-input-date" name="pa_time_1"
+									id="notice_write_date_1">
+								<input type="time" title="공유 날짜" value="13:10:20" class="review-input-date" name="pa_time_2"
+								id="notice_write_date_2">
+							</div>
+						</div>
+
+						<div class="view-notice-box">
 							<div class="view-notice-box-title">제목</div>
 							<div class="review-write-area-inbox">
 								<input type="text" title="제목" class="review-write-textarea input" name="pa_title"
@@ -445,6 +455,9 @@
 									</div>
 								<!-- </div> -->
 								<script>
+									$(function(){
+										
+									})
 									var address_name = [];
 									// 마커를 담을 배열입니다
 									var markers = [];
@@ -465,13 +478,13 @@
 									var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
 
 									// 키워드로 장소를 검색합니다
-									searchPlaces();
+									//searchPlaces();
 
 									// 키워드 검색을 요청하는 함수입니다
 									function searchPlaces() {
 
 										var keyword = document.getElementById('keyword').value;
-
+										
 										if (!keyword.replace(/^\s+|\s+$/g, '')) {
 											alert('키워드를 입력해주세요!');
 											return false;
@@ -597,7 +610,7 @@
 
 										return el;
 									}
-
+									
 									// 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 									function addMarker(position, idx, title) {
 										var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다

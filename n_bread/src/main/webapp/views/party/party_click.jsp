@@ -98,7 +98,7 @@
             <p id="article-category">
                  <%= party.getCatNum() %><br>
               <span id="article-befordate">
-               <%= party.getPaEnroll() %>
+               <%= party.getPaTime() %>
               </span>
             </p>
             <p id="article-location">

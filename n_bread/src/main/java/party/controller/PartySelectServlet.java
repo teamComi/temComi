@@ -51,13 +51,16 @@ public class PartySelectServlet extends HttpServlet {
 		//System.out.println("party : " + party);
 		Member member = new MemberService().selectMember(party.getMeNum());
 		RequestDispatcher view = null;
+		
+		PartyService pservice = new PartyService();
+		
 		//System.out.println("member : " + member);
 		
 		//JSONObject jparty = new JsonReturn().returnParty(party);
 		//JSONObject jmember = new JsonReturn().returnMember(member);
 		
 		//맨처음 보여질 리스트들 6개만 보이니까 1~6
-		ArrayList<Party> list = new PartyService().selectPartyList("open", 1, 6, panum);
+		ArrayList<Party> list = pservice.selectPartyList("open", 1, 6, Integer.toString(panum));
 		//System.out.println("==list : " + list);
 		
 		String type = (act.equals("Y")) ? "findParty" : "findReview";
@@ -65,7 +68,7 @@ public class PartySelectServlet extends HttpServlet {
 		ArrayList<ArrayList<PartyCo>> coList = null;
 		
 		Paging paging = null;
-		int listCount = 0;
+		int listCountReply = 0;
 		
 		if(type == "findReview") {//후기 
 			int currentPage = 1;//댓글의 카운트
@@ -74,9 +77,9 @@ public class PartySelectServlet extends HttpServlet {
 			//System.out.println("panum : " + panum);
 			PartyCoService coservice = new PartyCoService();
 			
-			listCount = coservice.getListCount(panum);
+			listCountReply = coservice.getListCount(panum);
 			//System.out.println("==listCount : " + listCount);
-			paging = new Paging(listCount, currentPage, limit);
+			paging = new Paging(listCountReply, currentPage, limit);
 			paging.calculator();
 			
 			//댓글 부분
@@ -118,13 +121,16 @@ public class PartySelectServlet extends HttpServlet {
 			request.setAttribute("type", (act.equals("Y")) ? "findParty" : "findReview");
 			request.setAttribute("party", party);
 			request.setAttribute("partyList", list);
-			
 			request.setAttribute("member", member);
-			request.setAttribute("partyColistCount", listCount);
-			request.setAttribute("partyCoPaging", paging);
-			request.setAttribute("partyCoList", coList);
-			System.out.println(">>partyCoList : " + coList.size());
-			System.out.println(">>partyColistCount : " + listCount);
+			
+			if(type == "findReview") {
+				request.setAttribute("partyColistCount", listCountReply);
+				request.setAttribute("partyCoPaging", paging);
+				request.setAttribute("partyCoList", coList);
+				System.out.println(">>partyCoList : " + coList.size());
+				System.out.println(">>partyColistCount : " + listCountReply);
+			}
+			
 			
 		}else {
 			view = request.getRequestDispatcher("views/common/error.jsp");

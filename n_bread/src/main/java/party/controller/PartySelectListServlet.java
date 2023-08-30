@@ -38,7 +38,7 @@ public class PartySelectListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String startStr = request.getParameter("start");
 		String endStr = request.getParameter("end");
-		int panum = Integer.parseInt(request.getParameter("panum"));
+		String panum = request.getParameter("panum");
 		int start = (startStr == null) ? 1 : Integer.parseInt(startStr);
 		int end = (endStr == null) ? 10 : Integer.parseInt(endStr);
 		

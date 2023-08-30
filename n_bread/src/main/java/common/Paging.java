@@ -19,8 +19,8 @@ public class Paging implements java.io.Serializable{
     }
 	
     // 페이지 계산 함수
-    public void calculator(){
-        /*
+	public void calculator() {
+		/*
     	// 총 페이지 수 : 목록의 총 갯수가 21개 인 경우는 
 		// 한 페이지에 출력할 목록이 10개인 경우이면 총 페이지 수는 3임
 		// 목록 1개도 한 페이지 차지함
@@ -72,7 +72,8 @@ public class Paging implements java.io.Serializable{
 		//한 페이지에 출력할 목록 갯수가 10개인 경우에는 3페이지가 요청되었다면 행번호는 21 ~ 30행임
 		this.startRow = (currentPage - 1) * limit + 1;
 		this.endRow = startRow + limit - 1;
-    }
+		
+	}
 
 	public int getStartRow() {
 		return startRow;
@@ -148,7 +149,6 @@ public class Paging implements java.io.Serializable{
 				+ ", currentPage=" + currentPage + ", maxPage=" + maxPage + ", startPage=" + startPage + ", endPage="
 				+ endPage + "]";
 	}
-    
-
+	
 
 }

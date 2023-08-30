@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function(){
 })
 
 function View_reply(){
+    
 }
 
 View_reply.prototype = {
@@ -35,7 +36,7 @@ View_reply.prototype = {
                 
                 $('#review').append(viewReplyInit(json, login));
                 _this.buttonEvent();
-                
+                 location.href = "#review";
             }
             ,error : function(jqXHR, textStatus, errorThrown){
                 console.log('error : ' + jqXHR + ', '+ textStatus + ', ' + errorThrown);
@@ -186,14 +187,39 @@ View_reply.prototype = {
                     }else{
                         page --;
                     }
-
                 }
                 var panum = $('.review-head').attr('data-panum');
                 _this.connect('select', 1, panum, page);
-
-
+                
             })
         })
+
+        //하트 클릭 
+        $('.review-body-bottom-heart').each(function(){
+            $(this).on('click', function(){
+                var heart = $(this).attr('data-heart');
+                var heartNum = Number($(this).find('.review-body-heart').text());
+                
+                if(heart == 'empty') {
+                    heartNum ++;
+                    $(this).attr('data-heart', heartNum);
+                }else{
+                    heartNum -= heartNum;
+                    $(this).attr('data-heart', 'empty');
+                }
+
+                $(this).parent().find('.review-body-heart').text(heartNum);
+            })
+            
+        })
+
+        //삭제 버튼 클릭
+        $('.review-body-list-right-btn').each(function(){
+            $(this).on('click', function(){
+                
+            })
+        })
+        
     },
     showReply : function(package, visible) {
         if(visible == 'block') {
@@ -337,7 +363,7 @@ function viewReplyInit(data){
 		                        댓글 <b>`+ depth1Obj.comCount +`</b>
 		                    </button>
 		                    <div class="review-body-bottom-heartbox">
-		                        <button class="review-body-bottom-heart">
+		                        <button class="review-body-bottom-heart" data-heart="empty">
 		                            <img class="review-body-bottom-heart-img" src="/comi/resources/images/heart.png">
 		                        </button>
 		                        <span class="review-body-heart">
@@ -443,7 +469,7 @@ function viewReplyInit(data){
 					                        댓글 <b>` + tempList[j].comCount + `</b>
 					                    </button>
 					                    <div class="review-body-bottom-heartbox">
-					                        <button class="review-body-bottom-heart">
+					                        <button class="review-body-bottom-heart" data-heart="empty">
 					                            <img class="review-body-bottom-heart-img" src="/comi/resources/images/heart.png">
 					                        </button>
 					                        <span class="review-body-heart">
@@ -470,7 +496,7 @@ function viewReplyInit(data){
 							                        <div class="review-write-profilearea">
 							                            <div class="review-write-profile">
 							                                <img src="/comi/resources/images/deafault.png" class="img-profile">
-							                                <span class="write-name">`+tempList[j].meNum+`</span>
+							                                <span class="write-name">`+myNick+`</span>
 							                            </div>
 							                        </div>
 							

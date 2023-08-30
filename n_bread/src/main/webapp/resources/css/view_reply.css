@@ -295,6 +295,7 @@
 
 .review-body .review-body-container .review-body-list .review-body-list-right-btn {
     margin-top: 5px;
+    cursor: pointer;
 }
 
 .review-body .review-body-container .review-body-read .review-body-read-text {
@@ -348,7 +349,7 @@
     font-size: 13px;
     line-height: 20px;
     color: #999;
-    z-index: 10;
+    z-index: 1;
     border: none;
     white-space: nowrap;
 }
@@ -402,6 +403,10 @@
 
 .review-reply-area {
     display: none;
+}
+
+.review-body-bottom-heart {
+    cursor: pointer;
 }
 
 /*********************************************리뷰 끝***********************************************/

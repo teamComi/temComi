@@ -1,0 +1,17 @@
+.photo {
+    text-align:center;
+    display:table;
+    border:1px solid #cecece;
+    width:500px;
+    height:500px;
+}
+
+.photo_box {
+    display:table-cell;
+    vertical-align:middle;
+}
+
+.photo_img {
+    max-width:450px;
+    max-height:450px;
+}
