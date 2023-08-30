@@ -122,5 +122,25 @@ public class PartyService {
 		String result = dao.getNowPartyNum(conn);
 		return result;
 	}
+
+	public int setCategory(String categoryCheck) {
+		int category = -1;
+		if(categoryCheck.equals("모임")) {
+			category = 1;
+		}else if(categoryCheck.equals("공구")) {
+			category = 2;
+		}else if(categoryCheck.equals("렌탈")) {
+			category = 3;
+		}else if(categoryCheck.equals("게임")) {
+			category = 4;
+		}else if(categoryCheck.equals("OTT")) {
+			category = 5;
+		}else if(categoryCheck.equals("기타")) {
+			category = 6;
+		}else {
+			category = 0;
+		}
+		return category;
+	}
 	
 }

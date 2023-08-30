@@ -166,21 +166,56 @@ public class PartyCoDao {
 			ResultSet rset = null;
 			
 			try {
+				String query = null;
 				
-				String query = "select * "
-						+ "from comments "
-						+ "left join member using(me_num) "
-						+ "where COM_PARENT in "
-						+ "(select COM_NUM "
-						+ "from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
-						+ "           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
-						+ "           COM_DEL_DATE, COM_PHOTO_NUM "
-						+ "     from (select * from comments where PA_NUM = ? and COM_DEPTH = 1 "
-						+ "           order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc) "
-						+ "         "
-						+ "    ) "
-						+ "where rnum >= ? and rnum <= ?) "
-						+ "order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc";
+				if(type == "count") {
+					//댓글순
+					query = "select * "
+							+ "from comments "
+							+ "left join member using(me_num) "
+							+ "where COM_NUM in ( "
+							+ "    select COM_NUM "
+							+ "	   from(select COM_NUM "
+							+ "        from comments "
+							+ "        where COM_PARENT in "
+							+ "        (select COM_NUM "
+							+ "        from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
+							+ "                   COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
+							+ "                   COM_DEL_DATE, COM_PHOTO_NUM "
+							+ "             from (select * from comments where PA_NUM = ? and COM_DEPTH = 1 "
+							+ "                   order by COM_COUNT desc, COM_PARENT desc, COM_NUM desc) "
+							+ "              ) "
+							+ "        where rnum >= ? and rnum <= ? "
+							+ "        ) "
+							+ "    ) "
+							+ ")"
+							+ "order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc";
+					
+				}
+				else {
+					//공감순
+					query = "select * "
+							+ "from comments "
+							+ "left join member using(me_num) "
+							+ "where COM_NUM in ( "
+							+ "    select COM_NUM "
+							+ "    from(select COM_NUM "
+							+ "        from comments "
+							+ "        where COM_PARENT in "
+							+ "        (select COM_NUM "
+							+ "        from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
+							+ "                   COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
+							+ "                   COM_DEL_DATE, COM_PHOTO_NUM "
+							+ "             from (select * from comments where PA_NUM = ? and COM_DEPTH = 1 "
+							+ "                   order by COM_VIEWS desc, COM_PARENT desc, COM_NUM desc) "
+							+ "              ) "
+							+ "        where rnum >= ? and rnum <= ? "
+							+ "        ) "
+							+ "    ) "
+							+ ")"
+							+ "order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc";
+					
+				}
 				
 				pstmt = conn.prepareStatement(query);
 				pstmt.setInt(1, panum);

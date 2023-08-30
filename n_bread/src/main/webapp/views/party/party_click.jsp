@@ -6,6 +6,7 @@
    //String type = (String) request.getAttribute("type");
    Party party = (Party) request.getAttribute("party");
    Member member = (Member) request.getAttribute("member");
+   String category_check = (String)request.getAttribute("category_check");
 %>
 <!DOCTYPE html>
 <html>
@@ -96,7 +97,7 @@
          <section id="article-description">
             <h1 id="article-title"></h1>
             <p id="article-category">
-                 <%= party.getCatNum() %><br>
+                 <%= category_check %><br>
               <span id="article-befordate">
                <%= party.getPaTime() %>
               </span>

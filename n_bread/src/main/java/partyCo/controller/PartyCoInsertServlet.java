@@ -16,6 +16,7 @@ import org.json.simple.JSONObject;
 
 import common.JsonReturn;
 import common.Paging;
+import party.model.service.PartyService;
 import partyCo.model.service.PartyCoService;
 import partyCo.model.vo.PartyCo;
 
@@ -45,7 +46,6 @@ public class PartyCoInsertServlet extends HttpServlet {
 		int depth = Integer.parseInt(request.getParameter("depth"));
 		int parent = Integer.parseInt(request.getParameter("parent"));
 		int currentPage = 1;//현재페이지
-		
 		if(request.getParameter("page") != null) {
 			currentPage = Integer.parseInt(request.getParameter("page"));
 		}
@@ -62,8 +62,8 @@ public class PartyCoInsertServlet extends HttpServlet {
 			int limit = 10;//한페이지당 목록 갯수
 			
 			int listCount = coservice.getListCount(panum);
-			Paging paging = new Paging(listCount, currentPage, limit);
 			System.out.println("??listCount : " + listCount);
+			Paging paging = new Paging(listCount, currentPage, limit);
 			paging.calculator();
 			
 			//댓글 부분

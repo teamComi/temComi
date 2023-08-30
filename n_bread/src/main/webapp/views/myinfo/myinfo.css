@@ -8,18 +8,74 @@ body{
 .infonav{
 
 width:250px;
-height: 64rem;
-background-color:#FFED76;
+height: 1024px;
+background-color:rgba(255,237,118, 0.8);
 float:left;
-margin:5px;
+margin: 0;
+ padding: 0;
+ border: none;
 overflow: hidden;
-box-shadow: 0 20px 30px rgba(72,67,33,0.25);
+box-shadow: 0 20px 30px  rgba(72,67,33,0.25);
 border: none;
 list-style: none;
+text: black;
 
 }
+
+.infonav ul{
+	height: 200px;
+	line-height: 30px;
+	
+}
+
+.infonav a {
+	
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	font-weight: bold;
+	width: 130px;
+}
+
+
+.infonav a:after{
+	display:block;
+	content:'';
+	border-bottom: solid 2px  #c06206;
+	transform: scaleX(0);
+	transition: transform 250ms ease-in-out;
+}
+
+.infonav a:hover:after {
+	 transform: scaleX(1);
+}
+.infonav
 
 .logout{
   position: absolute;
-  bottom: 0px;
+  
+  bottom: -7rem;
 }
+
+.container {
+	
+	
+}
+
+.main {
+  
+  padding: 10px 10px 30px 10px;
+  margin-top: 10px;
+  background: 		/* #FFF4B0; */ rgba(255,251,175,0.3);
+  border-radius: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+
+.main-top {
+	width: 85%;
+  height: 50%;
+  background-color:#ffed76;
+float:center;
+}
+

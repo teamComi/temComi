@@ -4,14 +4,19 @@
 
 document.addEventListener("DOMContentLoaded", function(){
     
-    var makeParty = new MakeParty();
-    /*
-    for(var i in partyData) {
-        var obj = partyData[i];
-        $('#portf_box').append(makeParty.getTag(obj));
+    //검색 
+    $('.search-btn').on('click', function(){
+        var val = $('.search-box-text').val();
+        location.href = '/comi/partysearch/val=' + val;
+
+    })
+
+    if($('.search-box-text').val().length > 0) {
+        //엔터키 눌르면 
+        $(document).on('key')
+
     }
-    */
-    var startCount = 0;
+    
     return;
     $.ajax({
         url : '/comi/partysall?type=' + pageType + '&start=' + startCount
@@ -34,3 +39,6 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     })
 });
+
+
+

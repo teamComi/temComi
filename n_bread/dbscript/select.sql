@@ -65,39 +65,45 @@ order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc;
 select *
 from comments
 left join member using(me_num)
-where COM_NUM = (
-        select COM_NUM
-        from(select *
-                from comments
-                where COM_PARENT in 
-                (select COM_NUM
-                from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
-                           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, 
-                           COM_DEL_DATE, COM_PHOTO_NUM
-                     from (select * from comments where PA_NUM = 1 and COM_DEPTH = 1
-                           order by COM_COUNT desc, COM_PARENT desc, COM_NUM desc)
-                    )
-                where rnum >= 1 and rnum <= 10)
-                order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc)
-        group by COM_PARENT, COM_NUM
-        order by COM_PARENT desc
-);
---order by COM_COUNT desc;
+where COM_NUM in (
+    select COM_NUM
+    from(select COM_NUM
+        from comments
+        where COM_PARENT in 
+        (select COM_NUM
+        from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
+                   COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, 
+                   COM_DEL_DATE, COM_PHOTO_NUM
+             from (select * from comments where PA_NUM = 1 and COM_DEPTH = 1
+                   order by COM_COUNT desc, COM_PARENT desc, COM_NUM desc)
+              )
+        where rnum >= 1 and rnum <= 10
+        )
+    )
+)
+order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc;
+
 
 --공감순
 select *
 from comments
 left join member using(me_num)
-where COM_PARENT in 
-(select COM_NUM
-from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
-           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, 
-           COM_DEL_DATE, COM_PHOTO_NUM
-     from (select * from comments where PA_NUM = 1 and COM_DEPTH = 1
-           order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc)
-        
+where COM_NUM in (
+    select COM_NUM
+    from(select COM_NUM
+        from comments
+        where COM_PARENT in 
+        (select COM_NUM
+        from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
+                   COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, 
+                   COM_DEL_DATE, COM_PHOTO_NUM
+             from (select * from comments where PA_NUM = 1 and COM_DEPTH = 1
+                   order by COM_VIEWS desc, COM_PARENT desc, COM_NUM desc)
+              )
+        where rnum >= 1 and rnum <= 10
+        )
     )
-where rnum >= 1 and rnum <= 10)
+)
 order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc;
 
 
@@ -112,10 +118,6 @@ BEGIN
   WHERE 상품코드 = :OLD.상품코드;
 END;
 /
-
-
-
-
 
 
 

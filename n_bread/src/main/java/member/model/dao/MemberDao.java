@@ -400,5 +400,51 @@ public class MemberDao {
 		
 		return member;
 	}
-	
+	public Member infoMember(Connection conn, int menum) {
+
+		Member member = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+
+		String query = "select * from member where me_num = ?";
+
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, menum);
+			rset = pstmt.executeQuery();
+
+			if (rset.next()) {
+				member = new Member();
+
+				member.setMeName(rset.getString("ME_NAME"));
+				member.setMeId(rset.getString("ME_ID"));
+				member.setMePwd(rset.getString("ME_PWD"));
+				member.setMeCPwd(rset.getInt("ME_C_PWD"));
+				member.setMeCer(rset.getString("ME_CER"));
+				member.setMeLoginType(rset.getString("ME_LOGIN_TYPE"));
+				member.setMeEmail(rset.getString("ME_EMAIL"));
+				member.setMePhone(rset.getString("ME_PHONE"));
+				member.setMeAdd(rset.getString("ME_ADD"));
+				member.setMeGender(rset.getString("ME_GENDER"));
+				member.setMeBDay(rset.getDate("ME_B_DAY"));
+				member.setMeEnroll(rset.getDate("ME_ENROLL"));
+				member.setMeModDate(rset.getDate("ME_MOD_DATE"));
+				member.setMeAka(rset.getString("ME_AKA"));
+				member.setMeLike(rset.getInt("ME_LIKE"));
+				member.setMePhotoAdd(rset.getString("ME_PHOTO_ADD"));
+				member.setMeAdmin(rset.getString("ME_ADMIN"));
+				member.setMeBan(rset.getString("ME_BAN"));
+				member.setMePoint(rset.getInt("ME_POINT"));
+				member.setCatNum(rset.getInt("CAT_NUM"));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		return member;
+
+	}
 }

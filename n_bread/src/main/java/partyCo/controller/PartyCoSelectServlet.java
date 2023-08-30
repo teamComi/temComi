@@ -42,7 +42,6 @@ public class PartyCoSelectServlet extends HttpServlet {
 		
 		int panum = Integer.parseInt(request.getParameter("panum"));
 		int currentPage = 1;
-		int limit = 10;
 		//전송온 페이지 값이 있다면 추출함
 		if(request.getParameter("page") != null) {
 			currentPage = Integer.parseInt(request.getParameter("page"));
@@ -51,6 +50,7 @@ public class PartyCoSelectServlet extends HttpServlet {
 		PartyCoService coservice = new PartyCoService();
 		
 		//한페이지당 목록 갯수
+		int limit = 10;//한페이지당 목록 갯수
 		
 		int listCount = coservice.getListCount(panum);
 		System.out.println("??listCount : " + listCount);

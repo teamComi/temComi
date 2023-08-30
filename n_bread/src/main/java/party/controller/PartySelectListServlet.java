@@ -38,13 +38,13 @@ public class PartySelectListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String startStr = request.getParameter("start");
 		String endStr = request.getParameter("end");
-		String panum = request.getParameter("panum");
+		int panum = Integer.parseInt(request.getParameter("panum"));
 		int start = (startStr == null) ? 1 : Integer.parseInt(startStr);
 		int end = (endStr == null) ? 10 : Integer.parseInt(endStr);
 		
 		System.out.println("panum : " + panum + ", start : " + start);
 		
-		ArrayList<Party> list = new PartyService().selectPartyList("open", start, end, panum);//활성화
+		ArrayList<Party> list = new PartyService().selectPartyList("open", start, end, Integer.toString(panum));//활성화
 		
 		System.out.println("list : " + list);
 		

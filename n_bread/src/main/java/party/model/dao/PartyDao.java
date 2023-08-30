@@ -132,8 +132,8 @@ public class PartyDao {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String query = "insert into party " + 
-				"values ((select count(*)+1 from party),2,sysdate,?,?,?,?,?,default,NULL,NULL,default,default, " +
-				"        default,default,default,?,?,default,?,null)";
+				"values ((select count(*) from party)+1,2,sysdate,?,?,?,?,?,default,NULL,NULL,default,default, " +
+				"        default,default,default,?,?,default,?,?)";
 
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -145,7 +145,11 @@ public class PartyDao {
 			pstmt.setString(6,party.getPaLocation());
 			pstmt.setInt(7, party.getPaTotalNum());
 			pstmt.setInt(8, party.getPhNum());
-			
+			if(party.getCatNum() > 0){
+				pstmt.setInt(9, party.getCatNum());
+			}else{
+				pstmt.setString(9, null);
+			}
 			result = pstmt.executeUpdate();
 
 		}catch (Exception e) {

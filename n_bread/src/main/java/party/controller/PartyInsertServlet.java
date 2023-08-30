@@ -50,6 +50,7 @@ public class PartyInsertServlet extends HttpServlet {
 		int photoNum = -1;
 		String inputFileName = null;
 		int photoResult = 0;
+		PartyService partyService = new PartyService();
 		RequestDispatcher view = null;
 		// RequestDispatcher view = null;
 		if (!ServletFileUpload.isMultipartContent(request)) {
@@ -82,7 +83,14 @@ public class PartyInsertServlet extends HttpServlet {
 				- Integer.parseInt(mrequest.getParameter("pa_deposit")))
 				/ Integer.parseInt(mrequest.getParameter("pa_total_num")));
 		party.setPaAct("Y");
-		
+		int categoryCheck = partyService.setCategory(mrequest.getParameter("category_check"));
+		party.setCatNum(categoryCheck);
+
+		String partyTime = mrequest.getParameter("pa_time_1") +" "+ mrequest.getParameter("pa_time_2");
+
+		System.out.println(partyTime);
+
+		//System.out.println(categoryCheck);
 		if ((inputFileName = mrequest.getFilesystemName("pa_img1")) != null) {
 			photoNum = seqPhotoNum("photo");
 			party.setPhNum(photoNum);
@@ -99,12 +107,12 @@ public class PartyInsertServlet extends HttpServlet {
 			photo.setPhoto5(inputFileName);
 			photoResult = new PhotoService().insertPhoto(photo, "photo");
 		}
-		int result = new PartyService().insertParty(party);
-		String panum = new PartyService().getNowPartyNum();
+		int result = partyService.insertParty(party);
+		String panum = partyService.getNowPartyNum();
 		// System.out.println("result : " + result);
 
 		Member member = new MemberService().selectMember(party.getMeNum());
-		ArrayList<Party> list = new PartyService().selectPartyList("open", 1, 6, panum);
+		ArrayList<Party> list = partyService.selectPartyList("open", 1, 6, panum);
 		System.out.println(party.getPaNum());
 		if (result > 0 && photoResult > 0) {
 			String url = "views/party/party_click.jsp";
@@ -112,12 +120,13 @@ public class PartyInsertServlet extends HttpServlet {
 			// if(act.equals("N")) url = "views/party/party_click.jsp";
 
 			view = request.getRequestDispatcher(url);
-			System.out.println("act : " + party.getPaAct());
+			//System.out.println("act : " + party.getPaAct());
 			// 파티 활성화 여부
 			request.setAttribute("type", (party.getPaAct().toUpperCase().equals("Y")) ? "findParty" : "findReview");
 			// 파티 활성화 여부에 따라 보여줄 페이지 선택
 			request.setAttribute("party", party);
 			// 파티 정보
+			request.setAttribute("category_check",mrequest.getParameter("category_check"));
 			request.setAttribute("partyList", list);
 			request.setAttribute("member", member);
 			// 파티 글 쓴 회원 정보

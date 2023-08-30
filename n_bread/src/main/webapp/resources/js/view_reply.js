@@ -94,6 +94,7 @@ View_reply.prototype = {
         //정렬
         $('.review-sort-btn').each(function(){
             $(this).on('click', function(){
+                var panum = $('.review-head').attr('data-panum');
                 var id = Number($(this).attr('id').split('_').pop());
                 var type = 'current';
                 if(id == 2) type = 'interest';

@@ -3,6 +3,9 @@ package partyCo.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -62,30 +65,61 @@ public class PartyCoSortServlet extends HttpServlet {
 		System.out.println("??partyCoList : " + partyCoList);
 		
 		//이중배열 만들어 보내기
-		JSONArray coList = null;
-		//ArrayList<ArrayList<PartyCo>> coList = null;
+		ArrayList<ArrayList<PartyCo>> coList = null;
+		
 		int count = 0;
 		if(partyCoList.size() > 0) {
 			
-			//coList = new ArrayList<ArrayList<PartyCo>>();
-			coList = new JSONArray();
-			//ArrayList<PartyCo> cList = new ArrayList<PartyCo>();
-			JSONArray cList = new JSONArray();
+			coList = new ArrayList<ArrayList<PartyCo>>();
+			ArrayList<PartyCo> cList = new ArrayList<PartyCo>();
 			
 			for(int i=0; i<partyCoList.size(); i++) {
 				System.out.println("i : " + i);
 				int nextDepth = (i < partyCoList.size()-1) ? partyCoList.get(i+1).getComDepth() : -1;//다음번 뎁스
 				
-				cList.add(new JsonReturn().returnPartyCo(partyCoList.get(i)));
-				
+				//cList.add(new JsonReturn().returnPartyCo(partyCoList.get(i)));
+				cList.add(partyCoList.get(i));
 				if(nextDepth == 1 || i == partyCoList.size()-1) {//마지막이거나 다음 뎁스가 1일때
 					
-					JSONArray ctemp = (JSONArray) cList.clone();
+					ArrayList<PartyCo> ctemp = (ArrayList<PartyCo>) cList.clone();
 					coList.add(ctemp);
 					cList.clear();
 					count ++;
 				}
 			}
+			
+			//파티코 다시 재편
+			if(type != "current") {
+				/*
+				Collections.sort(coList, new Comparator<List<JSONArray>>{
+					@Override
+					public int compare(JSONArray o1, JSONArray o2) {
+						return o1.get(0).getComCount() - o2.get(0).getComCount();
+					}
+				})
+				*/
+				JSONArray jcoList = new JSONArray();
+				
+				for(int i=0; i<coList.size(); i++) {
+					JSONArray jsubList = new JSONArray();
+					for(int j=0; j<coList.get(i).size(); i++) {
+						
+					}
+				}
+				
+				
+				System.out.println("sort coList 1 : " + coList);
+				
+				
+				Collections.sort(coList, (o1, o2) -> {
+					return o2.get(0).getComCount() - o1.get(0).getComCount();
+				});
+				
+				System.out.println("sort coList 2 : " + coList);
+			}
+			
+			
+			
 		}
 		JSONObject pagingJason = new JsonReturn().returnPaging(paging);
 		
