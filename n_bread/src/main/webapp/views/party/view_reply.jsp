@@ -90,9 +90,9 @@
         if(partyColistCount > 0 && partyCoList != null) { %>
         <!--댓글 정렬 버튼-->
         <div class="review-sort">
-            <button class="review-sort-btn sort-type-1 active">공감순</button>
-            <button class="review-sort-btn sort-type-2">최신순</button>
-            <button class="review-sort-btn sort-type-3">답글순</button>
+            <button class="review-sort-btn active" id="sortType_1">공감순</button>
+            <button class="review-sort-btn" id="sortType_2">최신순</button>
+            <button class="review-sort-btn" id="sortType_3">답글순</button>
         </div>
         <!--댓글 정렬 버튼 end-->
         <% } %>

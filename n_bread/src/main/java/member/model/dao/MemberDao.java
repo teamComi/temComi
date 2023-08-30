@@ -74,13 +74,13 @@ public class MemberDao {
 						,rset.getString("ME_GENDER")
 						,rset.getDate("ME_B_DAY")
 						,rset.getDate("ME_ENROLL")
-						,rset.getDate("ME_MOD_DATE")
 						,rset.getString("ME_AKA")
 						,rset.getInt("ME_LIKE")
 						,rset.getString("ME_PHOTO_ADD")
 						,rset.getString("ME_ADMIN")
 						,rset.getString("ME_BAN")
 						,rset.getInt("ME_POINT")
+						,rset.getDate("ME_MOD_DATE")
 						,rset.getInt("CAT_NUM")
 					);
 				
@@ -346,6 +346,59 @@ public class MemberDao {
 		}
 		
 		return list;
+	}
+	
+	//로그인
+	public Member selectLogin(Connection conn, String meId, String mePwd) {
+		Member member = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String query = "select * from member where me_id = ? and me_pwd = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setString(1, meId);
+			pstmt.setString(2, mePwd);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				member = new Member();
+				
+				member.setMeId(meId);
+				member.setMePwd(mePwd);
+				member.setMeNum(rset.getInt("me_num"));
+				member.setMeName(rset.getString("me_name"));
+				member.setMeCPwd(rset.getInt("me_c_pwd"));
+				member.setMeCer(rset.getString("me_cer"));
+				member.setMeLoginType(rset.getString("me_login_type"));
+				member.setMeEmail(rset.getString("me_email"));
+				member.setMePhone(rset.getString("me_phone"));
+				member.setMeAdd(rset.getString("me_add"));
+				member.setMeGender(rset.getString("me_gender"));
+				member.setMeBDay(rset.getDate("me_b_day"));
+				member.setMeEnroll(rset.getDate("me_enroll"));
+				member.setMeAka(rset.getString("me_aka"));
+				member.setMeLike(rset.getInt("me_like"));
+				member.setMePhotoAdd(rset.getString("me_photo_add"));
+				member.setMeAdmin(rset.getString("me_admin"));
+				member.setMeBan(rset.getString("me_ban"));
+				member.setMePoint(rset.getInt("me_point"));
+				member.setMeModDate(rset.getDate("me_mod_date"));
+				member.setCatNum(rset.getInt("cat_num"));
+
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return member;
 	}
 	
 }

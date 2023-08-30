@@ -20,20 +20,21 @@ public class Member implements Serializable {
 	private String meGender;
 	private Date meBDay;
 	private Date meEnroll;
-	private Date meModDate;
 	private String meAka;
 	private int meLike;
 	private String mePhotoAdd;
 	private String meAdmin;
 	private String meBan;
-	private int mePoint;
+	private int mePoint;	
+	private Date meModDate;
 	private int catNum;
+
 	
 	public Member() {}
 	
 	public Member(int meNum, String meName, String meId, String mePwd, int meCPwd, String meCer, String meLoginType,
-			String meEmail, String mePhone, String meAdd, String meGender, Date meBDay, Date meEnroll, Date meModDate,
-			String meAka, int meLike, String mePhotoAdd, String meAdmin, String meBan, int mePoint, int catNum) {
+			String meEmail, String mePhone, String meAdd, String meGender, Date meBDay, Date meEnroll, String meAka, 
+			int meLike, String mePhotoAdd, String meAdmin, String meBan, int mePoint, Date meModDate, int catNum) {
 		super();
 		this.meNum = meNum;
 		this.meName = meName;
@@ -48,17 +49,16 @@ public class Member implements Serializable {
 		this.meGender = meGender;
 		this.meBDay = meBDay;
 		this.meEnroll = meEnroll;
-		this.meModDate = meModDate;
 		this.meAka = meAka;
 		this.meLike = meLike;
 		this.mePhotoAdd = mePhotoAdd;
 		this.meAdmin = meAdmin;
 		this.meBan = meBan;
 		this.mePoint = mePoint;
+		this.meModDate = meModDate;
 		this.catNum = catNum;
+
 	}
-
-
 
 	public int getMeNum() {
 		return meNum;
@@ -164,14 +164,6 @@ public class Member implements Serializable {
 		this.meEnroll = meEnroll;
 	}
 
-	public Date getMeModDate() {
-		return meModDate;
-	}
-
-	public void setMeModDate(Date meModDate) {
-		this.meModDate = meModDate;
-	}
-
 	public String getMeAka() {
 		return meAka;
 	}
@@ -219,6 +211,14 @@ public class Member implements Serializable {
 	public void setMePoint(int mePoint) {
 		this.mePoint = mePoint;
 	}
+	
+	public Date getMeModDate() {
+		return meModDate;
+	}
+
+	public void setMeModDate(Date meModDate) {
+		this.meModDate = meModDate;
+	}
 
 	public int getCatNum() {
 		return catNum;
@@ -233,10 +233,12 @@ public class Member implements Serializable {
 		return "Member [meNum=" + meNum + ", meName=" + meName + ", meId=" + meId + ", mePwd=" + mePwd + ", meCPwd="
 				+ meCPwd + ", meCer=" + meCer + ", meLoginType=" + meLoginType + ", meEmail=" + meEmail + ", mePhone="
 				+ mePhone + ", meAdd=" + meAdd + ", meGender=" + meGender + ", meBDay=" + meBDay + ", meEnroll="
-				+ meEnroll + ", meModDate=" + meModDate + ", meAka=" + meAka + ", meLike=" + meLike + ", mePhotoAdd="
-				+ mePhotoAdd + ", meAdmin=" + meAdmin + ", meBan=" + meBan + ", mePoint=" + mePoint + ", catNum="
+				+ meEnroll + ", meAka=" + meAka + ", meLike=" + meLike + ", mePhotoAdd=" + mePhotoAdd + 
+				", meAdmin=" + meAdmin + ", meBan=" + meBan + ", mePoint=" + mePoint + ", meModDate=" + meModDate + ", catNum="
 				+ catNum + "]";
 	}
+
+
 
 	
 }

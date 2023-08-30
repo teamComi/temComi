@@ -45,6 +45,7 @@ insert into comments values
 
 
 -- 댓글 검색 뎁스 1 먼저 10개 검색하고 그에 따른 뎁스 2도 같이 검색
+-- 최신순
 select *
 from comments
 left join member using(me_num)
@@ -59,6 +60,46 @@ from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
     )
 where rnum >= 1 and rnum <= 10)
 order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc;
+
+-- 댓글순
+select *
+from comments
+left join member using(me_num)
+where COM_NUM = (
+        select COM_NUM
+        from(select *
+                from comments
+                where COM_PARENT in 
+                (select COM_NUM
+                from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
+                           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, 
+                           COM_DEL_DATE, COM_PHOTO_NUM
+                     from (select * from comments where PA_NUM = 1 and COM_DEPTH = 1
+                           order by COM_COUNT desc, COM_PARENT desc, COM_NUM desc)
+                    )
+                where rnum >= 1 and rnum <= 10)
+                order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc)
+        group by COM_PARENT, COM_NUM
+        order by COM_PARENT desc
+);
+--order by COM_COUNT desc;
+
+--공감순
+select *
+from comments
+left join member using(me_num)
+where COM_PARENT in 
+(select COM_NUM
+from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH,
+           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, 
+           COM_DEL_DATE, COM_PHOTO_NUM
+     from (select * from comments where PA_NUM = 1 and COM_DEPTH = 1
+           order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc)
+        
+    )
+where rnum >= 1 and rnum <= 10)
+order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc;
+
 
 -- 인서트 순간 댓글의 카운트 올리기
 -- 트리거 작성

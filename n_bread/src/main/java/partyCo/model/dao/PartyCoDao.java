@@ -153,6 +153,84 @@ public class PartyCoDao {
 		
 		return result;
 	}
+	
+	public ArrayList<PartyCo> sortPartyCo(Connection conn, int panum, int startRow, int endRow, String type) {
+		
+		ArrayList<PartyCo> list = new ArrayList<PartyCo>();
+		
+		if(type == "current") {
+			list = selectPartyCoList(conn, panum, startRow, endRow);
+		}else {
+			
+			PreparedStatement pstmt = null;
+			ResultSet rset = null;
+			
+			try {
+				
+				String query = "select * "
+						+ "from comments "
+						+ "left join member using(me_num) "
+						+ "where COM_PARENT in "
+						+ "(select COM_NUM "
+						+ "from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
+						+ "           COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
+						+ "           COM_DEL_DATE, COM_PHOTO_NUM "
+						+ "     from (select * from comments where PA_NUM = ? and COM_DEPTH = 1 "
+						+ "           order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc) "
+						+ "         "
+						+ "    ) "
+						+ "where rnum >= ? and rnum <= ?) "
+						+ "order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc";
+				
+				pstmt = conn.prepareStatement(query);
+				pstmt.setInt(1, panum);
+				pstmt.setInt(2, startRow);
+				pstmt.setInt(3, endRow);
+				
+				rset = pstmt.executeQuery();
+				
+				while(rset.next()) {
+					PartyCo partyCo = new PartyCo();
+					
+					partyCo.setComNum(rset.getInt("COM_NUM"));
+					partyCo.setPaNum(rset.getInt("PA_NUM"));
+					partyCo.setComParent(rset.getInt("COM_PARENT"));
+					partyCo.setComDepth(rset.getInt("COM_DEPTH"));
+					partyCo.setComCon(rset.getString("COM_CON"));
+					partyCo.setComViews(rset.getInt("COM_VIEWS"));
+					partyCo.setComCount(rset.getInt("COM_COUNT"));
+					partyCo.setComEnroll(rset.getDate("COM_ENROLL"));
+					partyCo.setComModDate(rset.getDate("COM_MOD_DATE"));
+					partyCo.setComDelDate(rset.getDate("COM_DEL_DATE"));
+					partyCo.setComPhotoNum(rset.getInt("COM_PHOTO_NUM"));
+					partyCo.setMeNum(rset.getInt("ME_NUM"));
+					partyCo.setMeAka(rset.getString("ME_AKA"));
+					partyCo.setMePhotoAdd(rset.getInt("ME_PHOTO_ADD"));
+					
+					//System.out.println("board : " + board);
+					list.add(partyCo);
+				}
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				close(rset);
+				close(pstmt);
+			}
+		}
+		
+		return list;
+	}
+
+	public ArrayList<PartyCo> sortPartyCoCount(Connection conn, int panum, int startRow, int endRow) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<PartyCo> sortPartyCoCurrent(Connection conn, int panum, int startRow, int endRow) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	public int updatePartyCo(Connection conn, PartyCo partyCo) {
 		// TODO Auto-generated method stub
@@ -173,20 +251,7 @@ public class PartyCoDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public ArrayList<PartyCo> searchPartyCoInterest(Connection conn, String keyword) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ArrayList<PartyCo> sortPartyCoCategory(Connection conn, String keyword) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ArrayList<PartyCo> sortPartyCoCurrent(Connection conn, String keyword) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	
 	
 }

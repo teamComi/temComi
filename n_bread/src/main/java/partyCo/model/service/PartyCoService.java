@@ -57,6 +57,14 @@ public class PartyCoService {
 		return result;
 	}
 	
+	//정렬 - 공감순
+	public ArrayList<PartyCo> sortPartyCo(int panum, int startRow, int endRow, String type){
+		Connection conn = getConnection();
+		ArrayList<PartyCo> list = dao.sortPartyCo(conn, panum, startRow, endRow, type);
+		close(conn);
+		return list;
+	}
+	
 	//수정
 	public int updatePartyCo(PartyCo partyCo) {
 		Connection conn = getConnection();
@@ -99,32 +107,4 @@ public class PartyCoService {
 		close(conn);
 		return list;
 	}
-	
-	//정렬 - 공감순
-	public ArrayList<PartyCo> sortPartyCoInterest(String keyword){
-		Connection conn = getConnection();
-		ArrayList<PartyCo> list = dao.searchPartyCoInterest(conn, keyword);
-		close(conn);
-		return list;
-	}
-	
-	//정렬 - 카테고리
-	public ArrayList<PartyCo> sortPartyCoCategory(String keyword){
-		Connection conn = getConnection();
-		ArrayList<PartyCo> list = dao.sortPartyCoCategory(conn, keyword);
-		close(conn);
-		return list;
-	}
-	
-	//정렬 - 날짜
-	public ArrayList<PartyCo> sortPartyCoCurrent(String keyword){
-		Connection conn = getConnection();
-		ArrayList<PartyCo> list = dao.sortPartyCoCurrent(conn, keyword);
-		close(conn);
-		return list;
-	}
-
-	
-
-	
 }

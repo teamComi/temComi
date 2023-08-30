@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.sql.Date;
-import java.text.DateFormat;
 import java.util.Base64;
 
 import javax.servlet.RequestDispatcher;

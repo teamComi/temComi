@@ -1,9 +1,13 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="member.model.vo.Member" %>
 <%
 	String type = (String) request.getAttribute("type");
 %>
+<%
+	//로그인 확인을 위해서 내장된 session 객체를 이용
+	Member loginMember = (Member)session.getAttribute("loginMember");
+%>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,17 +37,30 @@
                         <li class="<%= (type != null && type.equals("qna")) ? "active" : "" %>"><a href="/comi/views/qna/qna.jsp">Q&A</a></li>
                     </ul>
                 </div>
-
+				
                 <!--장바구니, 찜-->
                 <div class="header_right right">
                     <ul class="header_right_widget">
+                    	<%-- 비로그인 상태 --%>
+                    	<% if(loginMember == null) { %>
                         <li><a href="/comi/views/member/member_login.html">로그인</a></li>
-                        <li><a href="#"><img src="/comi/resources/images/search.png" class="icon_mypage" />
+                      <!--   <li><a href="#"><img src="/comi/resources/images/search.png" class="icon_mypage" />
                             <div class="tip">2</div>
                         </a></li>
                         <li><a href="#"><img src="/comi/resources/images/search.png"  class="icon_mycart" />
                             <div class="tip">2</div>
+                        </a></li> -->
+                        <%-- 로그인 상태 --%>
+                        <% } else { %>
+                        <%= loginMember.getMeName() %>님
+                        <a href="/comi/logout">로그아웃</a> <br> &nbsp;
+                        <!-- <li><a href="#"><img src="/comi/resources/images/search.png" class="icon_mypage" />
+                            <div class="tip">2</div>
                         </a></li>
+                        <li><a href="#"><img src="/comi/resources/images/search.png"  class="icon_mycart" />
+                            <div class="tip">2</div>
+                        </a></li> -->
+                        <% } %>
                     </ul>
                 </div>
             </nav>

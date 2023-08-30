@@ -4,10 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>first : error</title>
+<title>comi : error</title>
 </head>
 <body>
 <h1>오류 발생 : </h1>
+<%-- jsp 내장객체 중 exception 객체 사용 : 
+	page 지시자 태그에 isErrorPage='true' 라고 지정했을때만
+	exception 내장객체를 사용할 수 있음
+	jsp 페이지에서 발생한 에러(예외)를 자동으로 전달받게 됨
+ --%>
  <%
  	if(exception != null){  //jsp 페이지에서 발생한 에러이면
  %>
@@ -23,3 +28,10 @@
  
 </body>
 </html>
+
+
+
+
+
+
+

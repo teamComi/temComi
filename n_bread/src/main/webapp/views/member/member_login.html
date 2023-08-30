@@ -13,14 +13,16 @@
 <body>
 	
 	<div class="wrapper">
-		<form action="">
+		<form action="/comi/login" method="post">
 			<h1>로그인</h1>
 			<div class="input-box">
-				<input type="text" placeholder="Username" required>
+				<!-- <label>아이디 : <input type="text" name="meid" id="uid" class="pos"></label> -->
+				<input type="text" placeholder="Username" name="meid" required>
 				<i class='bx bxs-user'></i>
 			</div>
 			<div class="input-box">
-				<input type="password" placeholder="Password" required>
+				<!-- <label>암 호 : <input type="password" name="mepwd" id="upwd" class="pos"></label> -->
+				<input type="password" placeholder="Password" name="mepwd" required>
 				<i class='bx bxs-lock-alt'></i>
 			</div>
 			
@@ -29,10 +31,12 @@
 				<a href="#">비밀번호 찾기</a>
 			</div>
 			
-			<button type="submit" class="btn">로그인</button>
+			<input type="submit" class="btn" name="login" value="로그인">
+			
+			<!-- <button type="submit" class="btn" name="login">로그인</button> -->
 			
 			<div class="register-link">
-				<p><a href="/comi/views/member/member_create2.html">회원가입</a></p>
+				<p><a href="/comi/views/member/member_create.html">회원가입</a></p>
 			</div>
 		</form>
 	</div>

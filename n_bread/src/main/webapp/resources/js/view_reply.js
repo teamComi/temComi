@@ -1,5 +1,6 @@
 var veiwArr = [];
 var login = 'login';
+var myMeNum = 1;
 
 document.addEventListener("DOMContentLoaded", function(){
     
@@ -13,30 +14,15 @@ function View_reply(){
 
 View_reply.prototype = {
     
-    connect : function(type, menum, panum, page, depth, parent, content){
+    connectInsert : function(menum, panum, page, depth, parent, content){
         var _this = this;
-        var url = (type == 'insert') 
-                    ? '/comi/partycoins?menum='+menum +'&panum=' + panum + '&depth=' + depth + '&parent=' + parent + '&content=' + content + '&page' + page
-                    : '/comi/partycosel?menum='+menum +'&panum=' + panum + '&page=' + page;
+        var url = '/comi/partycoins?menum='+menum +'&panum=' + panum + '&depth=' + depth + '&parent=' + parent + '&content=' + content + '&page' + page;
         $.ajax({
             url : url
             ,type : 'post'
             ,dataType : 'json'
             ,success : function(data){
-                
-                var str = JSON.stringify(data);
-                var json = JSON.parse(str);
-                console.log('str : ' + str);
-                console.log('json.paging : ' + json.paging);
-                console.log('json.list : ' + json.list);
-
-                //$('#review_number').html(reviewLength + '개의 댓글');
-                $('#review').empty();
-                //댓글 리스트 불러오기
-                
-                $('#review').append(viewReplyInit(json, login));
-                _this.buttonEvent();
-                 location.href = "#review";
+                _this.setJson(data);
             }
             ,error : function(jqXHR, textStatus, errorThrown){
                 console.log('error : ' + jqXHR + ', '+ textStatus + ', ' + errorThrown);
@@ -44,9 +30,78 @@ View_reply.prototype = {
         })
     }
     ,
+    connectSelect : function(menum, panum, page){
+        var _this = this;
+        var url = '/comi/partycosel?menum='+menum +'&panum=' + panum + '&page=' + page;
+        $.ajax({
+            url : url
+            ,type : 'post'
+            ,dataType : 'json'
+            ,success : function(data){
+                _this.setJson(data);
+            }
+            ,error : function(jqXHR, textStatus, errorThrown){
+                console.log('error : ' + jqXHR + ', '+ textStatus + ', ' + errorThrown);
+            }
+        })
+    }
+    ,
+    connectSort : function(type, menum, panum, page){
+        var _this = this;
+        var url = '/comi/partycosort?type='+type+'&menum='+menum +'&panum=' + panum + '&page=' + page;
+        $.ajax({
+            url : url
+            ,type : 'post'
+            ,dataType : 'json'
+            ,success : function(data){
+                _this.setJson(data);
+            }
+            ,error : function(jqXHR, textStatus, errorThrown){
+                console.log('error : ' + jqXHR + ', '+ textStatus + ', ' + errorThrown);
+            }
+        })
+
+
+        
+    }
+    ,
+    setJson : function(){
+        var str = JSON.stringify(data);
+        var json = JSON.parse(str);
+        console.log('str : ' + str);
+        console.log('json.paging : ' + json.paging);
+        console.log('json.list : ' + json.list);
+
+        //$('#review_number').html(reviewLength + '개의 댓글');
+        $('#review').empty();
+        //댓글 리스트 불러오기
+        
+        $('#review').append(viewReplyInit(json, login));
+        this.buttonEvent();
+        //location.href = "#review";
+    }
+    ,
     buttonEvent : function(){
         
         var _this = this;
+
+        //새로고침
+        $('.review-head-refresh').on('click', function(){
+            var panum = $('.review-head').attr('data-panum');
+            _this.connectSelect(myMeNum, panum, currentPage);
+        })
+
+        //정렬
+        $('.review-sort-btn').each(function(){
+            $(this).on('click', function(){
+                var id = Number($(this).attr('id').split('_').pop());
+                var type = 'current';
+                if(id == 2) type = 'interest';
+                else if(id == 2) type = 'count';
+                _this.connectSort(type, myMeNum, panum, currentPage);
+            })
+        })
+
         //로그인 페이지
         $('.review-write-oucontainer').each(function(){
             if(login == 'login'){
@@ -133,7 +188,7 @@ View_reply.prototype = {
                     veiwArr.push(data);
                     */
                     console.log('댓글 달기 depth : ' + depth + ' panum : ' + panum + ' parent : ' + parent + ' content : ' + textarea.val());
-                    _this.connect('insert', 1, panum, currentPage, depth, parent, textarea.val());
+                    _this.connectInsert(myMeNum, panum, currentPage, depth, parent, textarea.val());
                     
                 }
                 return false;
@@ -189,7 +244,7 @@ View_reply.prototype = {
                     }
                 }
                 var panum = $('.review-head').attr('data-panum');
-                _this.connect('select', 1, panum, page);
+                _this.connectSelect(myMeNum, panum, page);
                 
             })
         })
@@ -198,13 +253,15 @@ View_reply.prototype = {
         $('.review-body-bottom-heart').each(function(){
             $(this).on('click', function(){
                 var heart = $(this).attr('data-heart');
-                var heartNum = Number($(this).find('.review-body-heart').text());
+                var heartNum = Number($(this).parent().find('.review-body-heart').text());
                 
                 if(heart == 'empty') {
+                    console.log('>> heartNum 1 : ' + heartNum);
                     heartNum ++;
                     $(this).attr('data-heart', heartNum);
+                    console.log('>> heartNum 2 : ' + heartNum);
                 }else{
-                    heartNum -= heartNum;
+                    heartNum --;
                     $(this).attr('data-heart', 'empty');
                 }
 
@@ -216,7 +273,7 @@ View_reply.prototype = {
         //삭제 버튼 클릭
         $('.review-body-list-right-btn').each(function(){
             $(this).on('click', function(){
-                
+
             })
         })
         
@@ -311,9 +368,9 @@ function viewReplyInit(data){
         el += `
         <!--댓글 정렬 버튼-->
         <div class="review-sort">
-            <button class="review-sort-btn sort-type-1 active">공감순</button>
-            <button class="review-sort-btn sort-type-2">최신순</button>
-            <button class="review-sort-btn sort-type-3">답글순</button>
+            <button class="review-sort-btn active" id="sortType_1">공감순</button>
+            <button class="review-sort-btn" id="sortType_2">최신순</button>
+            <button class="review-sort-btn" id="sortType_3">답글순</button>
         </div>
         <!--댓글 정렬 버튼 end-->`
         }

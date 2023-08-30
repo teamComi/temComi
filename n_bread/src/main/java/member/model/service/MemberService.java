@@ -17,19 +17,11 @@ public class MemberService {
 	private MemberDao mdao = new MemberDao();
 	
 	public MemberService() {}
-	
-	//로그인 멤버 조회
-	public Member selectLogin(int userid, String userpwd) {
-		Connection conn = getConnection();
-		Member loginMember = mdao.selectLogin(conn, userid, userpwd);
-		close(conn);
-		return loginMember;
-	}
-	
+
 	//조회
-	public Member selectMember(int userid) {
+	public Member selectMember(int menum) {
 		Connection conn = getConnection();
-		Member member = mdao.selectMember(conn, userid);
+		Member member = mdao.selectMember(conn, menum);
 		close(conn);
 		return member;
 	}
@@ -109,5 +101,22 @@ public class MemberService {
 		close(conn);
 		return list;
 	}
+
+	//인포
+	public Member infoMember(int menum) {
+		
+		Connection conn = getConnection();
+		Member member = mdao.infoMember(conn, menum);
+		close(conn);
+		return member;
+	}
 	
+	//로그인
+	public Member selectLogin(String meId, String mePwd) {
+		Connection conn = getConnection();
+		Member loginMember = mdao.selectLogin(conn, meId, mePwd);
+		close(conn);
+		return loginMember;
+	}
+
 }

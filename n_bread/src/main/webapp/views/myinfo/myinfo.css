@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+
+body{
+  background: #FFFDF4;
+  
+}
+.infonav{
+
+width:250px;
+height: 64rem;
+background-color:#FFED76;
+float:left;
+margin:5px;
+overflow: hidden;
+box-shadow: 0 20px 30px rgba(72,67,33,0.25);
+border: none;
+list-style: none;
+
+}
+
+.logout{
+  position: absolute;
+  bottom: 0px;
+}
