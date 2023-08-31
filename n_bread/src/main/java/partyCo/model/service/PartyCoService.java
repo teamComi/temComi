@@ -107,4 +107,15 @@ public class PartyCoService {
 		close(conn);
 		return list;
 	}
+
+	public int updatePartyCoView(int comnum, int plusnum) {
+		Connection conn = getConnection();
+		int result = dao.updatePartyCoView(conn, comnum, plusnum);
+		
+		if(result > 0) commit(conn);
+		else rollback(conn);
+		
+		close(conn);
+		return result;
+	}
 }

@@ -24,14 +24,14 @@ import partyCo.model.vo.PartyCo;
 /**
  * Servlet implementation class PartyReSelectAllServlet
  */
-@WebServlet("/partycosort")
-public class PartyCoSortServlet extends HttpServlet {
+@WebServlet("/partycosort2")
+public class PartyCoSortServlet2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PartyCoSortServlet() {
+    public PartyCoSortServlet2() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -90,31 +90,10 @@ public class PartyCoSortServlet extends HttpServlet {
 			}
 			System.out.println("type : " + type);
 			System.out.println("sort coList 1 : " + coList);
-			//정렬
-			if(type == "count") {
-				//System.out.println("count========== : " + type);
-//				Collections.sort(coList, new Comparator<ArrayList<PartyCo>>() {
-//					@Override
-//					public int compare(ArrayList<PartyCo> o1, ArrayList<PartyCo> o2) {
-//						return o2.get(0).getComCount() - o1.get(0).getComCount();
-//					};
-//					
-//				});
-			}else {
-				//System.out.println("interest========== : " + type);
-//				Collections.sort(coList, new Comparator<ArrayList<PartyCo>>() {
-//					@Override
-//					public int compare(ArrayList<PartyCo> o1, ArrayList<PartyCo> o2) {
-//						return o2.get(0).getComViews() - o1.get(0).getComViews();
-//					};
-//					
-//				});
-			}
 			
 			Collections.sort(coList, (o1, o2) -> {
-				return o2.get(0).getComCount() - o1.get(0).getComCount();
+				return o2.get(0).getComViews() - o1.get(0).getComViews();
 			});
-			
 			
 			System.out.println("sort coList 2 : " + coList);
 			

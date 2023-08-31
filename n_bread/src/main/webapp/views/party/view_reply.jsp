@@ -5,10 +5,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% 
-	String login = "login";
-	String myNick = "donki";
+	String login = (loginMember != null) ? "login" : "logout";
+	String myNick = (loginMember != null) ? loginMember.getMeId() : "";
+	int myMeNum = (loginMember != null) ? loginMember.getMeNum() : -1;
 	int partyColistCount = (int) request.getAttribute("partyColistCount");
-	
 	ArrayList<ArrayList<PartyCo>> partyCoList = (ArrayList<ArrayList<PartyCo>>) request.getAttribute("partyCoList");
 	Paging copage = (Paging) request.getAttribute("partyCoPaging");
 %>
@@ -21,6 +21,9 @@
     <script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
     <script type="text/javascript">
     var currentPage = Number(<%= "\"" + copage.getCurrentPage() + "\"" %>);
+    var login = <%= "\"" + login + "\"" %>;
+	var myNick = <%= "\"" + myNick + "\"" %>;
+	var myMeNum = Number(<%= "\"" + myMeNum + "\"" %>);
     </script>
     <script type="text/javascript" src="/comi/resources/js/util.js"></script>
     <script type="text/javascript" src="/comi/resources/js/view_reply.js"></script>
@@ -90,9 +93,9 @@
         if(partyColistCount > 0 && partyCoList != null) { %>
         <!--댓글 정렬 버튼-->
         <div class="review-sort">
-            <button class="review-sort-btn active" id="sortType_1">공감순</button>
-            <button class="review-sort-btn" id="sortType_2">최신순</button>
-            <button class="review-sort-btn" id="sortType_3">답글순</button>
+            <button class="review-sort-btn active" id="sortType_1">최신순</button>
+            <button class="review-sort-btn" id="sortType_2">답글순</button>
+            <button class="review-sort-btn" id="sortType_3">좋아요순</button>
         </div>
         <!--댓글 정렬 버튼 end-->
         <% } %>
@@ -109,7 +112,8 @@
             	<div class="review-body-container reviewbody-first" 
             	data-parent="<%= depth1Obj.getComParent() %>" 
             	data-depth="<%= depth1Obj.getComDepth() %>"
-            	data-panum="<%= depth1Obj.getPaNum() %>">
+            	data-panum="<%= depth1Obj.getPaNum() %>"
+				data-comnum="<%= depth1Obj.getComNum() %>">
             	
 	            	<!-- review-body-box -->
 	       			<div class="review-body-box">
@@ -118,7 +122,7 @@
 		                    <div class="review-body-list-profile">
 		                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 		                        <div class="review-body-list-profile-box">
-		                            <div class="review-body-list-name"><%= depth1Obj.getMeAka() %></div>
+		                            <div class="review-body-list-name"><%= myNick %></div>
 		                            <div class="review-body-list-date"><%= depth1Obj.getComEnroll() %></div>
 		                        </div>
 		                    </div>
@@ -214,7 +218,9 @@
 	            	
 		            	for(int j=1; j<tempList.size(); j++) {%>
 		            	
-		            		<div class="review-body-container reviewbody-second" data-parent="<%= tempList.get(j).getComParent() %>">
+		            		<div class="review-body-container reviewbody-second" 
+							data-parent="<%= tempList.get(j).getComParent() %>"
+							data-comnum="<%= tempList.get(j).getComNum() %>">
 		        			
 			        			<!-- review-body-box -->
 			        			<div class="review-body-box">
@@ -223,7 +229,7 @@
 					                    <div class="review-body-list-profile">
 					                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 					                        <div class="review-body-list-profile-box">
-					                            <div class="review-body-list-name"><%= tempList.get(j).getMeAka() %></div>
+					                            <div class="review-body-list-name"><%= myNick %></div>
 					                            <div class="review-body-list-date"><%= tempList.get(j).getComEnroll() %></div>
 					                        </div>
 					                    </div>

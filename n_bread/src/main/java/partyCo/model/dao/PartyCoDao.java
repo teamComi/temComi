@@ -158,100 +158,95 @@ public class PartyCoDao {
 		
 		ArrayList<PartyCo> list = new ArrayList<PartyCo>();
 		
-		if(type == "current") {
-			list = selectPartyCoList(conn, panum, startRow, endRow);
-		}else {
-			
-			PreparedStatement pstmt = null;
-			ResultSet rset = null;
-			
-			try {
-				String query = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		try {
+			String query = null;
+			//System.out.println("???type : " + type);
+			if(type == "count") {
+				//댓글순
+				query = "select * "
+						+ "from comments "
+						+ "left join member using(me_num) "
+						+ "where COM_NUM in ( "
+						+ "    select COM_NUM "
+						+ "	   from(select COM_NUM "
+						+ "        from comments "
+						+ "        where COM_PARENT in "
+						+ "        (select COM_NUM "
+						+ "        from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
+						+ "                   COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
+						+ "                   COM_DEL_DATE, COM_PHOTO_NUM "
+						+ "             from (select * from comments where PA_NUM = ? and COM_DEPTH = 1 "
+						+ "                   order by COM_COUNT desc, COM_PARENT desc, COM_NUM desc) "
+						+ "              ) "
+						+ "        where rnum >= ? and rnum <= ? "
+						+ "        ) "
+						+ "    ) "
+						+ ")"
+						+ "order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc";
 				
-				if(type == "count") {
-					//댓글순
-					query = "select * "
-							+ "from comments "
-							+ "left join member using(me_num) "
-							+ "where COM_NUM in ( "
-							+ "    select COM_NUM "
-							+ "	   from(select COM_NUM "
-							+ "        from comments "
-							+ "        where COM_PARENT in "
-							+ "        (select COM_NUM "
-							+ "        from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
-							+ "                   COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
-							+ "                   COM_DEL_DATE, COM_PHOTO_NUM "
-							+ "             from (select * from comments where PA_NUM = ? and COM_DEPTH = 1 "
-							+ "                   order by COM_COUNT desc, COM_PARENT desc, COM_NUM desc) "
-							+ "              ) "
-							+ "        where rnum >= ? and rnum <= ? "
-							+ "        ) "
-							+ "    ) "
-							+ ")"
-							+ "order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc";
-					
-				}
-				else {
-					//공감순
-					query = "select * "
-							+ "from comments "
-							+ "left join member using(me_num) "
-							+ "where COM_NUM in ( "
-							+ "    select COM_NUM "
-							+ "    from(select COM_NUM "
-							+ "        from comments "
-							+ "        where COM_PARENT in "
-							+ "        (select COM_NUM "
-							+ "        from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
-							+ "                   COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
-							+ "                   COM_DEL_DATE, COM_PHOTO_NUM "
-							+ "             from (select * from comments where PA_NUM = ? and COM_DEPTH = 1 "
-							+ "                   order by COM_VIEWS desc, COM_PARENT desc, COM_NUM desc) "
-							+ "              ) "
-							+ "        where rnum >= ? and rnum <= ? "
-							+ "        ) "
-							+ "    ) "
-							+ ")"
-							+ "order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc";
-					
-				}
-				
-				pstmt = conn.prepareStatement(query);
-				pstmt.setInt(1, panum);
-				pstmt.setInt(2, startRow);
-				pstmt.setInt(3, endRow);
-				
-				rset = pstmt.executeQuery();
-				
-				while(rset.next()) {
-					PartyCo partyCo = new PartyCo();
-					
-					partyCo.setComNum(rset.getInt("COM_NUM"));
-					partyCo.setPaNum(rset.getInt("PA_NUM"));
-					partyCo.setComParent(rset.getInt("COM_PARENT"));
-					partyCo.setComDepth(rset.getInt("COM_DEPTH"));
-					partyCo.setComCon(rset.getString("COM_CON"));
-					partyCo.setComViews(rset.getInt("COM_VIEWS"));
-					partyCo.setComCount(rset.getInt("COM_COUNT"));
-					partyCo.setComEnroll(rset.getDate("COM_ENROLL"));
-					partyCo.setComModDate(rset.getDate("COM_MOD_DATE"));
-					partyCo.setComDelDate(rset.getDate("COM_DEL_DATE"));
-					partyCo.setComPhotoNum(rset.getInt("COM_PHOTO_NUM"));
-					partyCo.setMeNum(rset.getInt("ME_NUM"));
-					partyCo.setMeAka(rset.getString("ME_AKA"));
-					partyCo.setMePhotoAdd(rset.getInt("ME_PHOTO_ADD"));
-					
-					//System.out.println("board : " + board);
-					list.add(partyCo);
-				}
-				
-			}catch (Exception e) {
-				e.printStackTrace();
-			}finally {
-				close(rset);
-				close(pstmt);
 			}
+			else {
+				//공감순
+				query = "select * "
+						+ "from comments "
+						+ "left join member using(me_num) "
+						+ "where COM_NUM in ( "
+						+ "    select COM_NUM "
+						+ "    from(select COM_NUM "
+						+ "        from comments "
+						+ "        where COM_PARENT in "
+						+ "        (select COM_NUM "
+						+ "        from (select rownum rnum, COM_NUM, PA_NUM, COM_PARENT, COM_DEPTH, "
+						+ "                   COM_CON, COM_VIEWS, COM_COUNT, COM_ENROLL, COM_MOD_DATE, "
+						+ "                   COM_DEL_DATE, COM_PHOTO_NUM "
+						+ "             from (select * from comments where PA_NUM = ? and COM_DEPTH = 1 "
+						+ "                   order by COM_VIEWS desc, COM_PARENT desc, COM_NUM desc) "
+						+ "              ) "
+						+ "        where rnum >= ? and rnum <= ? "
+						+ "        ) "
+						+ "    ) "
+						+ ")"
+						+ "order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc";
+				
+			}
+			
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, panum);
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				PartyCo partyCo = new PartyCo();
+				
+				partyCo.setComNum(rset.getInt("COM_NUM"));
+				partyCo.setPaNum(rset.getInt("PA_NUM"));
+				partyCo.setComParent(rset.getInt("COM_PARENT"));
+				partyCo.setComDepth(rset.getInt("COM_DEPTH"));
+				partyCo.setComCon(rset.getString("COM_CON"));
+				partyCo.setComViews(rset.getInt("COM_VIEWS"));
+				partyCo.setComCount(rset.getInt("COM_COUNT"));
+				partyCo.setComEnroll(rset.getDate("COM_ENROLL"));
+				partyCo.setComModDate(rset.getDate("COM_MOD_DATE"));
+				partyCo.setComDelDate(rset.getDate("COM_DEL_DATE"));
+				partyCo.setComPhotoNum(rset.getInt("COM_PHOTO_NUM"));
+				partyCo.setMeNum(rset.getInt("ME_NUM"));
+				partyCo.setMeAka(rset.getString("ME_AKA"));
+				partyCo.setMePhotoAdd(rset.getInt("ME_PHOTO_ADD"));
+				
+				//System.out.println("board : " + board);
+				list.add(partyCo);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
 		}
 		
 		return list;
@@ -285,6 +280,27 @@ public class PartyCoDao {
 	public ArrayList<PartyCo> searchPartyCo(Connection conn, String keyword) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public int updatePartyCoView(Connection conn, int comnum, int plusnum) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		System.out.println("comnum : " + comnum + " plusnum : " + plusnum);
+		try {
+			String plus = (plusnum == 1) ? "+" : "-";
+			String query = "update comments set com_views = com_views " +plus+ " ? where COM_NUM = ?";
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, Math.abs(plusnum));
+			pstmt.setInt(2, comnum);
+			result = pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 	
 	

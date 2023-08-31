@@ -106,6 +106,8 @@ where COM_NUM in (
 )
 order by COM_PARENT desc, COM_DEPTH asc, COM_NUM desc;
 
+update comments set com_views = com_views+1 where COM_NUM = 76;
+
 
 -- 인서트 순간 댓글의 카운트 올리기
 -- 트리거 작성

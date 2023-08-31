@@ -1,11 +1,10 @@
 var veiwArr = [];
-var login = 'login';
-var myMeNum = 1;
+var sortType = 1;
 
 document.addEventListener("DOMContentLoaded", function(){
-    
     var viewReply = new View_reply();
     viewReply.buttonEvent();
+    
 })
 
 function View_reply(){
@@ -14,6 +13,33 @@ function View_reply(){
 
 View_reply.prototype = {
     
+    connectUpdateViews : function(comnum, plusnum, heart){
+        console.log('comnum : ' + comnum + ' plusnum : ' + plusnum);
+        var url = '/comi/partycoupview?comnum=' + comnum + '&plusnum='+plusnum;
+        $.ajax({
+            url : url
+            ,type : 'post'
+            ,dataType : 'text'
+            ,success : function(data){
+                console.log('data : ' + data);
+                if(Number(data) > 0) {
+                    var heartNum = Number(heart.text());
+                    heart.text(heartNum + plusnum);
+                    if(plusnum == -1) {
+                        heart.parent().find('.review-body-bottom-heart').removeClass('active');
+                        $(this).attr('data-heart', 'empty');
+                    }else {
+                        heart.parent().find('.review-body-bottom-heart').addClass('active');
+                        $(this).attr('data-heart', heartNum);
+                    }
+                }
+            }
+            ,error : function(jqXHR, textStatus, errorThrown){
+                console.log('error : ' + jqXHR + ', '+ textStatus + ', ' + errorThrown);
+            }
+        })
+    },
+
     connectInsert : function(menum, panum, page, depth, parent, content){
         var _this = this;
         var url = '/comi/partycoins?menum='+menum +'&panum=' + panum + '&depth=' + depth + '&parent=' + parent + '&content=' + content + '&page' + page;
@@ -30,9 +56,9 @@ View_reply.prototype = {
         })
     }
     ,
-    connectSelect : function(menum, panum, page){
+    connectSelect : function(panum, page){
         var _this = this;
-        var url = '/comi/partycosel?menum='+menum +'&panum=' + panum + '&page=' + page;
+        var url = '/comi/partycosel?panum=' + panum + '&page=' + page;
         $.ajax({
             url : url
             ,type : 'post'
@@ -46,9 +72,10 @@ View_reply.prototype = {
         })
     }
     ,
-    connectSort : function(type, menum, panum, page){
+    connectSort : function(type, panum, page){
         var _this = this;
-        var url = '/comi/partycosort?type='+type+'&menum='+menum +'&panum=' + panum + '&page=' + page;
+        var url = (type == 'count') ? '/comi/partycosort?type='+type+'&panum=' + panum + '&page=' + page
+                  : '/comi/partycosort2?type='+type+'&panum=' + panum + '&page=' + page
         $.ajax({
             url : url
             ,type : 'post'
@@ -65,7 +92,7 @@ View_reply.prototype = {
         
     }
     ,
-    setJson : function(){
+    setJson : function(data){
         var str = JSON.stringify(data);
         var json = JSON.parse(str);
         console.log('str : ' + str);
@@ -81,25 +108,62 @@ View_reply.prototype = {
         //location.href = "#review";
     }
     ,
+    sortBtnInit : function(){
+        
+    }
+    ,
     buttonEvent : function(){
         
         var _this = this;
 
+        //팝업 외
+        $('html').click(function(e){
+            var writeBox = $('.review-write-inner.review-rewriting');
+            var loginBox = $('.review-write-inner.review-write-inner-login');
+
+            if($(e.target).parents('.review-write-inner').length < 1){
+                console.log('팝업 외 부분이 맞습니다')
+                //실행 이벤트 부분
+                $('.review-write-inner.review-rewriting').each(function(){
+                    $(this).hide();
+                })
+                $('.review-write-inner.review-write-inner-login').each(function(){
+                    $(this).show();
+                })
+                $('.review-write-inner.review-write-inner-reply').each(function(){
+                    $(this).show();
+                })
+                
+                
+            }else{
+                //console.log('?????');
+            }
+        });
+
+        $('.review-sort-btn').each(function(){
+            $(this).removeClass('active');
+        })
+        console.log('sortType : ' + sortType);
+        $('#sortType_' + sortType).addClass('active');
+
         //새로고침
         $('.review-head-refresh').on('click', function(){
             var panum = $('.review-head').attr('data-panum');
-            _this.connectSelect(myMeNum, panum, currentPage);
+            sortType = 1;
+            _this.connectSelect(panum, currentPage);
         })
 
         //정렬
         $('.review-sort-btn').each(function(){
             $(this).on('click', function(){
+                
                 var panum = $('.review-head').attr('data-panum');
                 var id = Number($(this).attr('id').split('_').pop());
-                var type = 'current';
-                if(id == 2) type = 'interest';
-                else if(id == 2) type = 'count';
-                _this.connectSort(type, myMeNum, panum, currentPage);
+                sortType = id;
+                if(id == 1) _this.connectSelect(panum, currentPage);
+                else if(id == 2) _this.connectSort('count', panum, currentPage);
+                else  _this.connectSort('interest', panum, currentPage);
+               
             })
         })
 
@@ -245,7 +309,7 @@ View_reply.prototype = {
                     }
                 }
                 var panum = $('.review-head').attr('data-panum');
-                _this.connectSelect(myMeNum, panum, page);
+                _this.connectSelect(panum, page);
                 
             })
         })
@@ -254,19 +318,21 @@ View_reply.prototype = {
         $('.review-body-bottom-heart').each(function(){
             $(this).on('click', function(){
                 var heart = $(this).attr('data-heart');
-                var heartNum = Number($(this).parent().find('.review-body-heart').text());
-                
+                var plusnum;
                 if(heart == 'empty') {
-                    console.log('>> heartNum 1 : ' + heartNum);
-                    heartNum ++;
-                    $(this).attr('data-heart', heartNum);
-                    console.log('>> heartNum 2 : ' + heartNum);
+                    //console.log('>> heartNum 1 : ' + heartNum);
+                    //heartNum ++;
+                    plusnum = 1;
+                    //$(this).attr('data-heart', heartNum);
+                    //console.log('>> heartNum 2 : ' + heartNum);
                 }else{
-                    heartNum --;
-                    $(this).attr('data-heart', 'empty');
+                    //heartNum --;
+                    plusnum = -1;
+                    //$(this).attr('data-heart', 'empty');
                 }
-
-                $(this).parent().find('.review-body-heart').text(heartNum);
+                var comnum = $(this).parent().parent().parent().parent().parent().find('.review-body-container').attr('data-comnum');
+                _this.connectUpdateViews(comnum, plusnum, $(this).parent().find('.review-body-heart'));
+                //$(this).parent().find('.review-body-heart').text(heartNum);
             })
             
         })
@@ -300,7 +366,6 @@ function decode (str) {
 function viewReplyInit(data){
     //var parent = Number(parent);
     console.log('data : ', JSON.stringify(data));
-    var myNick = '??';
     
     console.log('login : ' + login);
     var el = `
@@ -369,9 +434,9 @@ function viewReplyInit(data){
         el += `
         <!--댓글 정렬 버튼-->
         <div class="review-sort">
-            <button class="review-sort-btn active" id="sortType_1">공감순</button>
-            <button class="review-sort-btn" id="sortType_2">최신순</button>
-            <button class="review-sort-btn" id="sortType_3">답글순</button>
+            <button class="review-sort-btn active" id="sortType_1">최신순</button>
+            <button class="review-sort-btn" id="sortType_2">답글순</button>
+            <button class="review-sort-btn" id="sortType_3">좋아요순</button>
         </div>
         <!--댓글 정렬 버튼 end-->`
         }
@@ -390,7 +455,8 @@ function viewReplyInit(data){
             	<div class="review-body-container reviewbody-first" 
             	data-parent="` + depth1Obj.comParent + `" 
             	data-depth="` + depth1Obj.comDepth + `"
-            	data-panum="` + depth1Obj.paNum + `">
+            	data-panum="` + depth1Obj.paNum + `"
+                data-comnum="` + depth1Obj.comNum + `">
             	
 	            	<!-- review-body-box -->
 	       			<div class="review-body-box">
@@ -496,7 +562,9 @@ function viewReplyInit(data){
 	            	
 		            	for(var j=1; j<tempList.length; j++) {
                             el += `
-		            		<div class="review-body-container reviewbody-second" data-parent="`+ tempList[j].comParent + `">
+		            		<div class="review-body-container reviewbody-second" 
+                            data-parent="`+ tempList[j].comParent + `"
+                            data-comnum="` + tempList[j].comNum + `">
 		        			
 			        			<!-- review-body-box -->
 			        			<div class="review-body-box">

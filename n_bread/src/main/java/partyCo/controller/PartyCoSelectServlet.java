@@ -73,7 +73,7 @@ public class PartyCoSelectServlet extends HttpServlet {
 			JSONArray cList = new JSONArray();
 			
 			for(int i=0; i<partyCoList.size(); i++) {
-				System.out.println("i : " + i);
+				//System.out.println("i : " + i);
 				int nextDepth = (i < partyCoList.size()-1) ? partyCoList.get(i+1).getComDepth() : -1;//다음번 뎁스
 				
 				cList.add(new JsonReturn().returnPartyCo(partyCoList.get(i)));
