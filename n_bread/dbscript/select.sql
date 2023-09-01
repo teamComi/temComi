@@ -112,16 +112,60 @@ update comments set com_views = com_views+1 where COM_NUM = 76;
 -- 인서트 순간 댓글의 카운트 올리기
 -- 트리거 작성
 CREATE OR REPLACE TRIGGER TR_COM_COUNT
-AFTER DELETE ON 입고
+AFTER INSERT ON comments
 FOR EACH ROW
+when (com_depth = 2)
 BEGIN
-  UPDATE 상품 
-  SET 재고수량 = 재고수량 - :OLD.입고수량
-  WHERE 상품코드 = :OLD.상품코드;
+  UPDATE comments 
+  SET com_count = com_count + 1
+  WHERE com_parent = :NEW.com_parent
+  and   com_depth = 1;
 END;
 /
 
+-- 검색
+select *
+from (select rownum rnum, PA_NUM, ME_NUM, PA_TIME, PA_TOTAL_AMOUNT,
+           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL, 
+           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE, 
+           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM, 
+           PA_GENDER_LIMIT, PH_NUM, CAT_NUM
+     from (select * from party
+           where PA_TITLE like '%7즐거운 모%'
+           or    PA_CON like '%7즐거운 모%'
+           or    PA_LOCATION like '%7즐거운 모%'
+           or    PA_TIME like '%7즐거운 모%'
+           order by PA_ENROLL desc))
+where rnum >= 1 and rnum <= 10;
 
+select *
+from (select rownum rnum, PA_NUM, ME_NUM, PA_TIME, PA_TOTAL_AMOUNT,
+           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL, 
+           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE, 
+           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM, 
+           PA_GENDER_LIMIT, PH_NUM, CAT_NUM
+     from (select * from party
+           where PA_ACT = 'Y' and(
+                 PA_TITLE like '%7%'
+           or    PA_CON like '%7%'
+           or    PA_LOCATION like '%7%'
+           or    PA_TIME like '%7%')
+           order by PA_ENROLL desc, PA_NUM desc))
+where rnum >= 1 and rnum <= 10;
+
+
+insert into main_category
+values (1,'모임',null);
+insert into main_category
+values (2,'공구',null);
+insert into main_category
+values (3,'렌탈',null);
+insert into main_category
+values (4,'게임',null);
+insert into main_category
+values (5,'OTT',null);
+insert into main_category
+values (6,'기타',null);
 
 
 

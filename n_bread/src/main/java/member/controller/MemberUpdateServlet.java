@@ -1,6 +1,7 @@
 package member.controller;
 
 import java.io.IOException;
+import java.sql.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import member.model.service.MemberService;
 import member.model.vo.Member;
@@ -37,22 +39,29 @@ public class MemberUpdateServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 				
 		//2. 전송온 값 꺼내서 변수 또는 객체에 저장하기
-		Member member = new Member();	
-	
-		
-		member.setMeId(request.getParameter("me_id"));
-		
-		
+		HttpSession session = request.getSession();
+		Member loginMember = (Member)session.getAttribute("loginMember");
+		Member member = new Member();
+
+		loginMember.setMeId(request.getParameter("id"));
+		loginMember.setMePwd(request.getParameter("pwd"));
+		loginMember.setMeEmail(request.getParameter("email"));
+		loginMember.setMePhone(request.getParameter("phone"));
+		loginMember.setMeGender(request.getParameter("gender"));
+
 		//3. 모델 서비스 메소드로 값 또는 객체 전달 실행하고 결과받기
-		int result = new MemberService().updateMember(member);
+		int result = new MemberService().updateMember(loginMember);
 		
 		//4. 받은 결과로 내보낼 뷰 선택 처리
 		if(result > 0) {
-			response.sendRedirect("views/common/header.jsp");
-	} else {			
-		RequestDispatcher view = request.getRequestDispatcher("views/myinfo/myinfo.jsp");
+			response.sendRedirect("/comi/myinfo?meid=" + loginMember.getMeId());
+		} else {			
+			RequestDispatcher view = request.getRequestDispatcher("views/common/error.jsp");
 		
-		view.forward(request, response);
+			request.setAttribute("message", loginMember.getMeId() + "님 정보 수정 실패!");
+		
+			view.forward(request, response);
+			
 	}
 }
 

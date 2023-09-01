@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="qna.model.vo.Qna, member.model.vo.Member"%>
+
+<%
+	
+	Member member = (Member)request.getAttribute("member");
+	Qna qna = (Qna)request.getAttribute("qna");
+%>    
+    
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +33,7 @@
 	<tr>
 		<th>작성자</th>
 		<td><input type="text" name="writer" 
-		readonly value="<%= loginMember.getMeId() %>"></td>
+		readonly value="14"></td>
 	</tr>
 	<tr>
 		<th>첨부파일</th>
@@ -36,8 +44,12 @@
 		<td><textarea rows="5" cols="50" name="content"></textarea></td>
 	</tr>
 	<tr>
+		<th>신 고 내 용</th>
+		<td><textarea rows="5" cols="50" name="report"></textarea></td>
+	</tr>
+	<tr>
 		<th colspan="2">
-			<input type="submit" value="등록하기"> &nbsp;
+			<input type="submit" value="등록하기"> &nbsp; <!-- [/comi/comi/qlist]로 연결 X -->
 			<input type="reset" value="작성취소"> &nbsp;
 			<input type="button" value="목록" 
 			onclick="javascript:location.href='/comi/qlist?page=1'; return false;">

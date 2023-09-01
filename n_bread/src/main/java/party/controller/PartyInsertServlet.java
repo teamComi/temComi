@@ -1,9 +1,9 @@
 package party.controller;
 
-import static common.PhotoTemplate.savePathChange;
-import static common.PhotoTemplate.seqPhotoNum;
+import static common.PhotoTemplate.*;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -24,6 +24,8 @@ import party.model.service.PartyService;
 import party.model.vo.Party;
 import photo.model.service.PhotoService;
 import photo.model.vo.Photo;
+import totalparty.model.service.TotalPartyService;
+import totalparty.model.vo.TotalParty;
 
 /**
  * Servlet implementation class partyMakeServlet
@@ -47,9 +49,9 @@ public class PartyInsertServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		int photoNum = -1;
+		int photoNum = seqPhotoNum("photo");
 		String inputFileName = null;
-		int photoResult = 0;
+		int photoResult = -1;
 		PartyService partyService = new PartyService();
 		RequestDispatcher view = null;
 		// RequestDispatcher view = null;
@@ -73,7 +75,7 @@ public class PartyInsertServlet extends HttpServlet {
 		Party party = new Party();
 		party.setPaTitle(mrequest.getParameter("pa_title"));
 		party.setPaCon(mrequest.getParameter("pa_con"));
-		party.setMeNum(2);
+		party.setMeNum(Integer.parseInt(mrequest.getParameter("usernum")));
 		// 회원가입 완료후 수정부분
 		party.setPaLocation(mrequest.getParameter("address"));
 		party.setPaTotalAmount(Integer.parseInt(mrequest.getParameter("pa_total_amount")));
@@ -83,18 +85,19 @@ public class PartyInsertServlet extends HttpServlet {
 				- Integer.parseInt(mrequest.getParameter("pa_deposit")))
 				/ Integer.parseInt(mrequest.getParameter("pa_total_num")));
 		party.setPaAct("Y");
+		party.setPaTotalNum(Integer.parseInt(mrequest.getParameter("pa_total_num")));
+		
 		int categoryCheck = partyService.setCategory(mrequest.getParameter("category_check"));
 		party.setCatNum(categoryCheck);
-
-		String partyTime = mrequest.getParameter("pa_time_1") +" "+ mrequest.getParameter("pa_time_2");
+		System.out.println(categoryCheck);
+		String partyTime = mrequest.getParameter("pa_time_1");
+		//+" "+ mrequest.getParameter("pa_time_2");
 
 		System.out.println(partyTime);
-
+		party.setPaTime(Date.valueOf(partyTime));
 		//System.out.println(categoryCheck);
 		if ((inputFileName = mrequest.getFilesystemName("pa_img1")) != null) {
-			photoNum = seqPhotoNum("photo");
 			party.setPhNum(photoNum);
-			
 			photo.setPhotonum(photoNum);
 			photo.setPhoto1(inputFileName);
 			inputFileName = mrequest.getFilesystemName("pa_img2");
@@ -106,11 +109,24 @@ public class PartyInsertServlet extends HttpServlet {
 			inputFileName = mrequest.getFilesystemName("pa_img5");
 			photo.setPhoto5(inputFileName);
 			photoResult = new PhotoService().insertPhoto(photo, "photo");
+		}else{
+			if(deletePhotoDir(savePath)){
+				System.out.println("성공");
+			}else{
+				System.out.println("실패");
+			}
+			photoResult = 1;
+			photoNum = -1;
 		}
 		int result = partyService.insertParty(party);
 		String panum = partyService.getNowPartyNum();
+		int resultPartyTotal = new TotalPartyService().createTotalPartyNum(Integer.parseInt(panum),party.getMeNum());
+		TotalParty totalParty = null;
+		if( resultPartyTotal == 1){
+			totalParty = new TotalPartyService().selcetTotalPart(Integer.parseInt(panum));
+		}
 		// System.out.println("result : " + result);
-
+		System.out.println("토탈 파티 : " + resultPartyTotal);
 		Member member = new MemberService().selectMember(party.getMeNum());
 		ArrayList<Party> list = partyService.selectPartyList("open", 1, 6, panum);
 		System.out.println(party.getPaNum());
@@ -129,6 +145,8 @@ public class PartyInsertServlet extends HttpServlet {
 			request.setAttribute("category_check",mrequest.getParameter("category_check"));
 			request.setAttribute("partyList", list);
 			request.setAttribute("member", member);
+			request.setAttribute("total",totalParty);
+			request.setAttribute("photo", photo);
 			// 파티 글 쓴 회원 정보
 
 		} else if (result > 0 && photoResult == 0) {

@@ -114,8 +114,8 @@ function moveToNote(){
 
 					<h4><%=member.getMeAka() %></h4>
 					<button
-						onclick="javascript:location.href='/comi/moveup?meId=<%= member.getMeId()%>';">프로필
-						편집</button>
+						onclick="javascript:location.href='/comi/moveup?meid=<%= member.getMeId()%>';">프로필편집
+					</button>
 				</div>
 
 				<div class="category">

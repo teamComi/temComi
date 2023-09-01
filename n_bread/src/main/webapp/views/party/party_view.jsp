@@ -1,9 +1,13 @@
+<%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="party.model.vo.Party"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% 
-	String pageType = (String) request.getAttribute("type"); 
+	String pageType = (String) request.getAttribute("type");
+    int currentPage = (int) request.getAttribute("currentPage");
+    int classfy = (int) request.getAttribute("classfy");
+    String sort = (String) request.getAttribute("sort");
 %>
 <!DOCTYPE html>
 <html>
@@ -23,6 +27,68 @@
     </script>
     <script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
     <script type="text/javascript" src="/comi/resources/js/party_view.js"></script>
+    <script>
+//var page = <%= "\"" + currentPage + "\"" %>;
+var keyword;
+var sort = <%= "\"" + sort + "\"" %>;
+console.log('sort : ' + sort);
+var classfy = Number(<%= "\"" + classfy + "\"" %>);
+
+$(function(){
+    
+    $('#selectSort_1 option').each(function(){
+        if($(this).val() == classfy){
+            $(this).prop('selected', true);
+        }    
+    })
+
+    $('#selectSort_2 option').each(function(){
+        if($(this).val() == sort){
+            $(this).prop('selected', true);
+        }  
+    })
+    
+    $('.search-box-text').on('keyup', function(){
+        if ( event.keyCode == 13 || event.which == 13 ) {
+            search('search', 1, keyword, sort, classfy);
+            console.log('엔터 입력 : ' + keyword);
+        }
+    })
+
+    $('.search-btn').on('clcik', function(){
+        search('search', 1, keyword, sort_1, sort_2);
+    })
+
+    //정렬 1
+    $('#selectSort_1').on('change', function(){
+        classfy = $(this).val();
+        console.log('?????');
+        search('select', 1, keyword, sort, classfy);
+    })
+
+    //정렬 2
+    $('#selectSort_2').on('change', function(){
+        sort = $(this).val();
+        search('select', 1, keyword, sort, classfy);
+    })
+})
+
+function search(type, page, keyword, sort_1, sort_2) {
+    keyword = $('.search-box-text').val();
+    if(type == 'select'){
+        location.href = '/comi/partysall?type=' + <%= "\"" + pageType + "\"" %> + '&page=' + page 
+                        + '&keyword=' + keyword + '&sort=' + sort + '&classfy=' + classfy;
+    }else{
+        if(keyword != '') {
+            //검색 시작
+            location.href = '/comi/partysall?type=' + <%= "\"" + pageType + "\"" %> + '&page=' + page 
+                        + '&keyword=' + keyword + '&sort=' + sort + '&classfy=' + classfy;
+        }
+    }
+}
+
+
+    </script>
 </head>
 <body>
     <!-- Header Section Begin -->
@@ -46,20 +112,21 @@
                     <% } %>
                 </div>
                 <div class="search-classify">
+                
                     <span class="search-classify-title">분류</span>
-                    <select class="search-classify-select" onchange="changeCategory(this.value);">
-                        <option value="all" selected>전체</option>
-                        <option value="meeting">모임</option>
-                        <option value="group">공구</option>
-                        <option value="rental"> 렌탈</option>
-                        <option value="game">게임</option>
-                        <option value="etc"> 기타</option>
+                    <select class="search-classify-select" id="selectSort_1">
+                        <option value="-1">전체</option>
+                        <option value="1">모임</option>
+                        <option value="2">공구</option>
+                        <option value="3"> 렌탈</option>
+                        <option value="4">게임</option>
+                        <option value="5"> 기타</option>
                     </select>
 
-                    <select class="search-classify-select" onchange="changeSort(this.value);">
-                        <option value="accuracy" selected>정확도순</option>
+                    <select class="search-classify-select" id="selectSort_2">
+                        <!--<option value="accuracy" selected>정확도순</option>-->
+                        <option value="current">최신순</option>
                         <option value="interest">관심순</option>
-                        <option value="recent">최신순</option>
                     </select>
 
                 </div>

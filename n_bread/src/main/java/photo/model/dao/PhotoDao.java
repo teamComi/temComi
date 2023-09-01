@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import photo.model.vo.Photo;
 import static common.JDBCTemplate.*;
@@ -109,6 +110,36 @@ public class PhotoDao {
 			close(pstmt);
 		}
 		return photo;
+	}
+
+	public ArrayList<Photo> selectPhotoList(Connection conn) {
+		ArrayList resultList = null;
+		Statement stmt = null;
+		ResultSet rset = null;
+		String query = "select * from photo";
+		
+		try {
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(query);
+			
+			while(rset.next()) {
+				Photo photo = new Photo();
+				photo.setPhotonum(rset.getInt(1));
+				photo.setPhoto1(rset.getString(2));
+				photo.setPhoto2(rset.getString(3));
+				photo.setPhoto3(rset.getString(4));
+				photo.setPhoto4(rset.getString(5));
+				photo.setPhoto5(rset.getString(6));
+				resultList.add(photo);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(stmt);
+		}
+		return resultList;
 	}
 	
 	

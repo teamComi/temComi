@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import party.model.vo.Party;
 
@@ -63,7 +64,7 @@ public class PartyDao {
 		
 		try {
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, (type == "open") ? "Y" : "N");
+			pstmt.setString(1, type);
 			pstmt.setInt(2, start);
 			pstmt.setInt(3, end);
 			
@@ -132,23 +133,24 @@ public class PartyDao {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String query = "insert into party " + 
-				"values ((select count(*) from party)+1,2,sysdate,?,?,?,?,?,default,NULL,NULL,default,default, " +
+				"values ((select count(*) from party)+1,?,sysdate,?,?,?,?,?,default,NULL,NULL,default,default, " +
 				"        default,default,default,?,?,default,?,?)";
 
 		try {
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1,party.getPaTotalAmount());
-			pstmt.setInt(2, party.getPaDeposit());
-			pstmt.setInt(3, party.getPaPerAmount());
-			pstmt.setString(4, party.getPaTitle());
-			pstmt.setString(5, party.getPaCon());
-			pstmt.setString(6,party.getPaLocation());
-			pstmt.setInt(7, party.getPaTotalNum());
-			pstmt.setInt(8, party.getPhNum());
+			pstmt.setInt(1, party.getMeNum());
+			pstmt.setInt(2,party.getPaTotalAmount());
+			pstmt.setInt(3, party.getPaDeposit());
+			pstmt.setInt(4, party.getPaPerAmount());
+			pstmt.setString(5, party.getPaTitle());
+			pstmt.setString(6, party.getPaCon());
+			pstmt.setString(7,party.getPaLocation());
+			pstmt.setInt(8, party.getPaTotalNum());
+			pstmt.setInt(9, party.getPhNum());
 			if(party.getCatNum() > 0){
-				pstmt.setInt(9, party.getCatNum());
+				pstmt.setInt(10, party.getCatNum());
 			}else{
-				pstmt.setString(9, null);
+				pstmt.setInt(10, 0);
 			}
 			result = pstmt.executeUpdate();
 
@@ -243,9 +245,161 @@ public class PartyDao {
 	}
 	
 	//검색
-	public ArrayList<Party> searchParty(Connection conn, String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Party> searchParty(Connection conn, HashMap<String, String> map) {
+		
+		ArrayList<Party> partyList = new ArrayList<Party>();
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String type = map.get("selType");
+		String sort = map.get("sort");
+		int classfy = Integer.parseInt(map.get("classfy"));
+		String keyword = map.get("keyword");
+		
+		int start = Integer.parseInt(map.get("start"));
+		int end = Integer.parseInt(map.get("end"));
+		System.out.println("========type : " + type+ " sort : " + sort + " classfy : " + classfy + " keyword : " + keyword );
+		
+		try {
+			
+			String query = null;
+			
+			if(classfy == -1) {
+				if(sort.equals("current")) {
+					
+					query = "select * "
+							+ "from (select rownum rnum, PA_NUM, ME_NUM, PA_TIME, PA_TOTAL_AMOUNT, "
+							+ "           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL,  "
+							+ "           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE,  "
+							+ "           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM,  "
+							+ "           PA_GENDER_LIMIT, PH_NUM, CAT_NUM "
+							+ "     from (select * from party "
+							+ "           where PA_ACT = ? and ( "
+							+ "                 PA_TITLE like ? "
+							+ "           or    PA_CON like ? "
+							+ "           or    PA_LOCATION like ? "
+							+ "           or    PA_TIME like ?) "
+							+ "           order by PA_ENROLL desc, PA_NUM desc)) "
+							+ "where rnum >= ? and rnum <= ?";
+					pstmt = conn.prepareStatement(query);
+					pstmt.setString(1, type);
+					
+					String kewordSql = "%"+keyword+"%";
+					pstmt.setString(2, kewordSql);
+					pstmt.setString(3, kewordSql);
+					pstmt.setString(4, kewordSql);
+					pstmt.setString(5, kewordSql);
+					
+					pstmt.setInt(6, start);
+					pstmt.setInt(7, end);
+					System.out.println("==============================");
+				}
+				else {
+					query = "select * "
+							+ "from (select rownum rnum, PA_NUM, ME_NUM, PA_TIME, PA_TOTAL_AMOUNT, "
+							+ "           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL,  "
+							+ "           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE,  "
+							+ "           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM,  "
+							+ "           PA_GENDER_LIMIT, PH_NUM, CAT_NUM "
+							+ "     from (select * from party "
+							+ "           where PA_ACT = ? and ( "
+							+ "                 PA_TITLE like ? "
+							+ "           or    PA_CON like ? "
+							+ "           or    PA_LOCATION like ? "
+							+ "           or    PA_TIME like ?) "
+							+ "           order by PA_VIEWS desc, PA_ENROLL desc)) "
+							+ "where rnum >= ? and rnum <= ?";
+					pstmt = conn.prepareStatement(query);
+					pstmt.setString(1, type);
+					
+					String kewordSql = "%"+keyword+"%";
+					pstmt.setString(2, kewordSql);
+					pstmt.setString(3, kewordSql);
+					pstmt.setString(4, kewordSql);
+					pstmt.setString(5, kewordSql);
+					
+					pstmt.setInt(6, start);
+					pstmt.setInt(7, end);
+				}
+			}
+			else {
+				if(sort.equals("current")){
+			
+					query = "select * "
+							+ "from (select rownum rnum, PA_NUM, ME_NUM, PA_TIME, PA_TOTAL_AMOUNT, "
+							+ "           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL, "
+							+ "           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE, "
+							+ "           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM, "
+							+ "           PA_GENDER_LIMIT, PH_NUM, CAT_NUM "
+							+ "     from (select * from party where PA_ACT = ? and CAT_NUM = ? and ("
+							+ "                                   PA_TITLE like ? "
+							+ "          					  or    PA_CON like ? "
+							+ "           					  or    PA_LOCATION like ? "
+							+ "           					  or    PA_TIME like ? )"
+							+ "           order by PA_ENROLL desc, PA_NUM desc)) "
+							+ "where rnum >= ? and rnum <= ?";
+					pstmt = conn.prepareStatement(query);
+					pstmt.setString(1, type);
+					pstmt.setInt(2, classfy);
+					
+					String kewordSql = "%"+keyword+"%";
+					pstmt.setString(3, kewordSql);
+					pstmt.setString(4, kewordSql);
+					pstmt.setString(5, kewordSql);
+					pstmt.setString(6, kewordSql);
+					
+					pstmt.setInt(7, start);
+					pstmt.setInt(8, end);
+				}
+				else {
+					query = "select * "
+							+ "from (select rownum rnum, PA_NUM, ME_NUM, PA_TIME, PA_TOTAL_AMOUNT, "
+							+ "           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL,  "
+							+ "           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE,  "
+							+ "           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM,  "
+							+ "           PA_GENDER_LIMIT, PH_NUM, CAT_NUM "
+							+ "     from (select * from party "
+							+ "           where PA_ACT = ? and CAT_NUM = ? and ( "
+							+ "                 PA_TITLE like ? "
+							+ "           or    PA_CON like ? "
+							+ "           or    PA_LOCATION like ? "
+							+ "           or    PA_TIME like ?) "
+							+ "           order by PA_VIEWS desc, PA_ENROLL desc)) "
+							+ "where rnum >= ? and rnum <= ?";
+					
+					pstmt = conn.prepareStatement(query);
+					pstmt.setString(1, type);
+					pstmt.setInt(2, classfy);
+					
+					String kewordSql = "%"+keyword+"%";
+					pstmt.setString(3, kewordSql);
+					pstmt.setString(4, kewordSql);
+					pstmt.setString(5, kewordSql);
+					pstmt.setString(6, kewordSql);
+					
+					pstmt.setInt(7, start);
+					pstmt.setInt(8, end);
+				}
+			}	
+			
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				Party party = makeParty(rset);
+				//System.out.println("party : " + party);
+				partyList.add(party);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return partyList;
+		
 	}
 	
 	//정렬 - 관심사
@@ -269,30 +423,30 @@ public class PartyDao {
 	
 	public Party makeParty(ResultSet rset) throws SQLException {
 		Party party = new Party(
-				rset.getInt("PA_NUM")
-				,rset.getInt("ME_NUM")
-				,rset.getDate("PA_TIME")
-				,rset.getInt("PA_TOTAL_AMOUNT")
-				,rset.getInt("PA_DEPOSIT")
-				,rset.getInt("PA_PER_AMOUNT")
-				,rset.getString("PA_TITLE")
-				,rset.getString("PA_CON")
-				,rset.getDate("PA_ENROLL")
-				,rset.getDate("PA_MOD_DATE")
-				,rset.getDate("PA_DEL_DATE")
-				,rset.getString("PA_ACT")
-				,rset.getInt("PA_VIEWS")
-				,rset.getInt("PA_LIKE")
-				,rset.getInt("PA_COM_COUNT")
-				,rset.getString("PA_GENDER_SET")
-				,rset.getString("PA_LOCATION")
-				,rset.getInt("PA_TOTAL_NUM")
-				,rset.getString("PA_GENDER_LIMIT")
-				,rset.getInt("PH_NUM")
-				,rset.getInt("CAT_NUM")
-		);
-		
-		return party;
+            rset.getInt("PA_NUM")
+            ,rset.getInt("ME_NUM")
+            ,rset.getDate("PA_TIME")
+            ,rset.getInt("PA_TOTAL_AMOUNT")
+            ,rset.getInt("PA_DEPOSIT")
+            ,rset.getInt("PA_PER_AMOUNT")
+            ,rset.getString("PA_TITLE")
+            ,rset.getString("PA_CON")
+            ,rset.getDate("PA_ENROLL")
+            ,rset.getDate("PA_MOD_DATE")
+            ,rset.getDate("PA_DEL_DATE")
+            ,rset.getString("PA_ACT")
+            ,rset.getInt("PA_VIEWS")
+            ,rset.getInt("PA_LIKE")
+            ,rset.getInt("PA_COM_COUNT")
+            ,rset.getString("PA_GENDER_SET")
+            ,rset.getString("PA_LOCATION")
+            ,rset.getInt("PA_TOTAL_NUM")
+            ,rset.getString("PA_GENDER_LIMIT")
+            ,rset.getInt("PH_NUM")
+            ,rset.getInt("CAT_NUM")
+      );
+      
+      return party;
 	}
 
 	public String getNowPartyNum(Connection conn) {
@@ -316,6 +470,30 @@ public class PartyDao {
 			close(stmt);
 		}
 		return nowPartyNum;
+	}
+
+	public int getListCount(Connection conn, String act) {
+		int listCount = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String query = "select count(*) from party where pa_act = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, act);//활성화여부
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) listCount = rset.getInt(1);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return listCount;
 	}
 	
 	

@@ -1,6 +1,7 @@
 package photo.model.service;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import photo.model.dao.PhotoDao;
 import photo.model.vo.Photo;
@@ -38,7 +39,11 @@ public class PhotoService {
 		Photo resultPhoto = dao.selectPhoto(conn,phNum,saveDatabase);
 		return resultPhoto;
 	}
-	
-	
-	
+
+
+	public ArrayList<Photo> selectPhotoList() {
+		Connection conn = getConnection();
+		ArrayList<Photo> resultList = dao.selectPhotoList(conn);
+		return resultList;
+	}	
 }

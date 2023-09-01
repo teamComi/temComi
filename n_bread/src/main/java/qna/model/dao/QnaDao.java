@@ -16,9 +16,50 @@ import qna.model.vo.Qna;
 public class QnaDao {
 	public QnaDao() {}
 	
-	public Qna selectQna(Connection conn, int partyid) {
+	public Qna selectQna(Connection conn, int qanum) {
 		// TODO Auto-generated method stub
-		return null;
+		Qna qna = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String query = "select * from qa "
+				+ "where qa_num = ?";
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, qanum);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				qna = new Qna();
+				
+		
+				qna.setMeNum(rset.getInt("me_num"));
+				qna.setQaTitle(rset.getString("qa_title"));
+				qna.setQaPwd(rset.getString("qa_pwd"));
+				qna.setQaCon(rset.getString("qa_con"));
+				qna.setQaCategory(rset.getString("qa_category"));
+				qna.setQaEnroll(rset.getDate("qa_enroll"));
+				qna.setQaModDate(rset.getDate("qa_mod_date"));
+				qna.setQaDelDate(rset.getDate("qa_del_date"));
+				qna.setQaViews(rset.getInt("qa_views"));
+				qna.setQaComCount(rset.getInt("qa_com_count"));
+				qna.setQaAdminNum(rset.getInt("qa_admin_num"));
+				qna.setQaReportCon(rset.getString("qa_report_con"));
+				qna.setQaAttNum(rset.getInt("qa_att_num"));
+				qna.setQaAttDate(rset.getDate("qa_att_date"));
+				qna.setQaPhotoNum(rset.getInt("qa_photo_num"));
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return qna;
 	}
 
 	public ArrayList<Qna> selectQnaAll(Connection conn, int startPage, int endPage) {
@@ -26,7 +67,7 @@ public class QnaDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		String query = "select * "
-				+ "from (rownum, QA_NUM, ME_NUM, QA_TITLE, QA_PWD, QA_CON, QA_CATEGORY, QA_ENROLL, "
+				+ "from (select rownum, QA_NUM, ME_NUM, QA_TITLE, QA_PWD, QA_CON, QA_CATEGORY, QA_ENROLL, "
 				+ "     QA_MOD_DATE, QA_DEL_DATE, QA_VIEWS, QA_COM_COUNT, QA_ADMIN_NUM, "
 				+ "     QA_REPORT_CON, QA_ATT_NUM, QA_ATT_DATE, QA_PHOTO_NUM "
 				+ "    from(select * "
@@ -81,11 +122,9 @@ public class QnaDao {
 	public int insertQna(Connection conn, Qna qna) {
 		int result = 0;
 		PreparedStatement pstmt = null;
-		String query = "insert into qa "
-				+ "values( "
-				+ "    (select max(qa_num) + 1 from qa), ?, ?, ?, ?, "
-				+ "    default, default, default, default, default, default, "
-				+ "    default, default, default, default, default)";
+		String query = "insert into qa values (SEQ_QA_NUM.nextval,?,?,?,?,?,"
+				+ "sysdate, default, default, default, "
+				+ "default,default,?,?,default,default)";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -94,6 +133,9 @@ public class QnaDao {
 			pstmt.setString(2, qna.getQaTitle());
 			pstmt.setString(3, qna.getQaPwd());
 			pstmt.setString(4, qna.getQaCon());
+			pstmt.setString(5, qna.getQaCategory());
+			pstmt.setString(6, qna.getQaReportCon());
+			pstmt.setInt(7, qna.getQaAttNum());
 			
 			result = pstmt.executeUpdate();
 			
@@ -194,7 +236,7 @@ public class QnaDao {
 		
 		String query = "select * "
 				+ "from (select rownum rnum, QA_NUM, ME_NUM, QA_TITLE, QA_PWD, QA_CON, "
-				+ "     QA_CATEGORY, QA_ENROLL, QA_MOD_DATE, QA_DEL_DATE,, QA_VIEWS, "
+				+ "     QA_CATEGORY, QA_ENROLL, QA_MOD_DATE, QA_DEL_DATE, QA_VIEWS, "
 				+ "     QA_COM_COUNT, QA_ADMIN_NUM, QA_REPORT_CON, QA_ATT_NUM,  "
 				+ "     QA_ATT_DATE, QA_PHOTO_NUM "
 				+ "     from (select * from qa)) "
@@ -223,7 +265,7 @@ public class QnaDao {
 				qna.setQaComCount(rset.getInt("qa_com_count"));
 				qna.setQaAdminNum(rset.getInt("qa_admin_num"));
 				qna.setQaReportCon(rset.getString("qa_report_con"));
-				qna.setQaAttNum(rset.getInt("qa_att_date"));
+				qna.setQaAttNum(rset.getInt("qa_att_num"));
 				qna.setQaAttDate(rset.getDate("qa_att_date"));
 				qna.setQaPhotoNum(rset.getInt("qa_photo_num"));
 				

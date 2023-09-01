@@ -10,6 +10,7 @@ import member.model.vo.Member;
 import party.model.vo.Party;
 import partyCh.model.vo.PartyCh;
 import partyCo.model.vo.PartyCo;
+import payment.model.vo.Payment;
 
 public class JsonReturn {
 	public JsonReturn() {
@@ -90,6 +91,7 @@ public class JsonReturn {
 		json.put("meNum", partyCo.getMeNum());
 		json.put("meAka", urlEncoderNullCheck(partyCo.getMeAka()));
 		json.put("mePhotoAdd", partyCo.getMePhotoAdd());
+		json.put("meId", partyCo.getMeId());
 		return json;
 	}
 	
@@ -124,6 +126,25 @@ public class JsonReturn {
 		json.put("maxPage", paging.getMaxPage());// 총 페이지 수
 		json.put("startPage", paging.getStartPage());// 페이지 그룹의 시작값
 		json.put("endPage", paging.getEndPage());// 페이지 그룹의 끝값
+		return json;
+	}
+	
+	public JSONObject returnPayment(Payment payment) throws UnsupportedEncodingException {
+		JSONObject json = new JSONObject();
+		json.put("pa_num", payment.getPaNum());
+		json.put("me_num", payment.getMeNum());
+		json.put("pm_num", payment.getPmNum());
+		json.put("pm_host", payment.getPmHost());
+		json.put("pm_method", payment.getPmMethod());
+		json.put("pm_amount", payment.getPmAmount());
+		json.put("pm_credits", payment.getPmCredits());
+		json.put("pm_TotalAmount", payment.getPmTotalAmount());
+		json.put("pm_deposit", payment.getPmDeposit());
+		json.put("pm_date", String.valueOf(payment.getPmDate()));
+		json.put("pm_ac_ver", payment.getPmAcVer());
+		json.put("pm_ph_ver", payment.getPmPhVer());
+		json.put("pm_easy_pay", payment.getPmEasyPay());
+		
 		return json;
 	}
 	

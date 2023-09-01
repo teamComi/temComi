@@ -2,6 +2,7 @@ package party.model.service;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import party.model.dao.PartyDao;
 import party.model.vo.Party;
@@ -86,9 +87,9 @@ public class PartyService {
 	}
 	
 	//검색
-	public ArrayList<Party> searchParty(String keyword){
+	public ArrayList<Party> searchParty(HashMap<String, String> map){
 		Connection conn = getConnection();
-		ArrayList<Party> list = dao.searchParty(conn, keyword);
+		ArrayList<Party> list = dao.searchParty(conn, map);
 		close(conn);
 		return list;
 	}
@@ -138,9 +139,16 @@ public class PartyService {
 		}else if(categoryCheck.equals("기타")) {
 			category = 6;
 		}else {
-			category = 0;
+			category = 6;
 		}
 		return category;
+	}
+
+	public int getListCount(String act) {
+		Connection conn = getConnection();
+		int listCount = dao.getListCount(conn, act);
+		close(conn);
+		return listCount;
 	}
 	
 }

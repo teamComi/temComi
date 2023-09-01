@@ -47,7 +47,7 @@ public class MemberDao {
 	}
 	
 	//회원 조회
-	public Member selectMember(Connection conn, int userid) {
+	public Member selectMember(Connection conn, int meNum) {
 		Member member = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -56,35 +56,35 @@ public class MemberDao {
 		
 		try {
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, userid);			
+			pstmt.setInt(1, meNum);			
 			rset = pstmt.executeQuery();
 			
 			if(rset.next()) {
-				member = new Member(
-						rset.getInt("ME_NUM")
-						,rset.getString("ME_NAME")
-						,rset.getString("ME_ID")
-						,rset.getString("ME_PWD")
-						,rset.getInt("ME_C_PWD")
-						,rset.getString("ME_CER")
-						,rset.getString("ME_LOGIN_TYPE")
-						,rset.getString("ME_EMAIL")
-						,rset.getString("ME_PHONE")
-						,rset.getString("ME_ADD")
-						,rset.getString("ME_GENDER")
-						,rset.getDate("ME_B_DAY")
-						,rset.getDate("ME_ENROLL")
-						,rset.getString("ME_AKA")
-						,rset.getInt("ME_LIKE")
-						,rset.getString("ME_PHOTO_ADD")
-						,rset.getString("ME_ADMIN")
-						,rset.getString("ME_BAN")
-						,rset.getInt("ME_POINT")
-						,rset.getDate("ME_MOD_DATE")
-						,rset.getInt("CAT_NUM")
-					);
+				member = new Member();
 				
 				//결과매핑 : 컬럼값 꺼내서 필드에 옮기기
+				member.setMeId(rset.getString("me_id"));
+				member.setMeNum(rset.getInt("ME_NUM"));
+				member.setMeName(rset.getString("ME_NAME"));
+				member.setMePwd(rset.getString("ME_PWD"));
+				member.setMeCPwd(rset.getInt("ME_C_PWD"));
+				member.setMeCer(rset.getString("ME_CER"));
+				member.setMeLoginType(rset.getString("ME_LOGIN_TYPE"));
+				member.setMeEmail(rset.getString("ME_EMAIL"));
+				member.setMePhone(rset.getString("ME_PHONE"));
+				member.setMeAdd(rset.getString("ME_ADD"));
+				member.setMeGender(rset.getString("ME_GENDER"));
+				member.setMeBDay(rset.getDate("ME_B_DAY"));
+				member.setMeEnroll(rset.getDate("ME_ENROLL"));
+				member.setMeModDate(rset.getDate("ME_MOD_DATE"));
+				member.setMeAka(rset.getString("ME_AKA"));
+				member.setMeLike(rset.getInt("ME_LIKE"));
+				member.setMePhotoAdd(rset.getString("ME_PHOTO_ADD"));
+				member.setMeAdmin(rset.getString("ME_ADMIN"));
+				member.setMeBan(rset.getString("ME_BAN"));
+				member.setMePoint(rset.getInt("ME_POINT"));
+				member.setCatNum(rset.getInt("CAT_NUM"));
+
 			}
 			
 		} catch (Exception e) {
@@ -97,6 +97,55 @@ public class MemberDao {
 		return member;
 	}
 	
+	public Member selectMember(Connection conn, String meId) {
+		Member member = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		String query = "select * from member where me_id = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, meId);			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				member = new Member();
+				
+				//결과매핑 : 컬럼값 꺼내서 필드에 옮기기
+				member.setMeId(rset.getString("me_id"));
+				member.setMeNum(rset.getInt("ME_NUM"));
+				member.setMeName(rset.getString("ME_NAME"));
+				member.setMePwd(rset.getString("ME_PWD"));
+				member.setMeCPwd(rset.getInt("ME_C_PWD"));
+				member.setMeCer(rset.getString("ME_CER"));
+				member.setMeLoginType(rset.getString("ME_LOGIN_TYPE"));
+				member.setMeEmail(rset.getString("ME_EMAIL"));
+				member.setMePhone(rset.getString("ME_PHONE"));
+				member.setMeAdd(rset.getString("ME_ADD"));
+				member.setMeGender(rset.getString("ME_GENDER"));
+				member.setMeBDay(rset.getDate("ME_B_DAY"));
+				member.setMeEnroll(rset.getDate("ME_ENROLL"));
+				member.setMeModDate(rset.getDate("ME_MOD_DATE"));
+				member.setMeAka(rset.getString("ME_AKA"));
+				member.setMeLike(rset.getInt("ME_LIKE"));
+				member.setMePhotoAdd(rset.getString("ME_PHOTO_ADD"));
+				member.setMeAdmin(rset.getString("ME_ADMIN"));
+				member.setMeBan(rset.getString("ME_BAN"));
+				member.setMePoint(rset.getInt("ME_POINT"));
+				member.setCatNum(rset.getInt("CAT_NUM"));
+
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		
+		return member;
+	}
 	//회원 전체 조회
 	public ArrayList<Member> selectList(Connection conn) {
 		ArrayList<Member> list = new ArrayList<Member>();
@@ -165,15 +214,19 @@ public class MemberDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		
-		String query = "update member set ne_age = ?, ne_phone = ?, ne_email = ?, "
-				+ "lastmodified = default where ne_num = ?";
+		String query = "update member set me_email = ?, me_phone = ?, me_gender = ? "
+				+ "where me_id = ?";
 		
 		try {
 			pstmt = conn.prepareStatement(query);			
 			
 			//결과매핑 : 컬럼값 꺼내서 필드에 옮기기
+			pstmt.setString(1, member.getMeEmail());
+			pstmt.setString(2, member.getMePhone());
+			pstmt.setString(3, member.getMeGender());
+			pstmt.setString(4, member.getMeId());
 			
-			result = pstmt.executeUpdate();			
+			result = pstmt.executeUpdate();	
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -447,4 +500,5 @@ public class MemberDao {
 		return member;
 
 	}
+
 }

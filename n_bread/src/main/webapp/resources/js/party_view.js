@@ -4,18 +4,6 @@
 
 document.addEventListener("DOMContentLoaded", function(){
     
-    //검색 
-    $('.search-btn').on('click', function(){
-        var val = $('.search-box-text').val();
-        location.href = '/comi/partysearch/val=' + val;
-
-    })
-
-    if($('.search-box-text').val().length > 0) {
-        //엔터키 눌르면 
-        $(document).on('key')
-
-    }
     
     return;
     $.ajax({

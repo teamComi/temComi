@@ -6,6 +6,7 @@ import java.sql.Date;
 public class Note implements Serializable {
 	
 	private static final long serialVersionUID = -2138342777947806459L;
+	private int noNum;
 	private int meNum;
 	private String noCon;
 	private Date noSenTime;
@@ -14,13 +15,23 @@ public class Note implements Serializable {
 	
 	public Note() {}
 
-	public Note(int meNum, String noCon, Date noSenTime, String noCh, int meNumSen) {
+	public Note(int noNum, int meNum, String noCon, Date noSenTime, String noCh, int meNumSen) {
 		super();
+		this.noNum =noNum;
 		this.meNum = meNum;
 		this.noCon = noCon;
 		this.noSenTime = noSenTime;
 		this.noCh = noCh;
 		this.meNumSen = meNumSen;
+	}
+
+	
+	public int getNoNum() {
+		return noNum;
+	}
+
+	public void setNoNum(int noNum) {
+		this.noNum = noNum;
 	}
 
 	public int getMeNum() {
@@ -65,8 +76,10 @@ public class Note implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Message [meNum=" + meNum + ", noCon=" + noCon + ", noSenTime=" + noSenTime + ", noCh=" + noCh
-				+ ", meNumSen=" + meNumSen + "]";
+		return "Note [noNum=" + noNum + ", meNum=" + meNum + ", noCon=" + noCon + ", noSenTime=" + noSenTime + ", noCh="
+				+ noCh + ", meNumSen=" + meNumSen + "]";
 	}
+
+	
 	
 }

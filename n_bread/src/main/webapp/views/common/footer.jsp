@@ -39,14 +39,14 @@
                         <label class="footer_text_2"><b>(주)십시일반</b></label>
                         <div class="">
                             <p class="footer_text_2">
-                                <span>사업자 등록번호 : 없음</span> |<span> 팀장 : 김정선 </span>| 팀원 : 전성훤, 이재민, 나정운, 김건, 서진우 | <br>서울특별시 서초구 서초대로77길 41, 4층 (서초동, 대동Ⅱ)
+                                <span>사업자 등록번호 : 없음</span> |<span> 팀장 : 김정선 </span>| 팀원 : 전성훤, 이재민, 나정운, 서진우 | <br>서울특별시 서초구 서초대로77길 41, 4층 (서초동, 대동Ⅱ)
                             </p>
                         </div>
                     </div>
                     <div class="footer_bottom_2">
                         <span class="footer_text_1">서비스 이용약관</span>
                         <span class="footer_text_1">개인정보 처리방침</span>
-                        <span class="footer_text_1 footer_copyright_text">Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="#" target="_blank" class="team_text">Komi</a></span>
+                        <span class="footer_text_1 footer_copyright_text">Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="#" target="_blank" class="team_text">Comi</a></span>
                     </div>
 
                 </div>

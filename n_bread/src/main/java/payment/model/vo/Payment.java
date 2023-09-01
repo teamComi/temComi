@@ -22,7 +22,16 @@ public class Payment implements Serializable{
 	private String pmEasyPay;
 	
 	public Payment() {}
-
+	
+	public Payment(int meNum, int paNum, String pmHost, int pmAmount, String pmDeposit, String pmMethod) {
+		this.meNum = meNum;
+		this.paNum = paNum;
+		this.pmHost = pmHost;
+		this.pmAmount = pmAmount;
+		this.pmDeposit = pmDeposit;
+		this.pmMethod = pmMethod;
+	}
+	
 	public Payment(int pmNum, int meNum, int paNum, String pmHost, String pmMethod, int pmAmount, int pmCredits,
 			int pmTotalAmount, String pmDeposit, Date pmDate, String pmAcVer, String pmPhVer, String pmEasyPay) {
 		super();

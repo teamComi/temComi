@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,6 +43,7 @@
 			<!--공지사항 출력-->
 			<div style="width: 500px; border: 1px solid #ffed76; margin: 0 auto; text-align: center; background-color: #ffed76;">
 				<form action="/comi/noticeins" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="writer" value="<%= loginMember.getMeNum() %>">
                     <table>
                     <tr>
                         <th>제 목</th>
@@ -49,7 +51,7 @@
                     </tr>
                     <tr>
                         <th>작성자</th>
-                        <td><input type="text" name="writer" readonly value="2" size="50"></td>
+                        <td><input type="text" readonly value="<%= loginMember.getMeName() %>" size="50"></td>
                     </tr>
                     <tr>
                         <th>내 용</th>

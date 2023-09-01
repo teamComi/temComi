@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import common.JsonReturn;
+import common.Paging;
 import party.model.service.PartyService;
 import party.model.vo.Party;
 
@@ -36,88 +38,72 @@ public class PartySelectAllServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-    /*
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String type = request.getParameter("type");
-		
-		PartyService pservice = new PartyService();
-		ArrayList<Party> list = null;
-		System.out.println("type : " + type);
-		
-		if(type.equals("findParty")) list = pservice.selectPartyAll("open");//활성화
-		else if(type.equals("findReview")) list = pservice.selectPartyAll("close");//비활성화
-		
-		System.out.println("list : " + list);
-		
-		JSONArray jarr = new JSONArray();
-		
-		for(Party party : list) {
-			JSONObject json = new JSONObject();
-			json.put("paid", party.getPaNum());
-			json.put("meid", party.getMeNum());
-			json.put("time", String.valueOf(party.getPaTime()));
-			json.put("price", party.getPaTotalAmount());
-			json.put("deposit", party.getPaDeposit());
-			json.put("peoplePrice", party.getPaPerAmount());
-			
-			json.put("title", URLEncoder.encode(party.getPaTitle(), "UTF-8"));
-			json.put("contents", URLEncoder.encode(party.getPaCon(), "UTF-8"));
-			json.put("enroll", String.valueOf(party.getPaEnroll()));
-			json.put("modDate", String.valueOf(party.getPaModDate()));
-			json.put("delDate", String.valueOf(party.getPaDelDate()));
-			json.put("act", party.getPaAct());
-			json.put("views", party.getPaViews());
-			json.put("likes", party.getPaLike());
-			json.put("count", party.getPaComCount());
-			
-			json.put("genderSet", party.getPaGenderSet());
-			json.put("location", party.getPaLocation());
-			json.put("totalNum", party.getPaTotalNum());
-			json.put("genderLimit", party.getPaGenderLimit());
-			json.put("phNum", party.getPhNum());
-			json.put("category", party.getCatNum());
-			
-			jarr.add(json);
-		}
-		
-		JSONObject sendJson = new JSONObject();
-		sendJson.put("list", jarr);
-		response.setContentType("application/json; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(sendJson);
-		out.flush();
-		
-	}*/
+	 */	
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+    	request.setCharacterEncoding("UTF-8");
 		String type = request.getParameter("type");
-		String startStr = request.getParameter("start");
-		String endStr = request.getParameter("end");
-		int start = (startStr == null) ? 1 : Integer.parseInt(startStr);
-		int end = (endStr == null) ? 10 : Integer.parseInt(endStr);
+		String page = request.getParameter("page");
+		String keyword = request.getParameter("keyword");
+		String sort = request.getParameter("sort");//정렬
+		String classfy = request.getParameter("classfy");//분류
+		int currentPage = (page == null) ? 1 : Integer.parseInt(page);;
+		int limit = 10;
 		
 		PartyService pservice = new PartyService();
-		ArrayList<Party> list = null;
-		System.out.println("type : " + type + ", start : " + start + ", end : " + end);
 		
-		if(type.equals("findParty")) list = pservice.selectPartyAll("open", start, end);//활성화
-		else if(type.equals("findReview")) list = pservice.selectPartyAll("close", start, end);//비활성화
+		String act = (type.equals("findParty")) ? "Y" : "N";
+		int listCount = pservice.getListCount(act);
+		System.out.println("--listCount : " + listCount);
+		Paging paging = new Paging(listCount, currentPage, limit);
+		paging.calculator();
+		
+		int start = paging.getStartRow(); 
+		int end = paging.getEndRow();
+		
+		String selType = (type.equals("findParty")) ? "Y" : "N";
+		ArrayList<Party> list = null;//활성화
+		HashMap<String, String> map = null;
+		System.out.println("--type : " + type + ", start : " + start + ", end : " + end);
+		
+		if(keyword == null) list = pservice.selectPartyAll(selType, start, end);//활성화
+		else {
+			map = new HashMap<String, String>();
+			map.put("selType", selType);
+			map.put("sort", sort);
+			map.put("classfy", classfy);
+			map.put("keyword", keyword);
+			map.put("start", String.valueOf(start));
+			map.put("end", String.valueOf(end));
+			list = pservice.searchParty(map);//활성화
+		}
 		
 		System.out.println("list : " + list);
 		
 		RequestDispatcher view = null;
 		
+		
+		
+		sort = (sort == null) ? "current" : sort;
+		classfy = (classfy == null) ? "-1" : classfy;
+		System.out.println("sort : " + sort + "  classfy : " + classfy);
 		if(list != null && list.size() > 0) {
 			view = request.getRequestDispatcher("views/party/party_view.jsp");
-			
+			request.setAttribute("sort", sort);
+			request.setAttribute("classfy", Integer.parseInt(classfy));
+			request.setAttribute("currentPage", currentPage);
 			request.setAttribute("type", type);
 			request.setAttribute("partyList", list);
 		}else {
-			view = request.getRequestDispatcher("views/common/error.jsp");
-			request.setAttribute("message", "파티 리스트 불러오기 실패");
+			view = request.getRequestDispatcher("views/party/party_view.jsp");
+			request.setAttribute("sort", sort);
+			request.setAttribute("classfy", Integer.parseInt(classfy));
+			request.setAttribute("currentPage", currentPage);
+			request.setAttribute("type", type);
+			request.setAttribute("partyList", list);
+			//view = request.getRequestDispatcher("views/common/error.jsp");
+			//request.setAttribute("message", "파티 리스트 불러오기 실패");
 		}
 		view.forward(request, response);
 		

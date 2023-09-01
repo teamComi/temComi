@@ -19,9 +19,16 @@ public class MemberService {
 	public MemberService() {}
 
 	//조회
-	public Member selectMember(int menum) {
+	public Member selectMember(int meNum) {
 		Connection conn = getConnection();
-		Member member = mdao.selectMember(conn, menum);
+		Member member = mdao.selectMember(conn, meNum);
+		close(conn);
+		return member;
+	}
+	
+	public Member selectMember(String meNum) {
+		Connection conn = getConnection();
+		Member member = mdao.selectMember(conn, meNum);
 		close(conn);
 		return member;
 	}

@@ -55,7 +55,7 @@ public class QnaSelectAllServlet extends HttpServlet {
 
 		RequestDispatcher view = null;
 
-		if(list.size() > 0){
+		if(list.size() >= 0){
 			view = request.getRequestDispatcher("views/qna/qnalistview.jsp");
 			request.setAttribute("list",list);
 			request.setAttribute("paging",paging);

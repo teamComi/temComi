@@ -5,8 +5,14 @@
 <% 
    //String type = (String) request.getAttribute("type");
    Party party = (Party) request.getAttribute("party");
-   Member member = (Member) request.getAttribute("member");
+   Member member = (Member) request.getAttribute("member");//파티장
    String category_check = (String)request.getAttribute("category_check");
+   int per = 0;
+   if(party.getPaDeposit() > 0) {
+	   per = (int)((double)party.getPaDeposit()/(double)party.getPaTotalAmount() * 100);
+   }
+   ArrayList<Integer> totalPartyList = (ArrayList<Integer>)request.getAttribute("totalPartyList");
+   
 %>
 <!DOCTYPE html>
 <html>
@@ -20,9 +26,12 @@
    <link rel="stylesheet" type="text/css" href="/comi/resources/css/main.css"/>
    <link rel="stylesheet" type="text/css" href="/comi/resources/css/party_click.css"/>
    <script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
+   <!--<script type="text/javascript"	src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>-->
+	<script src="https://js.tosspayments.com/v1/payment-widget"></script>
    <script type="text/javascript" src="/comi/resources/js/lib/slick.min.js"></script>
    <script type="text/javascript" src="/comi/resources/js/util.js"></script>
    <script type="text/javascript" src="/comi/resources/js/makeParty.js"></script>
+   
 </head>
 <body>
     <!-- Header Section Begin -->
@@ -30,7 +39,38 @@
        <%@ include file="../common/header.jsp" %>
     </header>
     <!-- Header Section End -->
-
+    <%
+    	String partyMemberType = "none";
+    	if(loginMember.getMeNum() == member.getMeNum()) {
+    		partyMemberType = "host";
+    	}else{
+    		if(totalPartyList != null && totalPartyList.size() > 0) {
+	    		for(int i=0; i<totalPartyList.size(); i++) {
+		            if(loginMember.getMeNum() == totalPartyList.get(i)) {
+		               	partyMemberType = "member";
+		               	break;
+		            }
+	         	}
+    		}
+    	}
+    	
+    %>
+	<script type="text/javascript">
+      var partyMemberType = 'none';
+      <% if(loginMember.getMeNum() == member.getMeNum()) { %>
+         partyMemberType = 'host';
+      <% } else {
+    	  
+            //for(int i=0; i<totalPartyList.size(); i++) {
+               //if(loginMember.getMeNum() == totalPartyList.get(i)) {
+                  %>
+                  partyMemberType = 'member';
+                  <% //break;
+               //}
+            //}
+    	  	
+       } %>
+   </script>
    <!-- main -->
    <main class="main_wrapper">
       <% if(type.equals("findReview")) { //종료된 모임 %>
@@ -77,7 +117,7 @@
                      <div class="article-profile-right">
                         <div class="temperature-wrap">
                            <span>신뢰도</span>
-                           <span class="text-color text-color-03" id="text-color-id"><%= member.getMeLike() %>>%</span>
+                           <span class="text-color text-color-03" id="text-color-id"><%= member.getMeLike() %>%</span>
                         </div>
                         <div class="meters">
                            <div class="bar bar-color-03" 
@@ -130,7 +170,7 @@
                <div id="article-deposit">예치금 : <%= party.getPaDeposit() %>원</div>
                <div id="article-bar-box">
                   <span id="article-price-bar"></span>
-                  <span id="article-deposit-bar" style="width:<%= (party.getPaDeposit() == 0) ? 0 : party.getPaDeposit()/party.getPaTotalAmount() * 100 %>%"></span>
+                  <span id="article-deposit-bar" style="width:<%= per %>%"></span>
                </div>
                <div id="article-price">가격 : <%= party.getPaTotalAmount() %>원</div>
       
@@ -149,13 +189,131 @@
             </p>
          </section>
          <!-- 게시글 end-->
+
+         <!-- 결제 페이지 파티장과 회원이 같을때만 보이기 -->
+         <% 
+         //out.print("partyMemberType : " + partyMemberType + " party.getPaAct() : " + party.getPaAct());
+         if(partyMemberType != "none" && party.getPaAct().equals("Y")) { %>
+         <div class="view-payment-box">
+            <button id="paymentPop">결제하기</button>
+            <!-- <span id="paymentEnd">결제완료</span> -->
+         </div>
+         <% } %>
+         <!-- 결제 페이지 end -->
+         <script type="text/javascript">
+			var partyMemberTypeJs = <%= "\"" + partyMemberType + "\"" %>;
+
+         function generateRandomString() {
+            return window.btoa(Math.random()).slice(0, 20);
+         }
+
+         $(function(){
+
+            //결제
+            var paymentWidget = PaymentWidget(
+               "test_ck_6BYq7GWPVv5nNOzL6dw3NE5vbo1d",
+               PaymentWidget.ANONYMOUS
+            );
+
+            var depositBool = (partyMemberTypeJs == 'host') ? 'Y' : 'N';
+            var price = (partyMemberTypeJs == 'host') 
+                              ? Number(<%= "\"" + party.getPaDeposit() + "\"" %>)
+                              : Number(<%= "\"" + party.getPaPerAmount() + "\"" %>);//결제금액
+            
+            price = 100;
+            var paymentMethodWidget = paymentWidget.renderPaymentMethods("#payment-method", { value: price });
+         
+            $('#payment').click(function(){
+               
+               //결제 금액과 테이블 저장된 금액이 맞을때
+               paymentWidget.requestPayment({
+                  amount: price,
+                  orderId: generateRandomString(),
+                  orderName: <%= "\"" + party.getPaTitle() + "\"" %>,
+                  //successUrl: sucUrl,
+                  //failUrl: url + '&pay=no',
+                  customerEmail: <%= "\"" + loginMember.getMeEmail() + "\"" %>,
+                  customerName: <%= "\"" + loginMember.getMeName() + "\"" %>
+               })
+               .then(function (response) {
+                  // 성공 처리: 결제 승인 API를 호출하세요
+                  
+                  console.log('결제가 성공적으로 처리되었습니다.');
+                  console.log('response : ' + response);
+                  
+                  var selectedPaymentMethod = paymentMethodWidget.getSelectedPaymentMethod()
+                  console.log('selectedPaymentMethod : ' + selectedPaymentMethod);
+                  $.ajax({
+                     url : '/comi/payins'
+                     ,type : 'post'
+                     ,dataType : 'json'
+                     ,data : {
+                        
+                        pa_num : Number(<%= "\"" + party.getPaNum() + "\"" %>)
+                        ,me_num : Number(<%= "\"" + loginMember.getMeNum() + "\"" %>)
+                        ,pm_amount : price//결제금액
+                        ,pm_host : depositBool
+                        ,pm_deposit : depositBool
+                        ,pm_method : selectedPaymentMethod.method
+                        
+                     }
+                     ,success : function(result){
+                        console.log('저장완료');
+
+                        var jstr = JSON.stringify(result);
+                        var res = JSON.parse(jstr);
+                        //저장
+                        $('.view-payment-box').hide();
+                        $('#paymentPop').hide();
+                        $('#paymentEnd').show();
+                     },error : function(error){
+                        console.log('저장안됨');
+                     }
+                  });
+               })
+               .catch(function (error) {
+                  // 에러 처리: 에러 목록을 확인하세요
+                  console.log('error.code : ' + error.code);
+                  // https://docs.tosspayments.com/reference/error-codes#failurl로-전달되는-에러
+                  if (error.code === 'USER_CANCEL') {
+                  // 결제 고객이 결제창을 닫았을 때 에러 처리
+                  } else if (error.code === 'INVALID_CARD_COMPANY') {
+                  // 유효하지 않은 카드 코드에 대한 에러 처리
+                  }
+                  
+               })
+            });
+            
+
+            $('#paymentPop').on('click', function(){
+               $('.view-payment-pop').show();
+               //return false;
+            })
+         
+            $('.view-payment-pop').on('click', function(){
+               $(this).hide();
+               //return false;
+            })
+            
+            
+         })
+         </script>
          
          <% if(type.equals("findReview")) { //종료된 모임 %>
             <%@ include file="./view_reply.jsp" %>
          <% }else { //종료되지 않은 모임 %>
             <%@ include file="./view_chat.jsp" %>
+            <%--
+            <% if(loginMember.getMeNum() == party.getMeNum()){%>
+               <%@ include file="./view_chat.jsp" %>
+            <%}else {%>
+               <section class="joinparty-allow">
+                  <button class="joinparty-allow-btn" id="sendButton">참여하기</button>
+              </section>   
+            <% } %>
+            --%>
          <% } %>
-      
+              
          <!-- 공유 모임 더 보기 -->
          <section class="article-party-share">
             <div class="article-party-share-box">
@@ -170,6 +328,15 @@
          <!-- 공유 모임 더 보기 end-->
 
       </div>
+
+      <div class="view-payment-pop">
+			<!-- <input type="button" class="view-payment-btn" value="결제하기"> -->
+			<div class="view-payment-pop-box">
+				<div id="payment-method"></div>
+				<button id="payment">결제하기</button>
+			</div>
+			
+		</div>
    </main>
    
 

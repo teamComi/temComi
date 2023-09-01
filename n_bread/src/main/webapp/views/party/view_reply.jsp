@@ -2,11 +2,12 @@
 <%@page import="common.Paging"%>
 <%@page import="partyCo.model.vo.PartyCo"%>
 <%@page import="java.util.ArrayList"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% 
 	String login = (loginMember != null) ? "login" : "logout";
-	String myNick = (loginMember != null) ? loginMember.getMeId() : "";
+	String myId = (loginMember != null) ? loginMember.getMeId() : "";
 	int myMeNum = (loginMember != null) ? loginMember.getMeNum() : -1;
 	int partyColistCount = (int) request.getAttribute("partyColistCount");
 	ArrayList<ArrayList<PartyCo>> partyCoList = (ArrayList<ArrayList<PartyCo>>) request.getAttribute("partyCoList");
@@ -22,8 +23,9 @@
     <script type="text/javascript">
     var currentPage = Number(<%= "\"" + copage.getCurrentPage() + "\"" %>);
     var login = <%= "\"" + login + "\"" %>;
-	var myNick = <%= "\"" + myNick + "\"" %>;
+	var myId = <%= "\"" + myId + "\"" %>;
 	var myMeNum = Number(<%= "\"" + myMeNum + "\"" %>);
+	var paNum = Number(<%= "\"" + party.getPaNum() + "\"" %>);
     </script>
     <script type="text/javascript" src="/comi/resources/js/util.js"></script>
     <script type="text/javascript" src="/comi/resources/js/view_reply.js"></script>
@@ -33,7 +35,7 @@
 	<!-- 게시글 리뷰-->
     <section id="review">
         <!--댓글 헤드-->
-        <div class="review-head" data-panum="<%= partyCoList.get(0).get(0).getPaNum() %>">
+        <div class="review-head" data-panum="<%= party.getPaNum() %>">
             <span class="review-head-title" id="review_number"><%= partyColistCount %>개의 댓글</span>
             <button type="button" class="review-head-refresh" alt="새로고침">
                 <img src="/comi/resources/images/refresh.png">
@@ -48,12 +50,12 @@
                 <% if(login.equals("login")) { %>
                     <legend class="u_vc">댓글 쓰기</legend>
                     <div class="review-write-inner review-rewriting" 
-            			data-panum="<%= partyCoList.get(0).get(0).getPaNum() %>">
+            			data-panum="<%= party.getPaNum() %>">
                         
                         <div class="review-write-profilearea">
                             <div class="review-write-profile">
                                 <img src="/comi/resources/images/deafault.png" class="img-profile">
-                                <span class="write-name"><%= myNick %></span>
+                                <span class="write-name"><%= myId %></span>
                             </div>
                         </div>
 
@@ -122,7 +124,7 @@
 		                    <div class="review-body-list-profile">
 		                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 		                        <div class="review-body-list-profile-box">
-		                            <div class="review-body-list-name"><%= myNick %></div>
+		                            <div class="review-body-list-name"><%= depth1Obj.getMeId() %></div>
 		                            <div class="review-body-list-date"><%= depth1Obj.getComEnroll() %></div>
 		                        </div>
 		                    </div>
@@ -174,7 +176,7 @@
 					                        <div class="review-write-profilearea">
 					                            <div class="review-write-profile">
 					                                <img src="/comi/resources/images/deafault.png" class="img-profile">
-					                                <span class="write-name"><%= myNick %></span>
+					                                <span class="write-name"><%= myId %></span>
 					                            </div>
 					                        </div>
 					
@@ -229,7 +231,7 @@
 					                    <div class="review-body-list-profile">
 					                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 					                        <div class="review-body-list-profile-box">
-					                            <div class="review-body-list-name"><%= myNick %></div>
+					                            <div class="review-body-list-name"><%= tempList.get(j).getMeId() %></div>
 					                            <div class="review-body-list-date"><%= tempList.get(j).getComEnroll() %></div>
 					                        </div>
 					                    </div>
@@ -277,7 +279,7 @@
 							                        <div class="review-write-profilearea">
 							                            <div class="review-write-profile">
 							                                <img src="/comi/resources/images/deafault.png" class="img-profile">
-							                                <span class="write-name"><%= myNick %></span>
+							                                <span class="write-name"><%= myId %></span>
 							                            </div>
 							                        </div>
 							

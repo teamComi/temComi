@@ -21,6 +21,7 @@ public class PartyCo implements Serializable {
 	private int meNum;
 	private String meAka;
 	private int mePhotoAdd;
+	private String meId;
 	
 	public PartyCo() {}
 	
@@ -31,6 +32,16 @@ public class PartyCo implements Serializable {
 		this.comDepth = comDepth;
 		this.comCon = comCon;
 		this.meNum = meNum;
+	}
+	
+	public PartyCo(int paNum, int comParent, int comDepth, String comCon, int meNum, String meId) {
+		super();
+		this.paNum = paNum;
+		this.comParent = comParent;
+		this.comDepth = comDepth;
+		this.comCon = comCon;
+		this.meNum = meNum;
+		this.meId = meId;
 	}
 	
 	public PartyCo(int comNum, int paNum, int comParent, int comDepth, String comCon, int comViews, int comCount,
@@ -181,6 +192,14 @@ public class PartyCo implements Serializable {
 
 	public void setMePhotoAdd(int mePhotoAdd) {
 		this.mePhotoAdd = mePhotoAdd;
+	}
+	
+	public String getMeId() {
+		return meId;
+	}
+
+	public void setMeId(String meId) {
+		this.meId = meId;
 	}
 
 	@Override

@@ -96,7 +96,7 @@ public class PartyCoDao {
 				partyCo.setMeNum(rset.getInt("ME_NUM"));
 				partyCo.setMeAka(rset.getString("ME_AKA"));
 				partyCo.setMePhotoAdd(rset.getInt("ME_PHOTO_ADD"));
-				
+				partyCo.setMeId(rset.getString("ME_ID"));
 				//System.out.println("board : " + board);
 				list.add(partyCo);
 			}
@@ -237,7 +237,7 @@ public class PartyCoDao {
 				partyCo.setMeNum(rset.getInt("ME_NUM"));
 				partyCo.setMeAka(rset.getString("ME_AKA"));
 				partyCo.setMePhotoAdd(rset.getInt("ME_PHOTO_ADD"));
-				
+				partyCo.setMeId(rset.getString("ME_ID"));
 				//System.out.println("board : " + board);
 				list.add(partyCo);
 			}

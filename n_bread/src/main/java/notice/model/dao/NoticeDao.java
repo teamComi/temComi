@@ -92,22 +92,29 @@ public class NoticeDao {
 		// 공지사항 추가 부분
 		int result = 0;
 		PreparedStatement pstmt = null;
-
-		String query = "insert into notice " + //
-				"values(seq_no_num.nextval,?,?,?,default, " + //
-				"default, default, default, default " + //
-				", ?)";
+		String query = "";
+		if(photoNum != -1) {
+			query = "insert into notice " + //
+					"values(seq_no_num.nextval,?,?,?,default, " + //
+					"default, default, default, default " + //
+					", ?)";	
+		}else {
+			query = "insert into notice " + //
+					"values(seq_no_num.nextval,?,?,?,default, " + //
+					"default, default, default, default " + //
+					", default)";
+		}
+		
 
 		try {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, notice.getMeNum());
 			pstmt.setString(2, notice.getNoTitle());
 			pstmt.setString(3, notice.getNoCon());
-			if(photoNum == -1){
-				pstmt.setString(4, null);
-			}else{
+			if(photoNum != -1) {
 				pstmt.setInt(4, photoNum);
 			}
+			
 			result = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

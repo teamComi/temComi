@@ -16,6 +16,8 @@ import org.json.simple.JSONObject;
 import common.JsonReturn;
 import party.model.service.PartyService;
 import party.model.vo.Party;
+import photo.model.service.PhotoService;
+import photo.model.vo.Photo;
 
 /**
  * Servlet implementation class PartySelectList
@@ -45,8 +47,9 @@ public class PartySelectListServlet extends HttpServlet {
 		System.out.println("panum : " + panum + ", start : " + start);
 		
 		ArrayList<Party> list = new PartyService().selectPartyList("open", start, end, Integer.toString(panum));//활성화
-		
+		ArrayList<Photo> photoList = new PhotoService().selectPhotoList();
 		System.out.println("list : " + list);
+		System.out.println("photoList : " + photoList );
 		
 		JSONArray jarr = new JSONArray();
 		

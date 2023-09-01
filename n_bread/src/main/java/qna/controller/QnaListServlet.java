@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import common.Paging;
+import member.model.service.MemberService;
+import member.model.vo.Member;
 import qna.model.service.QnaService;
 import qna.model.vo.Qna;
 
@@ -57,19 +59,23 @@ public class QnaListServlet extends HttpServlet {
 		
 		//모델 서비스로 해당 페이지를 출력할 게시글만 조해회 옴
 		ArrayList<Qna> list = qservice.selectList(paging.getStartRow(), paging.getEndRow());
+		int menum = 14;
+		Member member = new MemberService().infoMember(menum);
 		
 		//받은 결과에 따라 성공 or 실패 페이지 내보내기
 		RequestDispatcher view = null;
-		if(list.size() > 0) {
-			view = request.getRequestDispatcher("views/qna/qnaListView.jsp");
-			
+		if(list.size() >= 0) {
+			//view = request.getRequestDispatcher("views/qna/qnaListView.jsp");
+			System.out.println("전송완료");
+			view = request.getRequestDispatcher("views/qna/qna.jsp");
 			request.setAttribute("list", list);
 			request.setAttribute("paging", paging);
 			request.setAttribute("currentPage", currentPage);
+			request.setAttribute("member",member );
 		}else {
 			view = request.getRequestDispatcher("views/common/error.jsp");
 			
-			request.setAttribute("message", currentPage + "페이지에 대한 목록 조회 실패");
+			request.setAttribute("message", currentPage + "qna 페이지에 대한 목록 조회 실패");
 		}
 		view.forward(request, response);
 	}

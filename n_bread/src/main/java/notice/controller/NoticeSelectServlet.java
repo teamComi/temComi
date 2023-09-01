@@ -50,7 +50,7 @@ public class NoticeSelectServlet extends HttpServlet {
 			request.setAttribute("currentPage",currentPage);
 
 		}else{
-			view = request.getRequestDispatcher("main.html");
+			view = request.getRequestDispatcher("main.jsp");
 			// 에러페이지 급구!!!
 		}
 		view.forward(request,response);

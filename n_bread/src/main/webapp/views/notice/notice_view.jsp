@@ -54,8 +54,33 @@
 			<div style="width: 500px; border: 1px solid #ffed76; margin: 0 auto; text-align: center;">
 				<!-- <h1>게시글 총 : <%= paging.getListCount()%></h1> 넘어오는거 확인 완료 -->
 				<table>
-					<tr><th>번호</th><th>제목</th><th>날짜</th><th>조회수</th><th>글쓴이</th></tr>
+					<!-- <tr><th>번호</th><th>제목</th><th>날짜</th><th>조회수</th><th>글쓴이</th></tr> -->
+					<tr>
+						<th><div class="qa-box-con qa-box-num">번호</div></th>
+						<th><div class="qa-box-con qa-box-title">제목</div></th>
+						<th><div class="qa-box-con qa-box-date">등록일</div></th>
+						<th><div class="qa-box-con qa-box-count">조회수</div></th>
+						<th><div class="qa-box-con qa-box-writer">작성자</div></th></tr>
+					<!-- <div class="qa-box qa-box-th">
+						<div class="qa-box-con qa-box-num">번호</div>
+						<div class="qa-box-con qa-box-title">제목</div>
+						<div class="qa-box-con qa-box-date">등록일</div>
+						<div class="qa-box-con qa-box-count">조회수</div>
+						<div class="qa-box-con qa-box-writer">작성자</div>
+						
+						
+					</div> -->
 					<% for(Notice n : list){%>
+						<!-- <div class="qa-box qa-box-td">
+							<div class="qa-box-con qa-box-num"><%= n.getNoNum() %></div>
+							<div class="qa-box-con qa-box-title"><%= n.getNoTitle()%></div>
+							<div class="qa-box-con qa-box-date"><%= n.getNoEnroll()%></div>
+							<div class="qa-box-con qa-box-count"><%= n.getNoViews()%></div>
+							<div class="qa-box-con qa-box-writer"><%= n.getMeNum()%></div>
+							
+							
+						</div> -->
+
 					<tr>
 						<td><a href="/comi/noticesel?nonum=<%=n.getNoNum()%>&page=<%= currentPage %>""></a><%= n.getNoNum() %></a></td>
 						<td><a href="/comi/noticesel?nonum=<%=n.getNoNum()%>&page=<%= currentPage %>""><%= n.getNoTitle()%></a></td>
@@ -72,7 +97,9 @@
 			<!--버튼박스-->
 			<div class="no-container">
 				<div class="no-btnbox">
-					<button class="no-write-btn" id="write_btn" onclick="javascript:location.href='/comi/views/notice/notice_write.jsp'">글쓰기</button>
+					<% if(loginMember.getMeAdmin().equals("Y")){ %>
+						<button class="no-write-btn" id="write_btn" onclick="javascript:location.href='/comi/views/notice/notice_write.jsp'">글쓰기</button>
+					<%}%>
 				</div>
 				<div class="no-navbox">
 					<button class="no-nav-btn prevnext-btn" id="no_nav_btn_prev">

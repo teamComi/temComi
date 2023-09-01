@@ -1,7 +1,6 @@
 package notice.controller;
 
-import static common.PhotoTemplate.savePathChange;
-import static common.PhotoTemplate.seqPhotoNum;
+import static common.PhotoTemplate.*;
 
 import java.io.IOException;
 
@@ -21,6 +20,7 @@ import notice.model.service.NoticeService;
 import notice.model.vo.Notice;
 import photo.model.service.PhotoService;
 import photo.model.vo.Photo;
+
 
 /**
  * Servlet implementation class NoticeInsertServlet
@@ -43,7 +43,7 @@ public class NoticeInsertServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		int photoNum = -1;
+		int photoNum = seqPhotoNum("NOTICEPHOTO");
 		// System.out.println("photoNum : " + photoNum);
 		String inputFileName = null;
 		int photoResult = -1;
@@ -70,7 +70,6 @@ public class NoticeInsertServlet extends HttpServlet {
 		notice.setNoCon(mrequest.getParameter("content"));
 		inputFileName = mrequest.getFilesystemName("inputfile1");
 		if (inputFileName != null) {
-			photoNum = seqPhotoNum("NOTICEPHOTO");
 			photo.setPhoto1(inputFileName);
 			inputFileName = mrequest.getFilesystemName("inputfile2");
 			photo.setPhoto2(inputFileName);
@@ -83,6 +82,14 @@ public class NoticeInsertServlet extends HttpServlet {
 			photo.setPhotonum(photoNum);
 			notice.setNoPhotoNum(photoNum);
 			photoResult = new PhotoService().insertPhoto(photo, "noticephoto");
+		}else{
+			if(deletePhotoDir(savePath)){
+				System.out.println("성공");
+			}else{
+				System.out.println("실패");
+			}
+			photoResult = 1;
+			photoNum = -1;
 		}
 		
 		int noticeResult = new NoticeService().insertNotice(notice, photoNum);

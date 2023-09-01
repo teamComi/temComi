@@ -21,7 +21,7 @@ import qna.model.vo.Qna;
 /**
  * Servlet implementation class QnaInsertServlet
  */
-@WebServlet("/qnains")
+@WebServlet("/qinsert")
 public class QnaInsertServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,6 +38,7 @@ public class QnaInsertServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//mulipart 방식으로 전송 확인 or 에러 처리
+	
 		RequestDispatcher view = null;
 		if(!ServletFileUpload.isMultipartContent(request)) {
 			view = request.getRequestDispatcher("views/common/error.jsp");
@@ -61,6 +62,7 @@ public class QnaInsertServlet extends HttpServlet {
 		qna.setQaTitle(mrequest.getParameter("title"));
 		qna.setMeNum(Integer.parseInt(mrequest.getParameter("writer")));	//보류
 		qna.setQaCon(mrequest.getParameter("content"));
+		qna.setQaReportCon(mrequest.getParameter("report"));
 		
 //		//6. 업로드된 원본 파일 이름 추출
 //		String originlFileName = mrequest.getFilesystemName("upfile");
@@ -73,17 +75,22 @@ public class QnaInsertServlet extends HttpServlet {
 //		
 		
 		// 모델 서비스 메소드로 전달하고 결과받기
+		
 		int result = new QnaService().insertQna(qna);
 		
 		//받은 결과로 성공/실패 페이지 내보내기
 		if (result > 0) {
-			// 서블릿에서 서블릿을 실행
-			response.sendRedirect("/comi/qlist?page=1");
+			System.out.println("들어옴");
+			// 서블릿에서 서블릿을 실행 
+			view = request.getRequestDispatcher("/qlist");
+			request.setAttribute("page", 1);
+			//request.setAttribute("qna",qna);
 		} else {
 			view = request.getRequestDispatcher("views/common/error.jsp");
-			request.setAttribute("message", "새 게시 원글 등록 실패.");
-			view.forward(request, response);
+			request.setAttribute("message", "새 qna 등록 실패.");
+			
 		}
+		view.forward(request, response);
 	}
 
 	/**

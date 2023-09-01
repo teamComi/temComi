@@ -53,7 +53,7 @@ public class NoticeSelectAllServlet extends HttpServlet {
 
 		RequestDispatcher view = null;
 
-		if(list.size() > 0){
+		if(list.size() >= 0){
 			view = request.getRequestDispatcher("views/notice/notice_view.jsp");
 			request.setAttribute("list",list);
 			request.setAttribute("paging",paging);

@@ -1,9 +1,19 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<% 
+    pageEncoding="UTF-8" import="java.util.ArrayList, qna.model.vo.Qna, java.sql.Date, member.model.vo.Member "%>
+
+<%
 	
+	Member member = (Member)request.getAttribute("member");
+	ArrayList<Qna> list = (ArrayList<Qna>)request.getAttribute("list");
+
+	int nowpage = 1;
+	if(request.getAttribute("currentPage") != null) {
+		nowpage = ((Integer)request.getAttribute("currentPage")).intValue();
+	}
 %>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +27,11 @@
 	<script type="text/javascript" src="/comi/resources/js/lib/jquery.min.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/common.js"></script>
 	<script type="text/javascript" src="/comi/resources/js/question.js"></script>
+	<script type="text/javascript">
+	function showWriteForm(){
+	location.href = "/comi/views/qna/qnaWriteForm.jsp";
+}
+</script>
 </head>
 <body>
 	<!-- Header Section Begin -->
@@ -52,30 +67,17 @@
 					<div class="qa-box-con qa-box-date">등록일</div>
 					<div class="qa-box-con qa-box-count">조회수</div>
 				</div>
-				<div class="qa-box qa-box-td">
-					<div class="qa-box-con qa-box-num">1</div>
-					<div class="qa-box-con qa-box-title">본인 인증이 안됩니다.</div>
-					<div class="qa-box-con qa-box-writer">user11</div>
-					<div class="qa-box-con qa-box-date">2023-08-09</div>
-					<div class="qa-box-con qa-box-count">5</div>
-				</div>
-				<div class="qa-box qa-box-td qa-reply">
-					<div class="qa-box-con qa-box-num"></div>
-					<div class="qa-box-con qa-box-title">
-						<img class="reply-img" src="/comi/resources/images/reply.png">
-						본인 인증이 안됩니다.
+				<% for(Qna q : list){ %>
+					<div class="qa-box qa-box-td">
+					<div class="qa-box-con qa-box-num">   <%= q.getQaNum() %> </div>
+					<div class="qa-box-con qa-box-title"><a href ="/comi/qdetail?qnum=<%= q.getQaNum()%>&page=<%= nowpage %>"><%= q.getQaTitle()%></a></div>
+					<div class="qa-box-con qa-box-writer"> <%= member.getMeAka() %></div>
+					<div class="qa-box-con qa-box-date"><%= q.getQaEnroll() %></div>
+					<div class="qa-box-con qa-box-count"> <%= q.getQaViews() %>  </div>
 					</div>
-					<div class="qa-box-con qa-box-writer">관리자</div>
-					<div class="qa-box-con qa-box-date">2023-08-09</div>
-					<div class="qa-box-con qa-box-count">5</div>
-				</div>
-				<div class="qa-box qa-box-td">
-					<div class="qa-box-con qa-box-num">2</div>
-					<div class="qa-box-con qa-box-title">비밀번호 변경방법</div>
-					<div class="qa-box-con qa-box-writer">user22</div>
-					<div class="qa-box-con qa-box-date">2023-08-09</div>
-					<div class="qa-box-con qa-box-count">3</div>
-				</div>
+				<%}%>
+				
+				
 			</div>
 			<!--게시판end-->
 
@@ -83,7 +85,7 @@
 			<div class="qa-container">
 				<div class="qa-btnbox">
 					<button class="qa-write-btn" id="my_write_btn">내가쓴글</button>
-					<button class="qa-write-btn" id="write_btn">글쓰기</button>
+					<button class="qa-write-btn" id="write_btn" onclick="showWriteForm();">글쓰기</button>
 				</div>
 				<div class="qa-navbox">
 					<button class="qa-nav-btn prevnext-btn" id="qa_nav_btn_prev">
@@ -96,6 +98,10 @@
 					<button class="qa-nav-btn prevnext-btn" id="qa_nav_btn_next">
 						<img src="/comi/resources/images/nextBtn.png">
 					</button>
+					<button class="qa_list" id="qa_list" onclick="javascript:location.href='/comi/qlist?page=1';"> 목록
+						
+					</button>
+					
 				</div>
 			</div>
 			<!--버튼박스end-->

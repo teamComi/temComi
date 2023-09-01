@@ -35,17 +35,12 @@ public class PartySearchServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		
-		//int userid = Integer.parseInt(request.getParameter("userid"));
+		String keyword = request.getParameter("keyword");
 		int partyid = Integer.parseInt(request.getParameter("partyid"));
 		//Member member = new MemberService().selectMember(userid);
 		Party party = new PartyService().selectParty(partyid);
 		
-		//볼수는 있지만 참여는 안되게
-		if(party != null) {
-			
-		} else {
-			
-		}
+		
 	}
 
 	/**

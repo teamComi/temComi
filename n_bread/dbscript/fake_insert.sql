@@ -33,9 +33,9 @@ insert into photo
 values(SEQ_PH_NUM.nextval, null, null, null, null, null);
 
 insert into party 
-values(SEQ_PA_NUM.nextval, 1, sysdate, 27000, 12000, 5000, '닭갈비 먹으러 가실 분!', 
+values(3, 1, sysdate, 27000, 12000, 5000, '닭갈비 먹으러 가실 분!', 
 '제가 12000원 걸고 15000원만 셋이서 n빵하면 될것 같아요. 장소는 동작구 성대시장 앞에 닭갈비 집이에요~',
-sysdate, null, null, 'Y', 0, 0, 0, 'N', '서울시 동작구 상도로 15길 성대시장 칼도', 3, 'A', 1, 1);
+sysdate, null, null, 'N', 0, 0, 0, 'N', '서울시 동작구 상도로 15길 성대시장 칼도', 3, 'A', 1, 1);
 
 insert into party 
 values(SEQ_PA_NUM.nextval, 2, '23/07/05', 32000, 12000, 10000, '삼겹살 먹으러 가실 분!', 

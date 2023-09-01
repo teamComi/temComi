@@ -22,6 +22,9 @@ import party.model.service.PartyService;
 import party.model.vo.Party;
 import partyCo.model.service.PartyCoService;
 import partyCo.model.vo.PartyCo;
+import photo.model.vo.Photo;
+
+import static common.PhotoTemplate.*;
 
 /**
  * Servlet implementation class PartySelectAllServlet
@@ -51,9 +54,10 @@ public class PartySelectServlet extends HttpServlet {
 		//System.out.println("party : " + party);
 		Member member = new MemberService().selectMember(party.getMeNum());
 		RequestDispatcher view = null;
-		
+		System.out.println("photo num : "+ party.getPhNum());
+		Photo photo = searchPhoto(party,"party");
 		PartyService pservice = new PartyService();
-		
+		//System.out.println(photo.getPhotonum());
 		//System.out.println("member : " + member);
 		
 		//JSONObject jparty = new JsonReturn().returnParty(party);
@@ -81,11 +85,10 @@ public class PartySelectServlet extends HttpServlet {
 			//System.out.println("==listCount : " + listCount);
 			paging = new Paging(listCountReply, currentPage, limit);
 			paging.calculator();
-			
 			//댓글 부분
 			partyCoList = coservice.selectPartyCoList(panum, 1, limit);
 			//System.out.println("==partyCoList : " + partyCoList);
-			System.out.println("==partyCoList size : " + partyCoList.size());
+			//System.out.println("==partyCoList size : " + partyCoList.size());
 			//이중배열 만들어 보내기
 			int count = 0;
 			if(partyCoList.size() > 0) {
@@ -122,15 +125,16 @@ public class PartySelectServlet extends HttpServlet {
 			request.setAttribute("party", party);
 			request.setAttribute("partyList", list);
 			request.setAttribute("member", member);
+			request.setAttribute("photo",photo);
 			
 			if(type == "findReview") {
 				request.setAttribute("partyColistCount", listCountReply);
 				request.setAttribute("partyCoPaging", paging);
 				request.setAttribute("partyCoList", coList);
-				System.out.println(">>partyCoList : " + coList.size());
-				System.out.println(">>partyColistCount : " + listCountReply);
+				//System.out.println(">>partyCoList : " + coList.size());
+				//System.out.println(">>partyCoList : " + coList.get(0).get(0).getMeId());
+				//System.out.println(">>partyColistCount : " + listCountReply);
 			}
-			
 			
 		}else {
 			view = request.getRequestDispatcher("views/common/error.jsp");

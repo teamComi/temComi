@@ -34,7 +34,7 @@
                         <li class="<%= (type != null && type.equals("make")) ? "active" : "" %>"><a href="/comi/views/party/party_make.jsp">공유 해요</a></li>
                         <li class="<%= (type != null && type.equals("findParty")) ? "active" : "" %>"><a href="/comi/partysall?type=findParty">공유 찾기</a></li>
                         <li class="<%= (type != null && type.equals("findReview")) ? "active" : "" %>"><a href="/comi/partysall?type=findReview">공유 후기</a></li>
-                        <li class="<%= (type != null && type.equals("qna")) ? "active" : "" %>"><a href="/comi/views/qna/qna.jsp">Q&A</a></li>
+                        <li class="<%= (type != null && type.equals("qna")) ? "active" : "" %>"><a href="/comi/qlist">Q&A</a></li>
                     </ul>
                 </div>
 				
@@ -52,7 +52,7 @@
                         </a></li> -->
                         <%-- 로그인 상태 --%>
                         <% } else { %>
-                        <%= loginMember.getMeName() %>님
+                        <a href="/comi/myinfo?menum=<%= loginMember.getMeNum() %>"><%= loginMember.getMeName() %>님</a>
                         <a href="/comi/logout">로그아웃</a> <br> &nbsp;
                         <!-- <li><a href="#"><img src="/comi/resources/images/search.png" class="icon_mypage" />
                             <div class="tip">2</div>

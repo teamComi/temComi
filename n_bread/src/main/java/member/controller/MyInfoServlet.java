@@ -32,12 +32,12 @@ public class MyInfoServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 내 정보(프로필) 페이지 요청 처리용 컨트롤러
-		request.setCharacterEncoding("utf-8");
+		request.setCharacterEncoding("UTF-8");
 		
-		int menum = 14;
+		int menum = Integer.parseInt(request.getParameter("menum"));
 		
 		Member member = new MemberService().infoMember(menum);
-		System.out.println(member.getMePoint());
+		
 		//받은 결과로 성공/실패 페이지 내보내기
 		RequestDispatcher view = null;
 		

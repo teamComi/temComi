@@ -24,13 +24,14 @@ View_reply.prototype = {
                 console.log('data : ' + data);
                 if(Number(data) > 0) {
                     var heartNum = Number(heart.text());
+                    var bottomHeart = heart.parent().find('.review-body-bottom-heart');
                     heart.text(heartNum + plusnum);
                     if(plusnum == -1) {
-                        heart.parent().find('.review-body-bottom-heart').removeClass('active');
-                        $(this).attr('data-heart', 'empty');
+                        bottomHeart.removeClass('active');
+                        bottomHeart.attr('data-heart', 'empty');
                     }else {
-                        heart.parent().find('.review-body-bottom-heart').addClass('active');
-                        $(this).attr('data-heart', heartNum);
+                        bottomHeart.addClass('active');
+                        bottomHeart.attr('data-heart', 'click');
                     }
                 }
             }
@@ -133,7 +134,6 @@ View_reply.prototype = {
                 $('.review-write-inner.review-write-inner-reply').each(function(){
                     $(this).show();
                 })
-                
                 
             }else{
                 //console.log('?????');
@@ -370,7 +370,7 @@ function viewReplyInit(data){
     console.log('login : ' + login);
     var el = `
     <!--댓글 헤드-->
-        <div class="review-head" data-panum="` + data.list[0][0].paNum + `">
+        <div class="review-head" data-panum="` + paNum + `">
             <span class="review-head-title" id="review_number">`+data.listCount+`개의 댓글</span>
             <button type="button" class="review-head-refresh" alt="새로고침">
                 <img src="/comi/resources/images/refresh.png">
@@ -387,12 +387,12 @@ function viewReplyInit(data){
                     el += `
                     <legend class="u_vc">댓글 쓰기</legend>
                     <div class="review-write-inner review-rewriting" 
-            			data-panum="` + data.list[0][0].paNum + `">
+            			data-panum="` + paNum + `">
                         
                         <div class="review-write-profilearea">
                             <div class="review-write-profile">
                                 <img src="/comi/resources/images/deafault.png" class="img-profile">
-                                <span class="write-name">` + myNick + `</span>
+                                <span class="write-name">` + myId + `</span>
                             </div>
                         </div>
 
@@ -465,7 +465,7 @@ function viewReplyInit(data){
 		                    <div class="review-body-list-profile">
 		                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 		                        <div class="review-body-list-profile-box">
-		                            <div class="review-body-list-name">` + decode(depth1Obj.meAka) + `</div>
+		                            <div class="review-body-list-name">` + decode(depth1Obj.meId) + `</div>
 		                            <div class="review-body-list-date">`+ depth1Obj.comEnroll +`</div>
 		                        </div>
 		                    </div>
@@ -518,7 +518,7 @@ function viewReplyInit(data){
 					                        <div class="review-write-profilearea">
 					                            <div class="review-write-profile">
 					                                <img src="/comi/resources/images/deafault.png" class="img-profile">
-					                                <span class="write-name">`+ myNick + `</span>
+					                                <span class="write-name">`+ myId + `</span>
 					                            </div>
 					                        </div>
 					
@@ -573,7 +573,7 @@ function viewReplyInit(data){
 					                    <div class="review-body-list-profile">
 					                        <img class="review-body-list-profile-img" src="/comi/resources/images/profile.png">
 					                        <div class="review-body-list-profile-box">
-					                            <div class="review-body-list-name">` + decode(tempList[j].meAka) + `</div>
+					                            <div class="review-body-list-name">` + decode(tempList[j].meId) + `</div>
 					                            <div class="review-body-list-date">` + tempList[j].comEnroll + `</div>
 					                        </div>
 					                    </div>
@@ -622,7 +622,7 @@ function viewReplyInit(data){
 							                        <div class="review-write-profilearea">
 							                            <div class="review-write-profile">
 							                                <img src="/comi/resources/images/deafault.png" class="img-profile">
-							                                <span class="write-name">`+myNick+`</span>
+							                                <span class="write-name">`+myId+`</span>
 							                            </div>
 							                        </div>
 							

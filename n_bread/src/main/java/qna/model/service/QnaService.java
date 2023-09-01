@@ -16,9 +16,9 @@ public class QnaService {
 	public QnaService() {}
 	
 	//조회 
-	public Qna selectQna(int qnaid) {
+	public Qna selectQna(int qanum) {
 		Connection conn = getConnection();
-		Qna qna = qdao.selectQna(conn, qnaid);
+		Qna qna = qdao.selectQna(conn, qanum);
 		close(conn);
 		return qna;
 	}
