@@ -119,8 +119,9 @@ public class PartyCoDao {
 			String query = null;
 			if(partyCo.getComParent() == -1) {
 				query = "insert into comments values "
-					+ "((select max(com_num) from comments) + 1, ?, (select max(com_num) from comments) + 1, "
-					+ "?, ?, ?, ?, sysdate, null, null, null, ?)";
+					+ "((select count(com_num) from comments) + 1, ?, "
+					+ "(select count(com_num) from comments) + 1, "
+					+ "?, ?, ?, ?, sysdate, null, null, ?, null)";
 				//System.out.println("partyCo.getPaNum() : " + partyCo.getPaNum());
 				//System.out.println("partyCo.getComDepth() : " + partyCo.getComDepth());
 				pstmt = conn.prepareStatement(query);
@@ -132,7 +133,8 @@ public class PartyCoDao {
 				pstmt.setInt(6, partyCo.getMeNum());
 			}else {
 				query = "insert into comments values " 
-						+ "((select max(com_num) from comments) + 1, ?, ?, ?, ?, ?, ?, sysdate, null, null, null, ?)";
+						+ "((select count(com_num) from comments) + 1, "
+						+ "?, ?, ?, ?, ?, ?, sysdate, null, null, ?, null)";
 				pstmt = conn.prepareStatement(query);
 				pstmt.setInt(1, partyCo.getPaNum());
 				pstmt.setInt(2, partyCo.getComParent());

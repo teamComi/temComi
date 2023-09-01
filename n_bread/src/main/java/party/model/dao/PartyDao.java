@@ -57,7 +57,7 @@ public class PartyDao {
 				+ "           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL, "
 				+ "           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE, "
 				+ "           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM, "
-				+ "           PA_GENDER_LIMIT, PH_NUM, CAT_NUM "
+				+ "           PA_GENDER_LIMIT, PA_PAY_CK, PH_NUM, CAT_NUM "
 				+ "     from (select * from party where PA_ACT = ?"
 				+ "           order by PA_ENROLL desc)) "
 				+ "where rnum >= ? and rnum <= ?";
@@ -97,7 +97,7 @@ public class PartyDao {
 				+ "           PA_DEPOSIT, PA_PER_AMOUNT, PA_TITLE, PA_CON, PA_ENROLL, "
 				+ "           PA_MOD_DATE, PA_DEL_DATE, PA_ACT, PA_VIEWS, PA_LIKE, "
 				+ "           PA_COM_COUNT, PA_GENDER_SET, PA_LOCATION, PA_TOTAL_NUM, "
-				+ "           PA_GENDER_LIMIT, PH_NUM, CAT_NUM "
+				+ "           PA_GENDER_LIMIT, PA_PAY_CK, PH_NUM, CAT_NUM "
 				+ "     from (select * from party where PA_ACT = ? and PA_NUM != ? "
 				+ "           order by PA_ENROLL desc)) "
 				+ "where rnum >= ? and rnum <= ?";
@@ -134,7 +134,7 @@ public class PartyDao {
 		int result = 0;
 		String query = "insert into party " + 
 				"values ((select count(*) from party)+1,?,sysdate,?,?,?,?,?,default,NULL,NULL,default,default, " +
-				"        default,default,default,?,?,default,?,?)";
+				"        default,default,default,?,?,default,?,?,?)";
 
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -146,11 +146,12 @@ public class PartyDao {
 			pstmt.setString(6, party.getPaCon());
 			pstmt.setString(7,party.getPaLocation());
 			pstmt.setInt(8, party.getPaTotalNum());
-			pstmt.setInt(9, party.getPhNum());
+			pstmt.setInt(9, party.getPaPayCk());
+			pstmt.setInt(10, party.getPhNum());
 			if(party.getCatNum() > 0){
-				pstmt.setInt(10, party.getCatNum());
+				pstmt.setInt(11, party.getCatNum());
 			}else{
-				pstmt.setInt(10, 0);
+				pstmt.setInt(11, 0);
 			}
 			result = pstmt.executeUpdate();
 
@@ -422,31 +423,32 @@ public class PartyDao {
 
 	
 	public Party makeParty(ResultSet rset) throws SQLException {
-		Party party = new Party(
-            rset.getInt("PA_NUM")
-            ,rset.getInt("ME_NUM")
-            ,rset.getDate("PA_TIME")
-            ,rset.getInt("PA_TOTAL_AMOUNT")
-            ,rset.getInt("PA_DEPOSIT")
-            ,rset.getInt("PA_PER_AMOUNT")
-            ,rset.getString("PA_TITLE")
-            ,rset.getString("PA_CON")
-            ,rset.getDate("PA_ENROLL")
-            ,rset.getDate("PA_MOD_DATE")
-            ,rset.getDate("PA_DEL_DATE")
-            ,rset.getString("PA_ACT")
-            ,rset.getInt("PA_VIEWS")
-            ,rset.getInt("PA_LIKE")
-            ,rset.getInt("PA_COM_COUNT")
-            ,rset.getString("PA_GENDER_SET")
-            ,rset.getString("PA_LOCATION")
-            ,rset.getInt("PA_TOTAL_NUM")
-            ,rset.getString("PA_GENDER_LIMIT")
-            ,rset.getInt("PH_NUM")
-            ,rset.getInt("CAT_NUM")
-      );
-      
-      return party;
+		Party party = new Party();
+		
+		party.setPaNum(rset.getInt("PA_NUM"));
+		party.setMeNum(rset.getInt("ME_NUM"));
+		party.setPaTime(rset.getDate("PA_TIME"));
+		party.setPaTotalAmount(rset.getInt("PA_TOTAL_AMOUNT"));
+		party.setPaDeposit(rset.getInt("PA_DEPOSIT"));
+		party.setPaPerAmount(rset.getInt("PA_PER_AMOUNT"));
+		party.setPaTitle(rset.getString("PA_TITLE"));
+		party.setPaCon(rset.getString("PA_CON"));
+		party.setPaEnroll(rset.getDate("PA_ENROLL"));
+		party.setPaModDate(rset.getDate("PA_MOD_DATE"));
+		party.setPaDelDate(rset.getDate("PA_DEL_DATE"));
+		party.setPaAct(rset.getString("PA_ACT"));
+		party.setPaViews(rset.getInt("PA_VIEWS"));
+		party.setPaLike(rset.getInt("PA_LIKE"));
+		party.setPaComCount(rset.getInt("PA_COM_COUNT"));
+		party.setPaGenderSet(rset.getString("PA_GENDER_SET"));
+		party.setPaLocation(rset.getString("PA_LOCATION"));
+		party.setPaTotalNum(rset.getInt("PA_TOTAL_NUM"));
+		party.setPaGenderLimit(rset.getString("PA_GENDER_LIMIT"));
+		party.setPaPayCk(rset.getInt("PA_PAY_CK"));
+		party.setPhNum(rset.getInt("PH_NUM"));
+		party.setCatNum(rset.getInt("CAT_NUM"));
+		
+		return party;
 	}
 
 	public String getNowPartyNum(Connection conn) {

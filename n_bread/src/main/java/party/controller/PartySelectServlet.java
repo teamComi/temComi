@@ -54,7 +54,7 @@ public class PartySelectServlet extends HttpServlet {
 		//System.out.println("party : " + party);
 		Member member = new MemberService().selectMember(party.getMeNum());
 		RequestDispatcher view = null;
-		System.out.println("photo num : "+ party.getPhNum());
+		System.out.println("panum : "+ panum + " party : " + party.getPaNum());
 		Photo photo = searchPhoto(party,"party");
 		PartyService pservice = new PartyService();
 		//System.out.println(photo.getPhotonum());
@@ -128,6 +128,10 @@ public class PartySelectServlet extends HttpServlet {
 			request.setAttribute("photo",photo);
 			
 			if(type == "findReview") {
+				System.out.println("partyColistCount" + listCountReply);
+				System.out.println("partyCoPaging" + paging);
+				System.out.println("partyCoList" + coList);
+				
 				request.setAttribute("partyColistCount", listCountReply);
 				request.setAttribute("partyCoPaging", paging);
 				request.setAttribute("partyCoList", coList);

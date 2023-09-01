@@ -30,6 +30,7 @@ public class Party implements Serializable{
 	private String paLocation;//위치정보
 	private int paTotalNum;//파티원 인원수
 	private String paGenderLimit;//성별 제한
+	private int paPayCk;
 	private int phNum;//사진테이블 번호
 	private int catNum;//분류
 	
@@ -37,8 +38,8 @@ public class Party implements Serializable{
 
 	public Party(int paNum, int meNum, Date paTime, int paTotalAmount, int paDeposit, int paPerAmount, String paTitle,
 			String paCon, Date paEnroll, Date paModDate, Date paDelDate, String paAct, int paViews, int paLike,
-			int paComCount, String paGenderSet, String paLocation, int paTotalNum, String paGenderLimit, int phNum,
-			int catNum) {
+			int paComCount, String paGenderSet, String paLocation, int paTotalNum, String paGenderLimit, 
+			int paPayCk, int phNum, int catNum) {
 		super();
 		this.paNum = paNum;
 		this.meNum = meNum;
@@ -59,6 +60,7 @@ public class Party implements Serializable{
 		this.paLocation = paLocation;
 		this.paTotalNum = paTotalNum;
 		this.paGenderLimit = paGenderLimit;
+		this.paPayCk = paPayCk;
 		this.phNum = phNum;
 		this.catNum = catNum;
 	}
@@ -229,6 +231,14 @@ public class Party implements Serializable{
 
 	public void setCatNum(int catNum) {
 		this.catNum = catNum;
+	}
+	
+	public int getPaPayCk() {
+		return paPayCk;
+	}
+
+	public void setPaPayCk(int paPayCk) {
+		this.paPayCk = paPayCk;
 	}
 
 	@Override

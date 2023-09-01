@@ -40,37 +40,22 @@
     </header>
     <!-- Header Section End -->
     <%
-    	String partyMemberType = "none";
-    	if(loginMember.getMeNum() == member.getMeNum()) {
-    		partyMemberType = "host";
-    	}else{
-    		if(totalPartyList != null && totalPartyList.size() > 0) {
-	    		for(int i=0; i<totalPartyList.size(); i++) {
-		            if(loginMember.getMeNum() == totalPartyList.get(i)) {
-		               	partyMemberType = "member";
-		               	break;
-		            }
-	         	}
-    		}
-    	}
-    	
+      String partyMemberType = "none";
+      if(loginMember != null) {
+         if(loginMember.getMeNum() == member.getMeNum()) {
+            partyMemberType = "host";
+         }else{
+            if(totalPartyList != null && totalPartyList.size() > 0) {
+               for(int i=0; i<totalPartyList.size(); i++) {
+                    if(loginMember.getMeNum() == totalPartyList.get(i)) {
+                          partyMemberType = "member";
+                          break;
+                    }
+                 }
+            }
+         }
+      }
     %>
-	<script type="text/javascript">
-      var partyMemberType = 'none';
-      <% if(loginMember.getMeNum() == member.getMeNum()) { %>
-         partyMemberType = 'host';
-      <% } else {
-    	  
-            //for(int i=0; i<totalPartyList.size(); i++) {
-               //if(loginMember.getMeNum() == totalPartyList.get(i)) {
-                  %>
-                  partyMemberType = 'member';
-                  <% //break;
-               //}
-            //}
-    	  	
-       } %>
-   </script>
    <!-- main -->
    <main class="main_wrapper">
       <% if(type.equals("findReview")) { //종료된 모임 %>
@@ -191,7 +176,7 @@
          <!-- 게시글 end-->
 
          <!-- 결제 페이지 파티장과 회원이 같을때만 보이기 -->
-         <% 
+      <% if(loginMember != null) { 
          //out.print("partyMemberType : " + partyMemberType + " party.getPaAct() : " + party.getPaAct());
          if(partyMemberType != "none" && party.getPaAct().equals("Y")) { %>
          <div class="view-payment-box">
@@ -199,10 +184,11 @@
             <!-- <span id="paymentEnd">결제완료</span> -->
          </div>
          <% } %>
+         
          <!-- 결제 페이지 end -->
          <script type="text/javascript">
-			var partyMemberTypeJs = <%= "\"" + partyMemberType + "\"" %>;
-
+         var partyMemberTypeJs = <%= "\"" + partyMemberType + "\"" %>;
+         
          function generateRandomString() {
             return window.btoa(Math.random()).slice(0, 20);
          }
@@ -215,17 +201,46 @@
                PaymentWidget.ANONYMOUS
             );
 
+            var paymentMethodWidget;
             var depositBool = (partyMemberTypeJs == 'host') ? 'Y' : 'N';
             var price = (partyMemberTypeJs == 'host') 
                               ? Number(<%= "\"" + party.getPaDeposit() + "\"" %>)
                               : Number(<%= "\"" + party.getPaPerAmount() + "\"" %>);//결제금액
-            
-            price = 100;
-            var paymentMethodWidget = paymentWidget.renderPaymentMethods("#payment-method", { value: price });
-         
-            $('#payment').click(function(){
+                              
+            $('#paymentPop').on('click', function(){
+               $.ajax({
+                  url : '/comi/partypay'
+                  ,type : 'post'
+                  ,dataType : 'json'
+                  ,data : {
+                     pa_num : Number(<%= "\"" + party.getPaNum() + "\"" %>)
+                     ,me_num : Number(<%= "\"" + loginMember.getMeNum() + "\"" %>)
+                  }
+                  ,success : function(json){
+                     console.log('파티 불러오기 완료');
+
+                     var jsonstr = JSON.stringify(json);
+                     var jsonData = JSON.parse(jsonstr);
+
+                     var databasePrice = (partyMemberTypeJs == 'host') ? jsonData.deposit : jsonData.peoplePrice;
+                     console.log('price : ' + price + '  databasePrice : ' + databasePrice);
+                     if(price == databasePrice) {//결제 금액과 테이블 저장된 금액이 맞을때
+                        price = 100;
+                        paymentMethodWidget = paymentWidget.renderPaymentMethods("#payment-method", { value: price });
+                        console.log('파티 금액 맞음 완료');
+
+
+                        $('.view-payment-pop').show();
+                     }
+                  },error : function(error){
+                        console.log('저장안됨');
+                  }
+               });
                
-               //결제 금액과 테이블 저장된 금액이 맞을때
+            });
+
+            $('#payment').click(function(){
+
                paymentWidget.requestPayment({
                   amount: price,
                   orderId: generateRandomString(),
@@ -239,7 +254,6 @@
                   // 성공 처리: 결제 승인 API를 호출하세요
                   
                   console.log('결제가 성공적으로 처리되었습니다.');
-                  console.log('response : ' + response);
                   
                   var selectedPaymentMethod = paymentMethodWidget.getSelectedPaymentMethod()
                   console.log('selectedPaymentMethod : ' + selectedPaymentMethod);
@@ -248,7 +262,6 @@
                      ,type : 'post'
                      ,dataType : 'json'
                      ,data : {
-                        
                         pa_num : Number(<%= "\"" + party.getPaNum() + "\"" %>)
                         ,me_num : Number(<%= "\"" + loginMember.getMeNum() + "\"" %>)
                         ,pm_amount : price//결제금액
@@ -258,7 +271,7 @@
                         
                      }
                      ,success : function(result){
-                        console.log('저장완료');
+                        console.log('결제 저장완료');
 
                         var jstr = JSON.stringify(result);
                         var res = JSON.parse(jstr);
@@ -266,6 +279,7 @@
                         $('.view-payment-box').hide();
                         $('#paymentPop').hide();
                         $('#paymentEnd').show();
+
                      },error : function(error){
                         console.log('저장안됨');
                      }
@@ -282,23 +296,18 @@
                   }
                   
                })
-            });
-            
-
-            $('#paymentPop').on('click', function(){
-               $('.view-payment-pop').show();
-               //return false;
             })
-         
+
             $('.view-payment-pop').on('click', function(){
                $(this).hide();
                //return false;
             })
             
-            
+
          })
          </script>
-         
+      <% } %>
+
          <% if(type.equals("findReview")) { //종료된 모임 %>
             <%@ include file="./view_reply.jsp" %>
          <% }else { //종료되지 않은 모임 %>

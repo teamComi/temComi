@@ -87,21 +87,17 @@ public class PartySelectAllServlet extends HttpServlet {
 		
 		sort = (sort == null) ? "current" : sort;
 		classfy = (classfy == null) ? "-1" : classfy;
+		
+		view = request.getRequestDispatcher("views/party/party_view.jsp");
+		request.setAttribute("sort", sort);
+		request.setAttribute("classfy", Integer.parseInt(classfy));
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("type", type);
+		request.setAttribute("partyList", list);
+		
 		System.out.println("sort : " + sort + "  classfy : " + classfy);
 		if(list != null && list.size() > 0) {
-			view = request.getRequestDispatcher("views/party/party_view.jsp");
-			request.setAttribute("sort", sort);
-			request.setAttribute("classfy", Integer.parseInt(classfy));
-			request.setAttribute("currentPage", currentPage);
-			request.setAttribute("type", type);
-			request.setAttribute("partyList", list);
 		}else {
-			view = request.getRequestDispatcher("views/party/party_view.jsp");
-			request.setAttribute("sort", sort);
-			request.setAttribute("classfy", Integer.parseInt(classfy));
-			request.setAttribute("currentPage", currentPage);
-			request.setAttribute("type", type);
-			request.setAttribute("partyList", list);
 			//view = request.getRequestDispatcher("views/common/error.jsp");
 			//request.setAttribute("message", "파티 리스트 불러오기 실패");
 		}

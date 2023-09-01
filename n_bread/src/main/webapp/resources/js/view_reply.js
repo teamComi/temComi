@@ -197,7 +197,7 @@ View_reply.prototype = {
         $('.review-write-textarea').each(function(){
             $(this).on('input', function(){
                 var reviewInner = $(this).parent().parent().parent('.review-write-inner');
-                var mynum = reviewInner.attr('data-mynum');
+                var mynum = reviewInner.attr('data-panum');
                 
                 console.log(mynum + ' 댓글 길이 ');
                 if($(this).val().length > 0) {

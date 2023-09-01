@@ -103,6 +103,7 @@ CREATE TABLE PARTY (
 	PA_LOCATION VARCHAR2(1000), /* 위치정보 */
 	PA_TOTAL_NUM NUMBER, /* 파티원 인원 수 */
 	PA_GENDER_LIMIT CHAR DEFAULT 'A' NOT NULL, /* 성별 제한 */
+	PA_PAY_CK NUMBER, /* 파티결제 여부 */
 	PH_NUM NUMBER, /* 사진 테이블 번호 */
 	CAT_NUM NUMBER /* 카테고리 테이블 번호 */
 );
@@ -146,6 +147,8 @@ COMMENT ON COLUMN PARTY.PA_LOCATION IS '위치정보';
 COMMENT ON COLUMN PARTY.PA_TOTAL_NUM IS '파티원 인원 수';
 
 COMMENT ON COLUMN PARTY.PA_GENDER_LIMIT IS '성별 제한';
+
+COMMENT ON COLUMN PARTY.PA_PAY_CK IS '파티결제 여부';
 
 COMMENT ON COLUMN PARTY.PH_NUM IS '사진 테이블 번호';
 
@@ -270,7 +273,8 @@ CREATE TABLE QA (
 	QA_REPORT_CON VARCHAR2(1000) NOT NULL, /* 신고내용 */
 	QA_ATT_NUM NUMBER, /* 신고할 회원 넘버 */
 	QA_ATT_DATE DATE DEFAULT NULL, /* 문의날짜 */
-	QA_PHOTO_NUM NUMBER /* 사진 테이블 번호 */
+	QA_PHOTO_NUM NUMBER, /* 사진 테이블 번호 */
+	QA_LEV NUMBER DEFAULT 1 /* 답글단계 */
 );
 
 COMMENT ON TABLE QA IS 'QNA';
@@ -306,6 +310,8 @@ COMMENT ON COLUMN QA.QA_ATT_NUM IS '신고할 회원 넘버';
 COMMENT ON COLUMN QA.QA_ATT_DATE IS '문의날짜';
 
 COMMENT ON COLUMN QA.QA_PHOTO_NUM IS '사진 테이블 번호';
+
+COMMENT ON COLUMN QA.QA_LEV IS '답글단계';
 
 CREATE UNIQUE INDEX PK_QA
 	ON QA (
@@ -1312,3 +1318,19 @@ ALTER TABLE CHAT
 		REFERENCES MEMBER (
 			ME_NUM
 		);
+
+insert into main_category
+values (1,'모임',null);
+insert into main_category
+values (2,'공구',null);
+insert into main_category
+values (3,'렌탈',null);
+insert into main_category
+values (4,'게임',null);
+insert into main_category
+values (5,'OTT',null);
+insert into main_category
+values (6,'기타',null);
+insert into photo
+values (0,null,null,null,null,null);
+commit;

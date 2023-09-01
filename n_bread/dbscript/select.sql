@@ -114,14 +114,38 @@ update comments set com_views = com_views+1 where COM_NUM = 76;
 CREATE OR REPLACE TRIGGER TR_COM_COUNT
 AFTER INSERT ON comments
 FOR EACH ROW
-when (com_depth = 2)
 BEGIN
   UPDATE comments 
-  SET com_count = com_count + 1
-  WHERE com_parent = :NEW.com_parent
+  SET COM_COUNT = COM_COUNT + 1
+  WHERE COM_NUM = :new.COM_PARENT
+  and   :new.com_depth = 2
   and   com_depth = 1;
 END;
 /
+insert into comments 
+values(2, 2, 1, 2, '1-1댓글 정말 맛있었어요!', 3, 0, 
+sysdate, null, null, 1, null);
+
+
+
+insert into payment
+values(1, 1, 1, 'Y', 'card', 3000, 0, 10000, 'Y', sysdate, 'N', 'N', 'N');
+
+-- 결제 테이블 저장 순간 파티의 pay_ck가 올라감
+CREATE OR REPLACE TRIGGER TR_PA_PAY_CK
+AFTER INSERT ON payment
+FOR EACH ROW
+BEGIN
+  UPDATE party 
+  SET PA_PAY_CK = PA_PAY_CK + :new.PM_AMOUNT
+  WHERE pa_num = :new.pa_num
+  and   me_num = :new.me_num;
+END;
+/
+
+insert into payment
+values(1, 1, 1, 'Y', 'card', 3000, 0, 10000, 'Y', sysdate, 'N', 'N', 'N');
+
 
 -- 검색
 select *
